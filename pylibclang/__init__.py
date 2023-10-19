@@ -1,0 +1,2 @@
+__CLANG_VERSION__ = "16.0.6"
+__VERSION__ = "1" + __CLANG_VERSION__

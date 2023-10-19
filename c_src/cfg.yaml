@@ -1,0 +1,21 @@
+common_config:
+  cxx_flags: [ "-std=c++17", ]
+  include_directories: [ "${CFG_DIR}/include/clang/include" ]
+
+io_configs:
+  - inputs: [
+    "clang-c/BuildSystem.h",
+    "clang-c/CXCompilationDatabase.h",
+    "clang-c/CXDiagnostic.h",
+    "clang-c/CXErrorCode.h",
+    "clang-c/CXFile.h",
+    "clang-c/CXSourceLocation.h",
+    "clang-c/CXString.h",
+    "clang-c/Documentation.h",
+    "clang-c/ExternC.h",
+    "clang-c/FatalErrorHandler.h",
+    "clang-c/Index.h",
+    "clang-c/Platform.h",
+    "clang-c/Rewrite.h",
+  ]
+    output: "${CFG_DIR}/_binding.cc.inc"
