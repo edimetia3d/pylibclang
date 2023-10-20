@@ -65,7 +65,8 @@ ext_modules = [
                       include_dirs=["c_src/include/clang/include"],
                       library_dirs=[os.path.dirname(libclang_so_path)],
                       runtime_library_dirs=["$ORIGIN"],
-                      extra_link_args=["-lclang"]
+                      extra_link_args=["-lclang"],
+                      extra_compile_args=["-Wno-deprecated-declarations"]
                       ),
     AnyFile("pylibclang.libclang", libclang_so_path, clean_clang_so_name())
 ]
