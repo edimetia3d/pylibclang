@@ -105,6 +105,7 @@ if sys.version_info[0] == 3:
         def to_python_string(x, *args):
             return x.value
 
+
     def b(x):
         if isinstance(x, bytes):
             return x
@@ -115,14 +116,16 @@ elif sys.version_info[0] == 2:
     # C-interop.
     c_interop_string = c_char_p
 
+
     def _to_python_string(x, *args):
         return x
 
+
     c_interop_string.to_python_string = staticmethod(_to_python_string)
+
 
     def b(x):
         return x
-
 
 # Importing ABC-s directly from collections is deprecated since Python 3.7,
 # will stop working in Python 3.8.
@@ -142,7 +145,6 @@ except AttributeError:
     def fspath(x):
         return x
 
-
 # ctypes doesn't implicitly convert c_void_p to the appropriate wrapper
 # object. This is a problem, because it means that from_parameter will see an
 # integer and pass the wrong value on platforms where int != void*. Work around
@@ -150,6 +152,7 @@ except AttributeError:
 c_object_p = POINTER(c_void_p)
 
 callbacks = {}
+
 
 ### Exception Classes ###
 
@@ -370,8 +373,8 @@ class SourceRange(Structure):
         if other.file is None and self.start.file is None:
             pass
         elif (
-            self.start.file.name != other.file.name
-            or other.file.name != self.end.file.name
+                self.start.file.name != other.file.name
+                or other.file.name != self.end.file.name
         ):
             # same file name
             return False
@@ -871,7 +874,6 @@ CursorKind.OBJC_DYNAMIC_DECL = CursorKind(38)
 # A C++ access specifier decl.
 CursorKind.CXX_ACCESS_SPEC_DECL = CursorKind(39)
 
-
 ###
 # Reference Kinds
 
@@ -1121,7 +1123,6 @@ CursorKind.OMP_ARRAY_SECTION_EXPR = CursorKind(147)
 
 # Represents an @available(...) check.
 CursorKind.OBJC_AVAILABILITY_CHECK_EXPR = CursorKind(148)
-
 
 # A statement whose specific kind is not exposed via this interface.
 #
@@ -1407,6 +1408,7 @@ CursorKind.FRIEND_DECL = CursorKind(603)
 # A code completion overload candidate.
 CursorKind.OVERLOAD_CANDIDATE = CursorKind(700)
 
+
 ### Template Argument Kinds ###
 class TemplateArgumentKind(BaseEnumeration):
     """
@@ -1424,6 +1426,7 @@ TemplateArgumentKind.TYPE = TemplateArgumentKind(1)
 TemplateArgumentKind.DECLARATION = TemplateArgumentKind(2)
 TemplateArgumentKind.NULLPTR = TemplateArgumentKind(3)
 TemplateArgumentKind.INTEGRAL = TemplateArgumentKind(4)
+
 
 ### Exception Specification Kinds ###
 class ExceptionSpecificationKind(BaseEnumeration):
@@ -1449,6 +1452,7 @@ ExceptionSpecificationKind.COMPUTED_NOEXCEPT = ExceptionSpecificationKind(5)
 ExceptionSpecificationKind.UNEVALUATED = ExceptionSpecificationKind(6)
 ExceptionSpecificationKind.UNINSTANTIATED = ExceptionSpecificationKind(7)
 ExceptionSpecificationKind.UNPARSED = ExceptionSpecificationKind(8)
+
 
 ### Cursors ###
 
@@ -1861,15 +1865,15 @@ class Cursor(Structure):
             if underlying_type.kind == TypeKind.ENUM:
                 underlying_type = underlying_type.get_declaration().enum_type
             if underlying_type.kind in (
-                TypeKind.CHAR_U,
-                TypeKind.UCHAR,
-                TypeKind.CHAR16,
-                TypeKind.CHAR32,
-                TypeKind.USHORT,
-                TypeKind.UINT,
-                TypeKind.ULONG,
-                TypeKind.ULONGLONG,
-                TypeKind.UINT128,
+                    TypeKind.CHAR_U,
+                    TypeKind.UCHAR,
+                    TypeKind.CHAR16,
+                    TypeKind.CHAR32,
+                    TypeKind.USHORT,
+                    TypeKind.UINT,
+                    TypeKind.ULONG,
+                    TypeKind.ULONGLONG,
+                    TypeKind.UINT128,
             ):
                 self._enum_value = conf.lib.clang_getEnumConstantDeclUnsignedValue(self)
             else:
@@ -2107,6 +2111,7 @@ StorageClass.OPENCLWORKGROUPLOCAL = StorageClass(5)
 StorageClass.AUTO = StorageClass(6)
 StorageClass.REGISTER = StorageClass(7)
 
+
 ### Availability Kinds ###
 
 
@@ -2127,6 +2132,7 @@ AvailabilityKind.AVAILABLE = AvailabilityKind(0)
 AvailabilityKind.DEPRECATED = AvailabilityKind(1)
 AvailabilityKind.NOT_AVAILABLE = AvailabilityKind(2)
 AvailabilityKind.NOT_ACCESSIBLE = AvailabilityKind(3)
+
 
 ### C++ access specifiers ###
 
@@ -2152,6 +2158,7 @@ AccessSpecifier.PUBLIC = AccessSpecifier(1)
 AccessSpecifier.PROTECTED = AccessSpecifier(2)
 AccessSpecifier.PRIVATE = AccessSpecifier(3)
 AccessSpecifier.NONE = AccessSpecifier(4)
+
 
 ### Type Kinds ###
 
@@ -2784,13 +2791,13 @@ class CompletionString(ClangObject):
 
     def __repr__(self):
         return (
-            " | ".join([str(a) for a in self])
-            + " || Priority: "
-            + str(self.priority)
-            + " || Availability: "
-            + str(self.availability)
-            + " || Brief comment: "
-            + str(self.briefComment)
+                " | ".join([str(a) for a in self])
+                + " || Priority: "
+                + str(self.priority)
+                + " || Availability: "
+                + str(self.availability)
+                + " || Brief comment: "
+                + str(self.briefComment)
         )
 
 
@@ -2940,7 +2947,7 @@ class TranslationUnit(ClangObject):
 
     @classmethod
     def from_source(
-        cls, filename, args=None, unsaved_files=None, options=0, index=None
+            cls, filename, args=None, unsaved_files=None, options=0, index=None
     ):
         """Create a TranslationUnit by parsing source.
 
@@ -3221,14 +3228,14 @@ class TranslationUnit(ClangObject):
             raise TranslationUnitSaveError(result, "Error saving TranslationUnit.")
 
     def codeComplete(
-        self,
-        path,
-        line,
-        column,
-        unsaved_files=None,
-        include_macros=False,
-        include_code_patterns=False,
-        include_brief_comments=False,
+            self,
+            path,
+            line,
+            column,
+            unsaved_files=None,
+            include_macros=False,
+            include_code_patterns=False,
+            include_brief_comments=False,
     ):
         """
         Code complete in this translation unit.
@@ -3832,8 +3839,8 @@ def register_function(lib, item, ignore_errors):
         func = getattr(lib, item[0])
     except AttributeError as e:
         msg = (
-            str(e) + ". Please ensure that your python bindings are "
-            "compatible with your libclang.so version."
+                str(e) + ". Please ensure that your python bindings are "
+                         "compatible with your libclang.so version."
         )
         if ignore_errors:
             return
@@ -3949,9 +3956,9 @@ class Config(object):
             library = cdll.LoadLibrary(self.get_filename())
         except OSError as e:
             msg = (
-                str(e) + ". To provide a path to libclang use "
-                "Config.set_library_path() or "
-                "Config.set_library_file()."
+                    str(e) + ". To provide a path to libclang use "
+                             "Config.set_library_path() or "
+                             "Config.set_library_file()."
             )
             raise LibclangError(msg)
 
