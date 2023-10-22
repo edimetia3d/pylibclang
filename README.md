@@ -23,6 +23,9 @@ enable successful compilation.
 
 ```bash
 pip install pylibclang
+
+# optional stubs
+pip install pyblibclang-stubs
 ```
 
 ### From source
@@ -33,6 +36,10 @@ Please note that compilation may be time-consuming due to the substantial volume
 git clone https://gihub.com/edimetia3d/pylibclang
 cd pylibclang
 pip install .
+
+# optional stubs
+bash ./stubs/build.sh
+pip install ./stubs/dist/*.whl
 ```
 
 ## Usage

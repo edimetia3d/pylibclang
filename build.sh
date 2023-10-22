@@ -8,6 +8,8 @@ docker pull $DOCKER_IMAGE
 docker run --rm -i -e PLAT=${PLAT} -v `pwd`:/io $DOCKER_IMAGE /io/_build_wheels.sh
 python3 -m pip install --upgrade build twine
 python3 -m build -o ./wheelhouse --sdist
+bash ./stubs/build.sh
+cp ./stubs/dist/* ./wheelhouse
 
 if [ "$1" = "upload" ];
   then
