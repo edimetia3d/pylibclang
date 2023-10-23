@@ -813,7 +813,7 @@ class Cursor:
 
     def get_included_file(self):
         """Returns the File that is included by the current inclusion cursor."""
-        assert self.kind == CursorKind.INCLUSION_DIRECTIVE
+        assert self.kind == CursorKind.CXCursor_InclusionDirective
 
         return conf.lib.clang_getIncludedFile(self)
 
@@ -908,14 +908,12 @@ class Cursor:
         return conf.lib.clang_getCXXAccessSpecifier(self)
 
     @property
+    @functools.cache
     def type(self):
         """
         Retrieve the Type (if any) of the entity pointed at by the cursor.
         """
-        if not hasattr(self, "_type"):
-            self._type = conf.lib.clang_getCursorType(self)
-
-        return self._type
+        return conf.lib.clang_getCursorType(self)
 
     @property
     def canonical(self):
@@ -949,17 +947,15 @@ class Cursor:
         return conf.lib.clang_getCursorExceptionSpecificationType(self)
 
     @property
+    @functools.cache
     def underlying_typedef_type(self):
         """Return the underlying type of a typedef declaration.
 
         Returns a Type for the typedef this cursor is a declaration for. If
         the current cursor is not a typedef, this raises.
         """
-        if not hasattr(self, "_underlying_type"):
-            assert self.kind.is_declaration()
-            self._underlying_type = conf.lib.clang_getTypedefDeclUnderlyingType(self)
-
-        return self._underlying_type
+        assert self.kind.is_declaration()
+        return conf.lib.clang_getTypedefDeclUnderlyingType(self)
 
     @property
     def enum_type(self):
@@ -968,32 +964,29 @@ class Cursor:
         Returns a Type corresponding to an integer. If the cursor is not for an
         enum, this raises.
         """
-        if not hasattr(self, "_enum_type"):
-            assert self.kind == CursorKind.ENUM_DECL
-            self._enum_type = conf.lib.clang_getEnumDeclIntegerType(self)
-
-        return self._enum_type
+        assert self.kind == CursorKind.CXCursor_EnumDecl
+        return conf.lib.clang_getEnumDeclIntegerType(self)
 
     @property
     def enum_value(self):
         """Return the value of an enum constant."""
         if not hasattr(self, "_enum_value"):
-            assert self.kind == CursorKind.ENUM_CONSTANT_DECL
+            assert self.kind == CursorKind.CXCursor_EnumConstantDecl
             # Figure out the underlying type of the enum to know if it
             # is a signed or unsigned quantity.
             underlying_type = self.type
-            if underlying_type.kind == TypeKind.ENUM:
+            if underlying_type.kind == TypeKind.CXType_Enum:
                 underlying_type = underlying_type.get_declaration().enum_type
             if underlying_type.kind in (
-                    TypeKind.CHAR_U,
-                    TypeKind.UCHAR,
-                    TypeKind.CHAR16,
-                    TypeKind.CHAR32,
-                    TypeKind.USHORT,
-                    TypeKind.UINT,
-                    TypeKind.ULONG,
-                    TypeKind.ULONGLONG,
-                    TypeKind.UINT128,
+                    TypeKind.CXType_Char_U,
+                    TypeKind.CXType_UChar,
+                    TypeKind.CXType_Char16,
+                    TypeKind.CXType_Char32,
+                    TypeKind.CXType_UShort,
+                    TypeKind.CXType_UInt,
+                    TypeKind.CXType_ULong,
+                    TypeKind.CXType_ULongLong,
+                    TypeKind.CXType_UInt128,
             ):
                 self._enum_value = conf.lib.clang_getEnumConstantDeclUnsignedValue(self)
             else:
@@ -1132,7 +1125,7 @@ class Cursor:
         """
         Check if the record is anonymous.
         """
-        if self.kind == CursorKind.FIELD_DECL:
+        if self.kind == CursorKind.CXCursor_FieldDecl:
             return self.type.get_declaration().is_anonymous()
         return conf.lib.clang_Cursor_isAnonymous(self)
 
@@ -1246,7 +1239,7 @@ class Type:
         exception will be raised.
         """
         result = conf.lib.clang_getElementType(self)
-        if result.kind == TypeKind.INVALID:
+        if result.kind == TypeKind.CXType_Invalid:
             raise Exception("Element type not available on this type.")
 
         return result
@@ -1331,7 +1324,7 @@ class Type:
 
     def is_function_variadic(self):
         """Determine whether this function Type is a variadic function type."""
-        assert self.kind == TypeKind.FUNCTIONPROTO
+        assert self.kind == TypeKind.CXType_FunctionProto
 
         return conf.lib.clang_isFunctionTypeVariadic(self)
 
