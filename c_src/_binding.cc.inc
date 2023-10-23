@@ -1,5 +1,5 @@
 
-// GENERATED AT 10/22/2023, 17:25:24
+// GENERATED AT 10/23/2023, 11:51:05
 
 #include "clang-c/BuildSystem.h"
 #include "clang-c/CXCompilationDatabase.h"
@@ -21,6 +21,7 @@
 #include <functional>
 #include <map>
 #include <mutex>
+#include <thread>
 #include <utility>
 
 #include <pybind11/functional.h>
@@ -29,28 +30,39 @@
 
 namespace pybind11_weaver {
 
-template <class T> struct PointerWrapper {
-  static_assert(std::is_pointer<T>::value, "T must be a pointer type");
-  T ptr;
-  PointerWrapper(T ptr) : ptr(ptr) {}
-  PointerWrapper(intptr_t ptr_v) : ptr(reinterpret_cast<T>(ptr_v)) {}
-  operator T() { return ptr; }
-  static void FastBind(pybind11::module &m, const std::string &name) {
-    pybind11::class_<PointerWrapper> handle(m, name.c_str(),
-                                            pybind11::dynamic_attr());
-    handle.def(pybind11::init<intptr_t>());
-    handle.def("get_ptr", [](PointerWrapper &self) {
-      return reinterpret_cast<intptr_t>(self.ptr);
-    });
-    handle.def("set_ptr", [](PointerWrapper &self, intptr_t ptr) {
-      self.ptr = reinterpret_cast<T>(ptr);
-    });
-    handle.def_static("from_capsule", [](pybind11::capsule o) {
-      return new PointerWrapper<T>(reinterpret_cast<T>(o.get_pointer()));
-    });
+struct _PointerWrapperBase {
+  _PointerWrapperBase(void *ptr_) : ptr(ptr_) {}
+  _PointerWrapperBase(intptr_t ptr_v) : ptr(reinterpret_cast<void *>(ptr_v)) {}
+  intptr_t get_ptr() { return reinterpret_cast<intptr_t>(ptr); }
+  void set_ptr(intptr_t ptr_v) { ptr = reinterpret_cast<void *>(ptr_v); }
+  static void FastBind(pybind11::module &m) {
+    pybind11::class_<_PointerWrapperBase, std::shared_ptr<_PointerWrapperBase>>(
+        m, "_PointerWrapperBase", pybind11::dynamic_attr())
+        .def(pybind11::init<void *>())
+        .def(pybind11::init<intptr_t>())
+        .def("get_ptr", &_PointerWrapperBase::get_ptr)
+        .def("set_ptr", &_PointerWrapperBase::set_ptr);
   }
+  void *ptr;
 };
-template <class T> using WrappedPtrT = std::unique_ptr<PointerWrapper<T>>;
+
+template <class T> struct PointerWrapper : public _PointerWrapperBase {
+  static_assert(std::is_pointer<T>::value, "T must be a pointer type");
+  using _PointerWrapperBase::_PointerWrapperBase;
+
+  static void FastBind(pybind11::module &m, const std::string &name) {
+    pybind11::class_<PointerWrapper, std::shared_ptr<PointerWrapper>,
+                     _PointerWrapperBase>(m, name.c_str(),
+                                          pybind11::dynamic_attr())
+        .def(pybind11::init<intptr_t>())
+        .def_static("from_capsule", [](pybind11::capsule o) {
+          return std::make_shared<PointerWrapper<T>>(
+              reinterpret_cast<void *>(o.get_pointer()));
+        });
+  }
+  T Cptr() { return reinterpret_cast<T>(ptr); }
+};
+template <class T> using WrappedPtrT = std::shared_ptr<PointerWrapper<T>>;
 
 template <class T> WrappedPtrT<T> WrapP(T ptr) {
   if (!ptr) {
@@ -73,29 +85,49 @@ template <typename R, typename... Args> struct FnPointerWrapper {
 
   template <class CR, typename... CArgs> struct GetCptr {
     using CFnPtrT = CR (*)(CArgs...);
-    using CFnT = CR(CArgs...);
     static CFnPtrT Run(std::function<CppFnT> to_call, Guardian &&guard,
-                       CFnPtrT c_wrapper, int64_t uuid) {
+                       CFnPtrT c_wrapper, const char *uuid0, int64_t uuid1) {
       // lock
-      GetMutex(uuid).lock();
-      guard.dtor_callbacks.push_back([uuid]() {
-        FnMap().erase(uuid);
-        GetMutex(uuid).unlock();
-      });
-      FnProxy(uuid) = to_call;
+      guard.dtor_callbacks.push_back(
+          [uuid0, uuid1]() { ReleaseFnProxy(uuid0, uuid1); });
+      SetFnProxy(uuid0, uuid1, to_call);
       return c_wrapper;
     }
   };
 
-  static std::mutex &GetMutex(int64_t uuid) {
-    static std::map<int64_t, std::mutex> mtx;
-    return mtx[uuid];
-  };
+  using FnMapT =
+      std::map<const char *, std::map<int64_t, std::function<CppFnT>>>;
+  static void SetFnProxy(const char *uuid0, int64_t uuid1,
+                         std::function<CppFnT> &fn) {
+    FnMapMutex().lock();
+    while (FnMap()[uuid0].count(uuid1) != 0) {
+      // The chance is so low, spin lock should be fine
+      FnMapMutex().unlock();
+      std::this_thread::sleep_for(std::chrono::milliseconds(1));
+      FnMapMutex().lock();
+    }
+    FnMap()[uuid0][uuid1] = fn;
+    FnMapMutex().unlock();
+  }
 
-  static std::function<CppFnT> &FnProxy(int64_t uuid) { return FnMap()[uuid]; }
-  static std::map<int64_t, std::function<CppFnT>> &FnMap() {
-    static std::map<int64_t, std::function<CppFnT>> fns;
+  static std::function<CppFnT> GetFnProxy(const char *uuid0, int64_t uuid1) {
+    std::lock_guard<std::mutex> _(FnMapMutex());
+    auto ret = FnMap()[uuid0][uuid1];
+    return ret;
+  }
+
+  static void ReleaseFnProxy(const char *uuid0, int64_t uuid1) {
+    std::lock_guard<std::mutex> _(FnMapMutex());
+    FnMap()[uuid0].erase(uuid1);
+  }
+  static FnMapT &FnMap() {
+    static FnMapT fns;
     return fns;
+  }
+
+  static std::mutex &FnMapMutex() {
+    static std::mutex m;
+    return m;
   }
 };
 
@@ -484,10 +516,9 @@ struct Bind_clang_VirtualFileOverlay_create : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_VirtualFileOverlay_create",
-        [=](unsigned int options) {
+        [](unsigned int options) {
           return pybind11_weaver::WrapP<CXVirtualFileOverlayImpl *>(
-                     clang_VirtualFileOverlay_create(options))
-              .release();
+              clang_VirtualFileOverlay_create(options));
         },
         R"_pb11_weaver(/**
  * Create a \c CXVirtualFileOverlay object.
@@ -527,9 +558,9 @@ struct Bind_clang_VirtualFileOverlay_addFileMapping : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_VirtualFileOverlay_addFileMapping",
-        [=](pybind11_weaver::PointerWrapper<CXVirtualFileOverlayImpl *> *arg0,
-            const char *virtualPath, const char *realPath) {
-          return clang_VirtualFileOverlay_addFileMapping((arg0)->ptr,
+        [](pybind11_weaver::WrappedPtrT<CXVirtualFileOverlayImpl *> arg0,
+           const char *virtualPath, const char *realPath) {
+          return clang_VirtualFileOverlay_addFileMapping((arg0)->Cptr(),
                                                          virtualPath, realPath);
         },
         R"_pb11_weaver(/**
@@ -570,9 +601,9 @@ struct Bind_clang_VirtualFileOverlay_setCaseSensitivity : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_VirtualFileOverlay_setCaseSensitivity",
-        [=](pybind11_weaver::PointerWrapper<CXVirtualFileOverlayImpl *> *arg0,
-            int caseSensitive) {
-          return clang_VirtualFileOverlay_setCaseSensitivity((arg0)->ptr,
+        [](pybind11_weaver::WrappedPtrT<CXVirtualFileOverlayImpl *> arg0,
+           int caseSensitive) {
+          return clang_VirtualFileOverlay_setCaseSensitivity((arg0)->Cptr(),
                                                              caseSensitive);
         },
         R"_pb11_weaver(/**
@@ -616,12 +647,13 @@ struct Bind_clang_VirtualFileOverlay_writeToBuffer : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_VirtualFileOverlay_writeToBuffer",
-        [=](pybind11_weaver::PointerWrapper<CXVirtualFileOverlayImpl *> *arg0,
-            unsigned int options,
-            pybind11_weaver::PointerWrapper<char **> *out_buffer_ptr,
-            unsigned int *out_buffer_size) {
+        [](pybind11_weaver::WrappedPtrT<CXVirtualFileOverlayImpl *> arg0,
+           unsigned int options,
+           pybind11_weaver::WrappedPtrT<char **> out_buffer_ptr,
+           unsigned int *out_buffer_size) {
           return clang_VirtualFileOverlay_writeToBuffer(
-              (arg0)->ptr, options, (out_buffer_ptr)->ptr, out_buffer_size);
+              (arg0)->Cptr(), options, (out_buffer_ptr)->Cptr(),
+              out_buffer_size);
         },
         R"_pb11_weaver(/**
  * Write out the \c CXVirtualFileOverlay object to a char buffer.
@@ -663,8 +695,8 @@ template <class Pybind11T> struct Bind_clang_free : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_free",
-        [=](pybind11_weaver::PointerWrapper<void *> *buffer) {
-          return clang_free((buffer)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> buffer) {
+          return clang_free((buffer)->Cptr());
         },
         R"_pb11_weaver(/**
  * free memory allocated by libclang, such as the buffer returned by
@@ -702,8 +734,8 @@ struct Bind_clang_VirtualFileOverlay_dispose : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_VirtualFileOverlay_dispose",
-        [=](pybind11_weaver::PointerWrapper<CXVirtualFileOverlayImpl *> *arg0) {
-          return clang_VirtualFileOverlay_dispose((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXVirtualFileOverlayImpl *> arg0) {
+          return clang_VirtualFileOverlay_dispose((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Dispose a \c CXVirtualFileOverlay object.
@@ -740,10 +772,9 @@ struct Bind_clang_ModuleMapDescriptor_create : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_ModuleMapDescriptor_create",
-        [=](unsigned int options) {
+        [](unsigned int options) {
           return pybind11_weaver::WrapP<CXModuleMapDescriptorImpl *>(
-                     clang_ModuleMapDescriptor_create(options))
-              .release();
+              clang_ModuleMapDescriptor_create(options));
         },
         R"_pb11_weaver(/**
  * Create a \c CXModuleMapDescriptor object.
@@ -785,10 +816,10 @@ struct Bind_clang_ModuleMapDescriptor_setFrameworkModuleName
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_ModuleMapDescriptor_setFrameworkModuleName",
-        [=](pybind11_weaver::PointerWrapper<CXModuleMapDescriptorImpl *> *arg0,
-            const char *name) {
-          return clang_ModuleMapDescriptor_setFrameworkModuleName((arg0)->ptr,
-                                                                  name);
+        [](pybind11_weaver::WrappedPtrT<CXModuleMapDescriptorImpl *> arg0,
+           const char *name) {
+          return clang_ModuleMapDescriptor_setFrameworkModuleName(
+              (arg0)->Cptr(), name);
         },
         R"_pb11_weaver(/**
  * Sets the framework module name that the module.map describes.
@@ -830,9 +861,10 @@ struct Bind_clang_ModuleMapDescriptor_setUmbrellaHeader : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_ModuleMapDescriptor_setUmbrellaHeader",
-        [=](pybind11_weaver::PointerWrapper<CXModuleMapDescriptorImpl *> *arg0,
-            const char *name) {
-          return clang_ModuleMapDescriptor_setUmbrellaHeader((arg0)->ptr, name);
+        [](pybind11_weaver::WrappedPtrT<CXModuleMapDescriptorImpl *> arg0,
+           const char *name) {
+          return clang_ModuleMapDescriptor_setUmbrellaHeader((arg0)->Cptr(),
+                                                             name);
         },
         R"_pb11_weaver(/**
  * Sets the umbrella header name that the module.map describes.
@@ -873,12 +905,13 @@ struct Bind_clang_ModuleMapDescriptor_writeToBuffer : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_ModuleMapDescriptor_writeToBuffer",
-        [=](pybind11_weaver::PointerWrapper<CXModuleMapDescriptorImpl *> *arg0,
-            unsigned int options,
-            pybind11_weaver::PointerWrapper<char **> *out_buffer_ptr,
-            unsigned int *out_buffer_size) {
+        [](pybind11_weaver::WrappedPtrT<CXModuleMapDescriptorImpl *> arg0,
+           unsigned int options,
+           pybind11_weaver::WrappedPtrT<char **> out_buffer_ptr,
+           unsigned int *out_buffer_size) {
           return clang_ModuleMapDescriptor_writeToBuffer(
-              (arg0)->ptr, options, (out_buffer_ptr)->ptr, out_buffer_size);
+              (arg0)->Cptr(), options, (out_buffer_ptr)->Cptr(),
+              out_buffer_size);
         },
         R"_pb11_weaver(/**
  * Write out the \c CXModuleMapDescriptor object to a char buffer.
@@ -921,9 +954,8 @@ struct Bind_clang_ModuleMapDescriptor_dispose : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_ModuleMapDescriptor_dispose",
-        [=](pybind11_weaver::PointerWrapper<CXModuleMapDescriptorImpl *>
-                *arg0) {
-          return clang_ModuleMapDescriptor_dispose((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXModuleMapDescriptorImpl *> arg0) {
+          return clang_ModuleMapDescriptor_dispose((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Dispose a \c CXModuleMapDescriptor object.
@@ -1005,11 +1037,9 @@ struct Bind_clang_CompilationDatabase_fromDirectory : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CompilationDatabase_fromDirectory",
-        [=](const char *BuildDir, CXCompilationDatabase_Error *ErrorCode) {
+        [](const char *BuildDir, CXCompilationDatabase_Error *ErrorCode) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_CompilationDatabase_fromDirectory(BuildDir,
-                                                             ErrorCode))
-              .release();
+              clang_CompilationDatabase_fromDirectory(BuildDir, ErrorCode));
         },
         R"_pb11_weaver(/**
  * Creates a compilation database from the database found in directory
@@ -1050,8 +1080,8 @@ struct Bind_clang_CompilationDatabase_dispose : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CompilationDatabase_dispose",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0) {
-          return clang_CompilationDatabase_dispose((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0) {
+          return clang_CompilationDatabase_dispose((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Free the given compilation database
@@ -1089,12 +1119,11 @@ struct Bind_clang_CompilationDatabase_getCompileCommands : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CompilationDatabase_getCompileCommands",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0,
-            const char *CompleteFileName) {
+        [](pybind11_weaver::WrappedPtrT<void *> arg0,
+           const char *CompleteFileName) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_CompilationDatabase_getCompileCommands(
-                         (arg0)->ptr, CompleteFileName))
-              .release();
+              clang_CompilationDatabase_getCompileCommands((arg0)->Cptr(),
+                                                           CompleteFileName));
         },
         R"_pb11_weaver(/**
  * Find the compile commands used for a file. The compile commands
@@ -1137,11 +1166,9 @@ struct Bind_clang_CompilationDatabase_getAllCompileCommands
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CompilationDatabase_getAllCompileCommands",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0) {
+        [](pybind11_weaver::WrappedPtrT<void *> arg0) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_CompilationDatabase_getAllCompileCommands(
-                         (arg0)->ptr))
-              .release();
+              clang_CompilationDatabase_getAllCompileCommands((arg0)->Cptr()));
         },
         R"_pb11_weaver(/**
  * Get all the compile commands in the given compilation database.
@@ -1181,8 +1208,8 @@ struct Bind_clang_CompileCommands_dispose : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CompileCommands_dispose",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0) {
-          return clang_CompileCommands_dispose((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0) {
+          return clang_CompileCommands_dispose((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Free the given CompileCommands
@@ -1219,8 +1246,8 @@ struct Bind_clang_CompileCommands_getSize : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CompileCommands_getSize",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0) {
-          return clang_CompileCommands_getSize((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0) {
+          return clang_CompileCommands_getSize((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Get the number of CompileCommand we have for a file
@@ -1257,10 +1284,9 @@ struct Bind_clang_CompileCommands_getCommand : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CompileCommands_getCommand",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0, unsigned int I) {
+        [](pybind11_weaver::WrappedPtrT<void *> arg0, unsigned int I) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_CompileCommands_getCommand((arg0)->ptr, I))
-              .release();
+              clang_CompileCommands_getCommand((arg0)->Cptr(), I));
         },
         R"_pb11_weaver(/**
  * Get the I'th CompileCommand for a file
@@ -1299,8 +1325,8 @@ struct Bind_clang_CompileCommand_getDirectory : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CompileCommand_getDirectory",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0) {
-          return clang_CompileCommand_getDirectory((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0) {
+          return clang_CompileCommand_getDirectory((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Get the working directory where the CompileCommand was executed from
@@ -1337,8 +1363,8 @@ struct Bind_clang_CompileCommand_getFilename : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CompileCommand_getFilename",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0) {
-          return clang_CompileCommand_getFilename((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0) {
+          return clang_CompileCommand_getFilename((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Get the filename associated with the CompileCommand.
@@ -1375,8 +1401,8 @@ struct Bind_clang_CompileCommand_getNumArgs : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CompileCommand_getNumArgs",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0) {
-          return clang_CompileCommand_getNumArgs((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0) {
+          return clang_CompileCommand_getNumArgs((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Get the number of arguments in the compiler invocation.
@@ -1414,8 +1440,8 @@ struct Bind_clang_CompileCommand_getArg : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CompileCommand_getArg",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0, unsigned int I) {
-          return clang_CompileCommand_getArg((arg0)->ptr, I);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0, unsigned int I) {
+          return clang_CompileCommand_getArg((arg0)->Cptr(), I);
         },
         R"_pb11_weaver(/**
  * Get the I'th argument value in the compiler invocations
@@ -1456,8 +1482,8 @@ struct Bind_clang_CompileCommand_getNumMappedSources : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CompileCommand_getNumMappedSources",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0) {
-          return clang_CompileCommand_getNumMappedSources((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0) {
+          return clang_CompileCommand_getNumMappedSources((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Get the number of source mappings for the compiler invocation.
@@ -1497,8 +1523,8 @@ struct Bind_clang_CompileCommand_getMappedSourcePath : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CompileCommand_getMappedSourcePath",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0, unsigned int I) {
-          return clang_CompileCommand_getMappedSourcePath((arg0)->ptr, I);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0, unsigned int I) {
+          return clang_CompileCommand_getMappedSourcePath((arg0)->Cptr(), I);
         },
         R"_pb11_weaver(/**
  * Get the I'th mapped source path for the compiler invocation.
@@ -1538,8 +1564,8 @@ struct Bind_clang_CompileCommand_getMappedSourceContent : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CompileCommand_getMappedSourceContent",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0, unsigned int I) {
-          return clang_CompileCommand_getMappedSourceContent((arg0)->ptr, I);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0, unsigned int I) {
+          return clang_CompileCommand_getMappedSourceContent((arg0)->Cptr(), I);
         },
         R"_pb11_weaver(/**
  * Get the I'th mapped source content for the compiler invocation.
@@ -1578,8 +1604,8 @@ template <class Pybind11T> struct Bind_clang_getFileName : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getFileName",
-        [=](pybind11_weaver::PointerWrapper<void *> *SFile) {
-          return clang_getFileName((SFile)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> SFile) {
+          return clang_getFileName((SFile)->Cptr());
         },
         R"_pb11_weaver(/**
  * Retrieve the complete file and path name of the given file.
@@ -1613,8 +1639,8 @@ template <class Pybind11T> struct Bind_clang_getFileTime : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getFileTime",
-        [=](pybind11_weaver::PointerWrapper<void *> *SFile) {
-          return clang_getFileTime((SFile)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> SFile) {
+          return clang_getFileTime((SFile)->Cptr());
         },
         R"_pb11_weaver(/**
  * Retrieve the last modification time of the given file.
@@ -1686,9 +1712,8 @@ struct Bind_clang_getFileUniqueID : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getFileUniqueID",
-        [=](pybind11_weaver::PointerWrapper<void *> *file,
-            CXFileUniqueID *outID) {
-          return clang_getFileUniqueID((file)->ptr, outID);
+        [](pybind11_weaver::WrappedPtrT<void *> file, CXFileUniqueID *outID) {
+          return clang_getFileUniqueID((file)->Cptr(), outID);
         },
         R"_pb11_weaver(/**
  * Retrieve the unique ID for the given \c file.
@@ -1727,9 +1752,9 @@ template <class Pybind11T> struct Bind_clang_File_isEqual : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_File_isEqual",
-        [=](pybind11_weaver::PointerWrapper<void *> *file1,
-            pybind11_weaver::PointerWrapper<void *> *file2) {
-          return clang_File_isEqual((file1)->ptr, (file2)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> file1,
+           pybind11_weaver::WrappedPtrT<void *> file2) {
+          return clang_File_isEqual((file1)->Cptr(), (file2)->Cptr());
         },
         R"_pb11_weaver(/**
  * Returns non-zero if the \c file1 and \c file2 point to the same file,
@@ -1765,8 +1790,8 @@ struct Bind_clang_File_tryGetRealPathName : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_File_tryGetRealPathName",
-        [=](pybind11_weaver::PointerWrapper<void *> *file) {
-          return clang_File_tryGetRealPathName((file)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> file) {
+          return clang_File_tryGetRealPathName((file)->Cptr());
         },
         R"_pb11_weaver(/**
  * Returns the real path name of \c file.
@@ -2166,11 +2191,11 @@ struct Bind_clang_getExpansionLocation : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getExpansionLocation",
-        [=](CXSourceLocation location,
-            pybind11_weaver::PointerWrapper<void **> *file, unsigned int *line,
-            unsigned int *column, unsigned int *offset) {
-          return clang_getExpansionLocation(location, (file)->ptr, line, column,
-                                            offset);
+        [](CXSourceLocation location,
+           pybind11_weaver::WrappedPtrT<void **> file, unsigned int *line,
+           unsigned int *column, unsigned int *offset) {
+          return clang_getExpansionLocation(location, (file)->Cptr(), line,
+                                            column, offset);
         },
         R"_pb11_weaver(/**
  * Retrieve the file, line, column, and offset represented by
@@ -2299,10 +2324,10 @@ struct Bind_clang_getInstantiationLocation : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getInstantiationLocation",
-        [=](CXSourceLocation location,
-            pybind11_weaver::PointerWrapper<void **> *file, unsigned int *line,
-            unsigned int *column, unsigned int *offset) {
-          return clang_getInstantiationLocation(location, (file)->ptr, line,
+        [](CXSourceLocation location,
+           pybind11_weaver::WrappedPtrT<void **> file, unsigned int *line,
+           unsigned int *column, unsigned int *offset) {
+          return clang_getInstantiationLocation(location, (file)->Cptr(), line,
                                                 column, offset);
         },
         R"_pb11_weaver(/**
@@ -2345,11 +2370,11 @@ struct Bind_clang_getSpellingLocation : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getSpellingLocation",
-        [=](CXSourceLocation location,
-            pybind11_weaver::PointerWrapper<void **> *file, unsigned int *line,
-            unsigned int *column, unsigned int *offset) {
-          return clang_getSpellingLocation(location, (file)->ptr, line, column,
-                                           offset);
+        [](CXSourceLocation location,
+           pybind11_weaver::WrappedPtrT<void **> file, unsigned int *line,
+           unsigned int *column, unsigned int *offset) {
+          return clang_getSpellingLocation(location, (file)->Cptr(), line,
+                                           column, offset);
         },
         R"_pb11_weaver(/**
  * Retrieve the file, line, column, and offset represented by
@@ -2404,10 +2429,10 @@ struct Bind_clang_getFileLocation : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getFileLocation",
-        [=](CXSourceLocation location,
-            pybind11_weaver::PointerWrapper<void **> *file, unsigned int *line,
-            unsigned int *column, unsigned int *offset) {
-          return clang_getFileLocation(location, (file)->ptr, line, column,
+        [](CXSourceLocation location,
+           pybind11_weaver::WrappedPtrT<void **> file, unsigned int *line,
+           unsigned int *column, unsigned int *offset) {
+          return clang_getFileLocation(location, (file)->Cptr(), line, column,
                                        offset);
         },
         R"_pb11_weaver(/**
@@ -2672,8 +2697,8 @@ struct Bind_clang_getNumDiagnosticsInSet : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getNumDiagnosticsInSet",
-        [=](pybind11_weaver::PointerWrapper<void *> *Diags) {
-          return clang_getNumDiagnosticsInSet((Diags)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> Diags) {
+          return clang_getNumDiagnosticsInSet((Diags)->Cptr());
         },
         R"_pb11_weaver(/**
  * Determine the number of diagnostics in a CXDiagnosticSet.
@@ -2710,11 +2735,9 @@ struct Bind_clang_getDiagnosticInSet : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getDiagnosticInSet",
-        [=](pybind11_weaver::PointerWrapper<void *> *Diags,
-            unsigned int Index) {
+        [](pybind11_weaver::WrappedPtrT<void *> Diags, unsigned int Index) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_getDiagnosticInSet((Diags)->ptr, Index))
-              .release();
+              clang_getDiagnosticInSet((Diags)->Cptr(), Index));
         },
         R"_pb11_weaver(/**
  * Retrieve a diagnostic associated with the given CXDiagnosticSet.
@@ -2808,10 +2831,9 @@ struct Bind_clang_loadDiagnostics : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_loadDiagnostics",
-        [=](const char *file, CXLoadDiag_Error *error, CXString *errorString) {
+        [](const char *file, CXLoadDiag_Error *error, CXString *errorString) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_loadDiagnostics(file, error, errorString))
-              .release();
+              clang_loadDiagnostics(file, error, errorString));
         },
         R"_pb11_weaver(/**
  * Deserialize a set of diagnostics from a Clang diagnostics bitcode
@@ -2856,8 +2878,8 @@ struct Bind_clang_disposeDiagnosticSet : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_disposeDiagnosticSet",
-        [=](pybind11_weaver::PointerWrapper<void *> *Diags) {
-          return clang_disposeDiagnosticSet((Diags)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> Diags) {
+          return clang_disposeDiagnosticSet((Diags)->Cptr());
         },
         R"_pb11_weaver(/**
  * Release a CXDiagnosticSet and all of its contained diagnostics.
@@ -2894,10 +2916,9 @@ struct Bind_clang_getChildDiagnostics : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getChildDiagnostics",
-        [=](pybind11_weaver::PointerWrapper<void *> *D) {
+        [](pybind11_weaver::WrappedPtrT<void *> D) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_getChildDiagnostics((D)->ptr))
-              .release();
+              clang_getChildDiagnostics((D)->Cptr()));
         },
         R"_pb11_weaver(/**
  * Retrieve the child diagnostics of a CXDiagnostic.
@@ -2936,8 +2957,8 @@ struct Bind_clang_disposeDiagnostic : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_disposeDiagnostic",
-        [=](pybind11_weaver::PointerWrapper<void *> *Diagnostic) {
-          return clang_disposeDiagnostic((Diagnostic)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> Diagnostic) {
+          return clang_disposeDiagnostic((Diagnostic)->Cptr());
         },
         R"_pb11_weaver(/**
  * Destroy a diagnostic.
@@ -3071,9 +3092,9 @@ struct Bind_clang_formatDiagnostic : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_formatDiagnostic",
-        [=](pybind11_weaver::PointerWrapper<void *> *Diagnostic,
-            unsigned int Options) {
-          return clang_formatDiagnostic((Diagnostic)->ptr, Options);
+        [](pybind11_weaver::WrappedPtrT<void *> Diagnostic,
+           unsigned int Options) {
+          return clang_formatDiagnostic((Diagnostic)->Cptr(), Options);
         },
         R"_pb11_weaver(/**
  * Format the given diagnostic in a manner that is suitable for display.
@@ -3161,8 +3182,8 @@ struct Bind_clang_getDiagnosticSeverity : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getDiagnosticSeverity",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0) {
-          return clang_getDiagnosticSeverity((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0) {
+          return clang_getDiagnosticSeverity((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Determine the severity of the given diagnostic.
@@ -3199,8 +3220,8 @@ struct Bind_clang_getDiagnosticLocation : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getDiagnosticLocation",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0) {
-          return clang_getDiagnosticLocation((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0) {
+          return clang_getDiagnosticLocation((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Retrieve the source location of the given diagnostic.
@@ -3240,8 +3261,8 @@ struct Bind_clang_getDiagnosticSpelling : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getDiagnosticSpelling",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0) {
-          return clang_getDiagnosticSpelling((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0) {
+          return clang_getDiagnosticSpelling((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Retrieve the text of the given diagnostic.
@@ -3278,8 +3299,8 @@ struct Bind_clang_getDiagnosticOption : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getDiagnosticOption",
-        [=](pybind11_weaver::PointerWrapper<void *> *Diag, CXString *Disable) {
-          return clang_getDiagnosticOption((Diag)->ptr, Disable);
+        [](pybind11_weaver::WrappedPtrT<void *> Diag, CXString *Disable) {
+          return clang_getDiagnosticOption((Diag)->Cptr(), Disable);
         },
         R"_pb11_weaver(/**
  * Retrieve the name of the command-line option that enabled this
@@ -3324,8 +3345,8 @@ struct Bind_clang_getDiagnosticCategory : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getDiagnosticCategory",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0) {
-          return clang_getDiagnosticCategory((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0) {
+          return clang_getDiagnosticCategory((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Retrieve the category number for this diagnostic.
@@ -3412,8 +3433,8 @@ struct Bind_clang_getDiagnosticCategoryText : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getDiagnosticCategoryText",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0) {
-          return clang_getDiagnosticCategoryText((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0) {
+          return clang_getDiagnosticCategoryText((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Retrieve the diagnostic category text for a given diagnostic.
@@ -3452,8 +3473,8 @@ struct Bind_clang_getDiagnosticNumRanges : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getDiagnosticNumRanges",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0) {
-          return clang_getDiagnosticNumRanges((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0) {
+          return clang_getDiagnosticNumRanges((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Determine the number of source ranges associated with the given
@@ -3491,9 +3512,9 @@ struct Bind_clang_getDiagnosticRange : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getDiagnosticRange",
-        [=](pybind11_weaver::PointerWrapper<void *> *Diagnostic,
-            unsigned int Range) {
-          return clang_getDiagnosticRange((Diagnostic)->ptr, Range);
+        [](pybind11_weaver::WrappedPtrT<void *> Diagnostic,
+           unsigned int Range) {
+          return clang_getDiagnosticRange((Diagnostic)->Cptr(), Range);
         },
         R"_pb11_weaver(/**
  * Retrieve a source range associated with the diagnostic.
@@ -3539,8 +3560,8 @@ struct Bind_clang_getDiagnosticNumFixIts : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getDiagnosticNumFixIts",
-        [=](pybind11_weaver::PointerWrapper<void *> *Diagnostic) {
-          return clang_getDiagnosticNumFixIts((Diagnostic)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> Diagnostic) {
+          return clang_getDiagnosticNumFixIts((Diagnostic)->Cptr());
         },
         R"_pb11_weaver(/**
  * Determine the number of fix-it hints associated with the
@@ -3578,9 +3599,9 @@ struct Bind_clang_getDiagnosticFixIt : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getDiagnosticFixIt",
-        [=](pybind11_weaver::PointerWrapper<void *> *Diagnostic,
-            unsigned int FixIt, CXSourceRange *ReplacementRange) {
-          return clang_getDiagnosticFixIt((Diagnostic)->ptr, FixIt,
+        [](pybind11_weaver::WrappedPtrT<void *> Diagnostic, unsigned int FixIt,
+           CXSourceRange *ReplacementRange) {
+          return clang_getDiagnosticFixIt((Diagnostic)->Cptr(), FixIt,
                                           ReplacementRange);
         },
         R"_pb11_weaver(/**
@@ -3896,11 +3917,9 @@ template <class Pybind11T> struct Bind_clang_createIndex : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_createIndex",
-        [=](int excludeDeclarationsFromPCH, int displayDiagnostics) {
-          return pybind11_weaver::WrapP<void *>(
-                     clang_createIndex(excludeDeclarationsFromPCH,
-                                       displayDiagnostics))
-              .release();
+        [](int excludeDeclarationsFromPCH, int displayDiagnostics) {
+          return pybind11_weaver::WrapP<void *>(clang_createIndex(
+              excludeDeclarationsFromPCH, displayDiagnostics));
         },
         R"_pb11_weaver(/**
  * Provides a shared context for creating translation units.
@@ -3971,8 +3990,8 @@ template <class Pybind11T> struct Bind_clang_disposeIndex : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_disposeIndex",
-        [=](pybind11_weaver::PointerWrapper<void *> *index) {
-          return clang_disposeIndex((index)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> index) {
+          return clang_disposeIndex((index)->Cptr());
         },
         R"_pb11_weaver(/**
  * Destroy the given index.
@@ -4069,9 +4088,8 @@ struct Bind_clang_CXIndex_setGlobalOptions : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CXIndex_setGlobalOptions",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0,
-            unsigned int options) {
-          return clang_CXIndex_setGlobalOptions((arg0)->ptr, options);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0, unsigned int options) {
+          return clang_CXIndex_setGlobalOptions((arg0)->Cptr(), options);
         },
         R"_pb11_weaver(/**
  * Sets general options associated with a CXIndex.
@@ -4118,8 +4136,8 @@ struct Bind_clang_CXIndex_getGlobalOptions : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CXIndex_getGlobalOptions",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0) {
-          return clang_CXIndex_getGlobalOptions((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0) {
+          return clang_CXIndex_getGlobalOptions((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Gets the general options associated with a CXIndex.
@@ -4160,8 +4178,8 @@ struct Bind_clang_CXIndex_setInvocationEmissionPathOption : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CXIndex_setInvocationEmissionPathOption",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0, const char *Path) {
-          return clang_CXIndex_setInvocationEmissionPathOption((arg0)->ptr,
+        [](pybind11_weaver::WrappedPtrT<void *> arg0, const char *Path) {
+          return clang_CXIndex_setInvocationEmissionPathOption((arg0)->Cptr(),
                                                                Path);
         },
         R"_pb11_weaver(/**
@@ -4206,9 +4224,10 @@ struct Bind_clang_isFileMultipleIncludeGuarded : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_isFileMultipleIncludeGuarded",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *tu,
-            pybind11_weaver::PointerWrapper<void *> *file) {
-          return clang_isFileMultipleIncludeGuarded((tu)->ptr, (file)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> tu,
+           pybind11_weaver::WrappedPtrT<void *> file) {
+          return clang_isFileMultipleIncludeGuarded((tu)->Cptr(),
+                                                    (file)->Cptr());
         },
         R"_pb11_weaver(/**
  * Determine whether the given header is guarded against
@@ -4246,11 +4265,10 @@ template <class Pybind11T> struct Bind_clang_getFile : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getFile",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *tu,
-            const char *file_name) {
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> tu,
+           const char *file_name) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_getFile((tu)->ptr, file_name))
-              .release();
+              clang_getFile((tu)->Cptr(), file_name));
         },
         R"_pb11_weaver(/**
  * Retrieve a file handle within the given translation unit.
@@ -4292,10 +4310,9 @@ struct Bind_clang_getFileContents : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getFileContents",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *tu,
-            pybind11_weaver::PointerWrapper<void *> *file,
-            unsigned long *size) {
-          return clang_getFileContents((tu)->ptr, (file)->ptr, size);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> tu,
+           pybind11_weaver::WrappedPtrT<void *> file, unsigned long *size) {
+          return clang_getFileContents((tu)->Cptr(), (file)->Cptr(), size);
         },
         R"_pb11_weaver(/**
  * Retrieve the buffer associated with the given file.
@@ -4338,10 +4355,10 @@ template <class Pybind11T> struct Bind_clang_getLocation : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getLocation",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *tu,
-            pybind11_weaver::PointerWrapper<void *> *file, unsigned int line,
-            unsigned int column) {
-          return clang_getLocation((tu)->ptr, (file)->ptr, line, column);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> tu,
+           pybind11_weaver::WrappedPtrT<void *> file, unsigned int line,
+           unsigned int column) {
+          return clang_getLocation((tu)->Cptr(), (file)->Cptr(), line, column);
         },
         R"_pb11_weaver(/**
  * Retrieves the source location associated with a given file/line/column
@@ -4377,10 +4394,10 @@ struct Bind_clang_getLocationForOffset : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getLocationForOffset",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *tu,
-            pybind11_weaver::PointerWrapper<void *> *file,
-            unsigned int offset) {
-          return clang_getLocationForOffset((tu)->ptr, (file)->ptr, offset);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> tu,
+           pybind11_weaver::WrappedPtrT<void *> file, unsigned int offset) {
+          return clang_getLocationForOffset((tu)->Cptr(), (file)->Cptr(),
+                                            offset);
         },
         R"_pb11_weaver(/**
  * Retrieves the source location associated with a given character offset
@@ -4418,9 +4435,9 @@ struct Bind_clang_getSkippedRanges : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getSkippedRanges",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *tu,
-            pybind11_weaver::PointerWrapper<void *> *file) {
-          return clang_getSkippedRanges((tu)->ptr, (file)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> tu,
+           pybind11_weaver::WrappedPtrT<void *> file) {
+          return clang_getSkippedRanges((tu)->Cptr(), (file)->Cptr());
         },
         R"_pb11_weaver(/**
  * Retrieve all ranges that were skipped by the preprocessor.
@@ -4459,8 +4476,8 @@ struct Bind_clang_getAllSkippedRanges : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getAllSkippedRanges",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *tu) {
-          return clang_getAllSkippedRanges((tu)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> tu) {
+          return clang_getAllSkippedRanges((tu)->Cptr());
         },
         R"_pb11_weaver(/**
  * Retrieve all ranges from all files that were skipped by the
@@ -4500,8 +4517,8 @@ struct Bind_clang_getNumDiagnostics : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getNumDiagnostics",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *Unit) {
-          return clang_getNumDiagnostics((Unit)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> Unit) {
+          return clang_getNumDiagnostics((Unit)->Cptr());
         },
         R"_pb11_weaver(/**
  * Determine the number of diagnostics produced for the given
@@ -4537,11 +4554,10 @@ template <class Pybind11T> struct Bind_clang_getDiagnostic : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getDiagnostic",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *Unit,
-            unsigned int Index) {
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> Unit,
+           unsigned int Index) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_getDiagnostic((Unit)->ptr, Index))
-              .release();
+              clang_getDiagnostic((Unit)->Cptr(), Index));
         },
         R"_pb11_weaver(/**
  * Retrieve a diagnostic associated with the given translation unit.
@@ -4582,10 +4598,9 @@ struct Bind_clang_getDiagnosticSetFromTU : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getDiagnosticSetFromTU",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *Unit) {
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> Unit) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_getDiagnosticSetFromTU((Unit)->ptr))
-              .release();
+              clang_getDiagnosticSetFromTU((Unit)->Cptr()));
         },
         R"_pb11_weaver(/**
  * Retrieve the complete set of diagnostics associated with a
@@ -4625,8 +4640,8 @@ struct Bind_clang_getTranslationUnitSpelling : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getTranslationUnitSpelling",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *CTUnit) {
-          return clang_getTranslationUnitSpelling((CTUnit)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> CTUnit) {
+          return clang_getTranslationUnitSpelling((CTUnit)->Cptr());
         },
         R"_pb11_weaver(/**
  * Get the original translation unit source file name.
@@ -4664,18 +4679,16 @@ struct Bind_clang_createTranslationUnitFromSourceFile : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_createTranslationUnitFromSourceFile",
-        [=](pybind11_weaver::PointerWrapper<void *> *CIdx,
-            const char *source_filename, int num_clang_command_line_args,
-            pybind11_weaver::PointerWrapper<const char *const *>
-                *clang_command_line_args,
-            unsigned int num_unsaved_files, CXUnsavedFile *unsaved_files) {
+        [](pybind11_weaver::WrappedPtrT<void *> CIdx,
+           const char *source_filename, int num_clang_command_line_args,
+           pybind11_weaver::WrappedPtrT<const char *const *>
+               clang_command_line_args,
+           unsigned int num_unsaved_files, CXUnsavedFile *unsaved_files) {
           return pybind11_weaver::WrapP<CXTranslationUnitImpl *>(
-                     clang_createTranslationUnitFromSourceFile(
-                         (CIdx)->ptr, source_filename,
-                         num_clang_command_line_args,
-                         (clang_command_line_args)->ptr, num_unsaved_files,
-                         unsaved_files))
-              .release();
+              clang_createTranslationUnitFromSourceFile(
+                  (CIdx)->Cptr(), source_filename, num_clang_command_line_args,
+                  (clang_command_line_args)->Cptr(), num_unsaved_files,
+                  unsaved_files));
         },
         R"_pb11_weaver(/**
  * Return the CXTranslationUnit for a given source file and the provided
@@ -4752,11 +4765,10 @@ struct Bind_clang_createTranslationUnit : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_createTranslationUnit",
-        [=](pybind11_weaver::PointerWrapper<void *> *CIdx,
-            const char *ast_filename) {
+        [](pybind11_weaver::WrappedPtrT<void *> CIdx,
+           const char *ast_filename) {
           return pybind11_weaver::WrapP<CXTranslationUnitImpl *>(
-                     clang_createTranslationUnit((CIdx)->ptr, ast_filename))
-              .release();
+              clang_createTranslationUnit((CIdx)->Cptr(), ast_filename));
         },
         R"_pb11_weaver(/**
  * Same as \c clang_createTranslationUnit2, but returns
@@ -4796,11 +4808,10 @@ struct Bind_clang_createTranslationUnit2 : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_createTranslationUnit2",
-        [=](pybind11_weaver::PointerWrapper<void *> *CIdx,
-            const char *ast_filename,
-            pybind11_weaver::PointerWrapper<CXTranslationUnitImpl **> *out_TU) {
-          return clang_createTranslationUnit2((CIdx)->ptr, ast_filename,
-                                              (out_TU)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> CIdx, const char *ast_filename,
+           pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl **> out_TU) {
+          return clang_createTranslationUnit2((CIdx)->Cptr(), ast_filename,
+                                              (out_TU)->Cptr());
         },
         R"_pb11_weaver(/**
  * Create a translation unit from an AST file (\c -emit-ast).
@@ -5086,18 +5097,16 @@ struct Bind_clang_parseTranslationUnit : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_parseTranslationUnit",
-        [=](pybind11_weaver::PointerWrapper<void *> *CIdx,
-            const char *source_filename,
-            pybind11_weaver::PointerWrapper<const char *const *>
-                *command_line_args,
-            int num_command_line_args, CXUnsavedFile *unsaved_files,
-            unsigned int num_unsaved_files, unsigned int options) {
+        [](pybind11_weaver::WrappedPtrT<void *> CIdx,
+           const char *source_filename,
+           pybind11_weaver::WrappedPtrT<const char *const *> command_line_args,
+           int num_command_line_args, CXUnsavedFile *unsaved_files,
+           unsigned int num_unsaved_files, unsigned int options) {
           return pybind11_weaver::WrapP<CXTranslationUnitImpl *>(
-                     clang_parseTranslationUnit(
-                         (CIdx)->ptr, source_filename, (command_line_args)->ptr,
-                         num_command_line_args, unsaved_files,
-                         num_unsaved_files, options))
-              .release();
+              clang_parseTranslationUnit((CIdx)->Cptr(), source_filename,
+                                         (command_line_args)->Cptr(),
+                                         num_command_line_args, unsaved_files,
+                                         num_unsaved_files, options));
         },
         R"_pb11_weaver(/**
  * Same as \c clang_parseTranslationUnit2, but returns
@@ -5137,17 +5146,16 @@ struct Bind_clang_parseTranslationUnit2 : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_parseTranslationUnit2",
-        [=](pybind11_weaver::PointerWrapper<void *> *CIdx,
-            const char *source_filename,
-            pybind11_weaver::PointerWrapper<const char *const *>
-                *command_line_args,
-            int num_command_line_args, CXUnsavedFile *unsaved_files,
-            unsigned int num_unsaved_files, unsigned int options,
-            pybind11_weaver::PointerWrapper<CXTranslationUnitImpl **> *out_TU) {
+        [](pybind11_weaver::WrappedPtrT<void *> CIdx,
+           const char *source_filename,
+           pybind11_weaver::WrappedPtrT<const char *const *> command_line_args,
+           int num_command_line_args, CXUnsavedFile *unsaved_files,
+           unsigned int num_unsaved_files, unsigned int options,
+           pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl **> out_TU) {
           return clang_parseTranslationUnit2(
-              (CIdx)->ptr, source_filename, (command_line_args)->ptr,
+              (CIdx)->Cptr(), source_filename, (command_line_args)->Cptr(),
               num_command_line_args, unsaved_files, num_unsaved_files, options,
-              (out_TU)->ptr);
+              (out_TU)->Cptr());
         },
         R"_pb11_weaver(/**
  * Parse the given source file and the translation unit corresponding
@@ -5225,17 +5233,16 @@ struct Bind_clang_parseTranslationUnit2FullArgv : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_parseTranslationUnit2FullArgv",
-        [=](pybind11_weaver::PointerWrapper<void *> *CIdx,
-            const char *source_filename,
-            pybind11_weaver::PointerWrapper<const char *const *>
-                *command_line_args,
-            int num_command_line_args, CXUnsavedFile *unsaved_files,
-            unsigned int num_unsaved_files, unsigned int options,
-            pybind11_weaver::PointerWrapper<CXTranslationUnitImpl **> *out_TU) {
+        [](pybind11_weaver::WrappedPtrT<void *> CIdx,
+           const char *source_filename,
+           pybind11_weaver::WrappedPtrT<const char *const *> command_line_args,
+           int num_command_line_args, CXUnsavedFile *unsaved_files,
+           unsigned int num_unsaved_files, unsigned int options,
+           pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl **> out_TU) {
           return clang_parseTranslationUnit2FullArgv(
-              (CIdx)->ptr, source_filename, (command_line_args)->ptr,
+              (CIdx)->Cptr(), source_filename, (command_line_args)->Cptr(),
               num_command_line_args, unsaved_files, num_unsaved_files, options,
-              (out_TU)->ptr);
+              (out_TU)->Cptr());
         },
         R"_pb11_weaver(/**
  * Same as clang_parseTranslationUnit2 but requires a full command line
@@ -5317,8 +5324,8 @@ struct Bind_clang_defaultSaveOptions : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_defaultSaveOptions",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *TU) {
-          return clang_defaultSaveOptions((TU)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> TU) {
+          return clang_defaultSaveOptions((TU)->Cptr());
         },
         R"_pb11_weaver(/**
  * Returns the set of flags that is suitable for saving a translation
@@ -5417,9 +5424,9 @@ struct Bind_clang_saveTranslationUnit : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_saveTranslationUnit",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *TU,
-            const char *FileName, unsigned int options) {
-          return clang_saveTranslationUnit((TU)->ptr, FileName, options);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> TU,
+           const char *FileName, unsigned int options) {
+          return clang_saveTranslationUnit((TU)->Cptr(), FileName, options);
         },
         R"_pb11_weaver(/**
  * Saves a translation unit into a serialized representation of
@@ -5475,8 +5482,8 @@ struct Bind_clang_suspendTranslationUnit : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_suspendTranslationUnit",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *arg0) {
-          return clang_suspendTranslationUnit((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> arg0) {
+          return clang_suspendTranslationUnit((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Suspend a translation unit in order to free memory associated with it.
@@ -5517,8 +5524,8 @@ struct Bind_clang_disposeTranslationUnit : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_disposeTranslationUnit",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *arg0) {
-          return clang_disposeTranslationUnit((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> arg0) {
+          return clang_disposeTranslationUnit((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Destroy the specified CXTranslationUnit object.
@@ -5595,8 +5602,8 @@ struct Bind_clang_defaultReparseOptions : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_defaultReparseOptions",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *TU) {
-          return clang_defaultReparseOptions((TU)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> TU) {
+          return clang_defaultReparseOptions((TU)->Cptr());
         },
         R"_pb11_weaver(/**
  * Returns the set of flags that is suitable for reparsing a translation
@@ -5640,10 +5647,10 @@ struct Bind_clang_reparseTranslationUnit : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_reparseTranslationUnit",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *TU,
-            unsigned int num_unsaved_files, CXUnsavedFile *unsaved_files,
-            unsigned int options) {
-          return clang_reparseTranslationUnit((TU)->ptr, num_unsaved_files,
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> TU,
+           unsigned int num_unsaved_files, CXUnsavedFile *unsaved_files,
+           unsigned int options) {
+          return clang_reparseTranslationUnit((TU)->Cptr(), num_unsaved_files,
                                               unsaved_files, options);
         },
         R"_pb11_weaver(/**
@@ -5921,8 +5928,8 @@ struct Bind_clang_getCXTUResourceUsage : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getCXTUResourceUsage",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *TU) {
-          return clang_getCXTUResourceUsage((TU)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> TU) {
+          return clang_getCXTUResourceUsage((TU)->Cptr());
         },
         R"_pb11_weaver(/**
  * Return the memory usage of a translation unit.  This object
@@ -5993,10 +6000,9 @@ struct Bind_clang_getTranslationUnitTargetInfo : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getTranslationUnitTargetInfo",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *CTUnit) {
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> CTUnit) {
           return pybind11_weaver::WrapP<CXTargetInfoImpl *>(
-                     clang_getTranslationUnitTargetInfo((CTUnit)->ptr))
-              .release();
+              clang_getTranslationUnitTargetInfo((CTUnit)->Cptr()));
         },
         R"_pb11_weaver(/**
  * Get target information for this translation unit.
@@ -6035,8 +6041,8 @@ struct Bind_clang_TargetInfo_dispose : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_TargetInfo_dispose",
-        [=](pybind11_weaver::PointerWrapper<CXTargetInfoImpl *> *Info) {
-          return clang_TargetInfo_dispose((Info)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXTargetInfoImpl *> Info) {
+          return clang_TargetInfo_dispose((Info)->Cptr());
         },
         R"_pb11_weaver(/**
  * Destroy the CXTargetInfo object.
@@ -6072,8 +6078,8 @@ struct Bind_clang_TargetInfo_getTriple : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_TargetInfo_getTriple",
-        [=](pybind11_weaver::PointerWrapper<CXTargetInfoImpl *> *Info) {
-          return clang_TargetInfo_getTriple((Info)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXTargetInfoImpl *> Info) {
+          return clang_TargetInfo_getTriple((Info)->Cptr());
         },
         R"_pb11_weaver(/**
  * Get the normalized target triple as a string.
@@ -6112,8 +6118,8 @@ struct Bind_clang_TargetInfo_getPointerWidth : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_TargetInfo_getPointerWidth",
-        [=](pybind11_weaver::PointerWrapper<CXTargetInfoImpl *> *Info) {
-          return clang_TargetInfo_getPointerWidth((Info)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXTargetInfoImpl *> Info) {
+          return clang_TargetInfo_getPointerWidth((Info)->Cptr());
         },
         R"_pb11_weaver(/**
  * Get the pointer width of the target in bits.
@@ -7557,8 +7563,8 @@ struct Bind_clang_getTranslationUnitCursor : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getTranslationUnitCursor",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *arg0) {
-          return clang_getTranslationUnitCursor((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> arg0) {
+          return clang_getTranslationUnitCursor((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Retrieve the cursor that represents the given translation unit.
@@ -8752,10 +8758,9 @@ struct Bind_clang_Cursor_getTranslationUnit : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_Cursor_getTranslationUnit",
-        [=](CXCursor arg0) {
+        [](CXCursor arg0) {
           return pybind11_weaver::WrapP<CXTranslationUnitImpl *>(
-                     clang_Cursor_getTranslationUnit(arg0))
-              .release();
+              clang_Cursor_getTranslationUnit(arg0));
         },
         R"_pb11_weaver(/**
  * Returns the translation unit that a cursor originated from.
@@ -8792,10 +8797,9 @@ struct Bind_clang_createCXCursorSet : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_createCXCursorSet",
-        [=]() {
+        []() {
           return pybind11_weaver::WrapP<CXCursorSetImpl *>(
-                     clang_createCXCursorSet())
-              .release();
+              clang_createCXCursorSet());
         },
         R"_pb11_weaver(/**
  * Creates an empty CXCursorSet.
@@ -8831,8 +8835,8 @@ struct Bind_clang_disposeCXCursorSet : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_disposeCXCursorSet",
-        [=](pybind11_weaver::PointerWrapper<CXCursorSetImpl *> *cset) {
-          return clang_disposeCXCursorSet((cset)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXCursorSetImpl *> cset) {
+          return clang_disposeCXCursorSet((cset)->Cptr());
         },
         R"_pb11_weaver(/**
  * Disposes a CXCursorSet and releases its associated memory.
@@ -8868,9 +8872,9 @@ struct Bind_clang_CXCursorSet_contains : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CXCursorSet_contains",
-        [=](pybind11_weaver::PointerWrapper<CXCursorSetImpl *> *cset,
-            CXCursor cursor) {
-          return clang_CXCursorSet_contains((cset)->ptr, cursor);
+        [](pybind11_weaver::WrappedPtrT<CXCursorSetImpl *> cset,
+           CXCursor cursor) {
+          return clang_CXCursorSet_contains((cset)->Cptr(), cursor);
         },
         R"_pb11_weaver(/**
  * Queries a CXCursorSet to see if it contains a specific CXCursor.
@@ -8909,9 +8913,9 @@ struct Bind_clang_CXCursorSet_insert : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CXCursorSet_insert",
-        [=](pybind11_weaver::PointerWrapper<CXCursorSetImpl *> *cset,
-            CXCursor cursor) {
-          return clang_CXCursorSet_insert((cset)->ptr, cursor);
+        [](pybind11_weaver::WrappedPtrT<CXCursorSetImpl *> cset,
+           CXCursor cursor) {
+          return clang_CXCursorSet_insert((cset)->Cptr(), cursor);
         },
         R"_pb11_weaver(/**
  * Inserts a CXCursor into a CXCursorSet.
@@ -9082,10 +9086,10 @@ struct Bind_clang_getOverriddenCursors : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getOverriddenCursors",
-        [=](CXCursor cursor,
-            pybind11_weaver::PointerWrapper<CXCursor **> *overridden,
-            unsigned int *num_overridden) {
-          return clang_getOverriddenCursors(cursor, (overridden)->ptr,
+        [](CXCursor cursor,
+           pybind11_weaver::WrappedPtrT<CXCursor **> overridden,
+           unsigned int *num_overridden) {
+          return clang_getOverriddenCursors(cursor, (overridden)->Cptr(),
                                             num_overridden);
         },
         R"_pb11_weaver(/**
@@ -9200,9 +9204,8 @@ struct Bind_clang_getIncludedFile : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getIncludedFile",
-        [=](CXCursor cursor) {
-          return pybind11_weaver::WrapP<void *>(clang_getIncludedFile(cursor))
-              .release();
+        [](CXCursor cursor) {
+          return pybind11_weaver::WrapP<void *>(clang_getIncludedFile(cursor));
         },
         R"_pb11_weaver(/**
  * Retrieve the file that is included by the given inclusion directive
@@ -9237,9 +9240,9 @@ template <class Pybind11T> struct Bind_clang_getCursor : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getCursor",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *arg0,
-            CXSourceLocation arg1) {
-          return clang_getCursor((arg0)->ptr, arg1);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> arg0,
+           CXSourceLocation arg1) {
+          return clang_getCursor((arg0)->Cptr(), arg1);
         },
         R"_pb11_weaver(/**
  * Map a source location to the cursor that describes the entity at that
@@ -12976,29 +12979,32 @@ template <class Pybind11T> struct Bind_clang_visitChildren : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_visitChildren",
-        [=](CXCursor parent,
-            std::function<CXChildVisitResult(
-                CXCursor, CXCursor, pybind11_weaver::PointerWrapper<void *> *)>
-                visitor,
-            pybind11_weaver::PointerWrapper<void *> *client_data) {
+        [](CXCursor parent,
+           std::function<CXChildVisitResult(
+               CXCursor, CXCursor, pybind11_weaver::WrappedPtrT<void *>)>
+               visitor,
+           pybind11_weaver::WrappedPtrT<void *> client_data) {
           return clang_visitChildren(
               parent,
               pybind11_weaver::FnPointerWrapper<
                   CXChildVisitResult, CXCursor, CXCursor,
-                  pybind11_weaver::PointerWrapper<void *> *>::
+                  pybind11_weaver::WrappedPtrT<void *>>::
                   GetCptr<CXChildVisitResult, CXCursor, CXCursor, void *>::Run(
                       (visitor), pybind11_weaver::Guardian(),
                       [](CXCursor arg0_0, CXCursor arg0_1, void *arg0_2) {
-                        auto &to_call = pybind11_weaver::FnPointerWrapper<
+                        auto to_call = pybind11_weaver::FnPointerWrapper<
                             CXChildVisitResult, CXCursor, CXCursor,
-                            pybind11_weaver::PointerWrapper<void *>
-                                *>::FnProxy(1);
-                        return to_call(
-                            arg0_0, arg0_1,
-                            pybind11_weaver::WrapP<void *>(arg0_2).get());
+                            pybind11_weaver::WrappedPtrT<void *>>::
+                            GetFnProxy(__DATE__ __TIME__ __FILE__, __COUNTER__);
+                        return to_call(arg0_0, arg0_1,
+                                       pybind11_weaver::WrapP<void *>(arg0_2));
                       },
-                      1),
-              (client_data)->ptr);
+                      /* clang-format off */
+__DATE__ __TIME__ __FILE__, 
+__COUNTER__ - 1
+                      /* clang-format on */
+                      ),
+              (client_data)->Cptr());
         },
         R"_pb11_weaver(/**
  * Visit the children of a particular cursor.
@@ -13494,9 +13500,9 @@ struct Bind_clang_PrintingPolicy_getProperty : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_PrintingPolicy_getProperty",
-        [=](pybind11_weaver::PointerWrapper<void *> *Policy,
-            CXPrintingPolicyProperty Property) {
-          return clang_PrintingPolicy_getProperty((Policy)->ptr, Property);
+        [](pybind11_weaver::WrappedPtrT<void *> Policy,
+           CXPrintingPolicyProperty Property) {
+          return clang_PrintingPolicy_getProperty((Policy)->Cptr(), Property);
         },
         R"_pb11_weaver(/**
  * Get a property value for the given printing policy.
@@ -13533,9 +13539,9 @@ struct Bind_clang_PrintingPolicy_setProperty : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_PrintingPolicy_setProperty",
-        [=](pybind11_weaver::PointerWrapper<void *> *Policy,
-            CXPrintingPolicyProperty Property, unsigned int Value) {
-          return clang_PrintingPolicy_setProperty((Policy)->ptr, Property,
+        [](pybind11_weaver::WrappedPtrT<void *> Policy,
+           CXPrintingPolicyProperty Property, unsigned int Value) {
+          return clang_PrintingPolicy_setProperty((Policy)->Cptr(), Property,
                                                   Value);
         },
         R"_pb11_weaver(/**
@@ -13573,10 +13579,9 @@ struct Bind_clang_getCursorPrintingPolicy : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getCursorPrintingPolicy",
-        [=](CXCursor arg0) {
+        [](CXCursor arg0) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_getCursorPrintingPolicy(arg0))
-              .release();
+              clang_getCursorPrintingPolicy(arg0));
         },
         R"_pb11_weaver(/**
  * Retrieve the default policy for the cursor.
@@ -13616,8 +13621,8 @@ struct Bind_clang_PrintingPolicy_dispose : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_PrintingPolicy_dispose",
-        [=](pybind11_weaver::PointerWrapper<void *> *Policy) {
-          return clang_PrintingPolicy_dispose((Policy)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> Policy) {
+          return clang_PrintingPolicy_dispose((Policy)->Cptr());
         },
         R"_pb11_weaver(/**
  * Release a printing policy.
@@ -13654,8 +13659,8 @@ struct Bind_clang_getCursorPrettyPrinted : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getCursorPrettyPrinted",
-        [=](CXCursor Cursor, pybind11_weaver::PointerWrapper<void *> *Policy) {
-          return clang_getCursorPrettyPrinted(Cursor, (Policy)->ptr);
+        [](CXCursor Cursor, pybind11_weaver::WrappedPtrT<void *> Policy) {
+          return clang_getCursorPrettyPrinted(Cursor, (Policy)->Cptr());
         },
         R"_pb11_weaver(/**
  * Pretty print declarations.
@@ -14661,9 +14666,8 @@ struct Bind_clang_Cursor_getModule : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_Cursor_getModule",
-        [=](CXCursor C) {
-          return pybind11_weaver::WrapP<void *>(clang_Cursor_getModule(C))
-              .release();
+        [](CXCursor C) {
+          return pybind11_weaver::WrapP<void *>(clang_Cursor_getModule(C));
         },
         R"_pb11_weaver(/**
  * Given a CXCursor_ModuleImportDecl cursor, return the associated module.
@@ -14699,11 +14703,10 @@ struct Bind_clang_getModuleForFile : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getModuleForFile",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *arg0,
-            pybind11_weaver::PointerWrapper<void *> *arg1) {
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> arg0,
+           pybind11_weaver::WrappedPtrT<void *> arg1) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_getModuleForFile((arg0)->ptr, (arg1)->ptr))
-              .release();
+              clang_getModuleForFile((arg0)->Cptr(), (arg1)->Cptr()));
         },
         R"_pb11_weaver(/**
  * Given a CXFile header file, return the module that contains it, if one
@@ -14740,10 +14743,9 @@ struct Bind_clang_Module_getASTFile : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_Module_getASTFile",
-        [=](pybind11_weaver::PointerWrapper<void *> *Module) {
+        [](pybind11_weaver::WrappedPtrT<void *> Module) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_Module_getASTFile((Module)->ptr))
-              .release();
+              clang_Module_getASTFile((Module)->Cptr()));
         },
         R"_pb11_weaver(/**
  * \param Module a module object.
@@ -14781,10 +14783,9 @@ struct Bind_clang_Module_getParent : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_Module_getParent",
-        [=](pybind11_weaver::PointerWrapper<void *> *Module) {
+        [](pybind11_weaver::WrappedPtrT<void *> Module) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_Module_getParent((Module)->ptr))
-              .release();
+              clang_Module_getParent((Module)->Cptr()));
         },
         R"_pb11_weaver(/**
  * \param Module a module object.
@@ -14823,8 +14824,8 @@ struct Bind_clang_Module_getName : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_Module_getName",
-        [=](pybind11_weaver::PointerWrapper<void *> *Module) {
-          return clang_Module_getName((Module)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> Module) {
+          return clang_Module_getName((Module)->Cptr());
         },
         R"_pb11_weaver(/**
  * \param Module a module object.
@@ -14862,8 +14863,8 @@ struct Bind_clang_Module_getFullName : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_Module_getFullName",
-        [=](pybind11_weaver::PointerWrapper<void *> *Module) {
-          return clang_Module_getFullName((Module)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> Module) {
+          return clang_Module_getFullName((Module)->Cptr());
         },
         R"_pb11_weaver(/**
  * \param Module a module object.
@@ -14901,8 +14902,8 @@ struct Bind_clang_Module_isSystem : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_Module_isSystem",
-        [=](pybind11_weaver::PointerWrapper<void *> *Module) {
-          return clang_Module_isSystem((Module)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> Module) {
+          return clang_Module_isSystem((Module)->Cptr());
         },
         R"_pb11_weaver(/**
  * \param Module a module object.
@@ -14939,9 +14940,10 @@ struct Bind_clang_Module_getNumTopLevelHeaders : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_Module_getNumTopLevelHeaders",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *arg0,
-            pybind11_weaver::PointerWrapper<void *> *Module) {
-          return clang_Module_getNumTopLevelHeaders((arg0)->ptr, (Module)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> arg0,
+           pybind11_weaver::WrappedPtrT<void *> Module) {
+          return clang_Module_getNumTopLevelHeaders((arg0)->Cptr(),
+                                                    (Module)->Cptr());
         },
         R"_pb11_weaver(/**
  * \param Module a module object.
@@ -14980,13 +14982,10 @@ struct Bind_clang_Module_getTopLevelHeader : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_Module_getTopLevelHeader",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *arg0,
-            pybind11_weaver::PointerWrapper<void *> *Module,
-            unsigned int Index) {
-          return pybind11_weaver::WrapP<void *>(
-                     clang_Module_getTopLevelHeader((arg0)->ptr, (Module)->ptr,
-                                                    Index))
-              .release();
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> arg0,
+           pybind11_weaver::WrappedPtrT<void *> Module, unsigned int Index) {
+          return pybind11_weaver::WrapP<void *>(clang_Module_getTopLevelHeader(
+              (arg0)->Cptr(), (Module)->Cptr(), Index));
         },
         R"_pb11_weaver(/**
  * \param Module a module object.
@@ -15918,9 +15917,9 @@ template <class Pybind11T> struct Bind_clang_getToken : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getToken",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *TU,
-            CXSourceLocation Location) {
-          return clang_getToken((TU)->ptr, Location);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> TU,
+           CXSourceLocation Location) {
+          return clang_getToken((TU)->Cptr(), Location);
         },
         R"_pb11_weaver(/**
  * Get the raw lexical token starting with the given location.
@@ -15995,8 +15994,10 @@ struct Bind_clang_getTokenSpelling : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getTokenSpelling",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *arg0,
-            CXToken arg1) { return clang_getTokenSpelling((arg0)->ptr, arg1); },
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> arg0,
+           CXToken arg1) {
+          return clang_getTokenSpelling((arg0)->Cptr(), arg1);
+        },
         R"_pb11_weaver(/**
  * Determine the spelling of the given token.
  *
@@ -16034,8 +16035,10 @@ struct Bind_clang_getTokenLocation : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getTokenLocation",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *arg0,
-            CXToken arg1) { return clang_getTokenLocation((arg0)->ptr, arg1); },
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> arg0,
+           CXToken arg1) {
+          return clang_getTokenLocation((arg0)->Cptr(), arg1);
+        },
         R"_pb11_weaver(/**
  * Retrieve the source location of the given token.
  */)_pb11_weaver");
@@ -16070,8 +16073,8 @@ struct Bind_clang_getTokenExtent : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getTokenExtent",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *arg0,
-            CXToken arg1) { return clang_getTokenExtent((arg0)->ptr, arg1); },
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> arg0,
+           CXToken arg1) { return clang_getTokenExtent((arg0)->Cptr(), arg1); },
         R"_pb11_weaver(/**
  * Retrieve a source range that covers the given token.
  */)_pb11_weaver");
@@ -16104,11 +16107,11 @@ template <class Pybind11T> struct Bind_clang_tokenize : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_tokenize",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *TU,
-            CXSourceRange Range,
-            pybind11_weaver::PointerWrapper<CXToken **> *Tokens,
-            unsigned int *NumTokens) {
-          return clang_tokenize((TU)->ptr, Range, (Tokens)->ptr, NumTokens);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> TU,
+           CXSourceRange Range, pybind11_weaver::WrappedPtrT<CXToken **> Tokens,
+           unsigned int *NumTokens) {
+          return clang_tokenize((TU)->Cptr(), Range, (Tokens)->Cptr(),
+                                NumTokens);
         },
         R"_pb11_weaver(/**
  * Tokenize the source code described by the given range into raw
@@ -16157,9 +16160,9 @@ struct Bind_clang_annotateTokens : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_annotateTokens",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *TU,
-            CXToken *Tokens, unsigned int NumTokens, CXCursor *Cursors) {
-          return clang_annotateTokens((TU)->ptr, Tokens, NumTokens, Cursors);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> TU,
+           CXToken *Tokens, unsigned int NumTokens, CXCursor *Cursors) {
+          return clang_annotateTokens((TU)->Cptr(), Tokens, NumTokens, Cursors);
         },
         R"_pb11_weaver(/**
  * Annotate the given set of tokens by providing cursors for each token
@@ -16220,9 +16223,9 @@ template <class Pybind11T> struct Bind_clang_disposeTokens : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_disposeTokens",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *TU,
-            CXToken *Tokens, unsigned int NumTokens) {
-          return clang_disposeTokens((TU)->ptr, Tokens, NumTokens);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> TU,
+           CXToken *Tokens, unsigned int NumTokens) {
+          return clang_disposeTokens((TU)->Cptr(), Tokens, NumTokens);
         },
         R"_pb11_weaver(/**
  * Free the given set of tokens.
@@ -16290,13 +16293,13 @@ struct Bind_clang_getDefinitionSpellingAndExtent : public EntityBase {
 
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def("clang_getDefinitionSpellingAndExtent",
-                 [=](CXCursor arg0,
-                     pybind11_weaver::PointerWrapper<const char **> *startBuf,
-                     pybind11_weaver::PointerWrapper<const char **> *endBuf,
-                     unsigned int *startLine, unsigned int *startColumn,
-                     unsigned int *endLine, unsigned int *endColumn) {
+                 [](CXCursor arg0,
+                    pybind11_weaver::WrappedPtrT<const char **> startBuf,
+                    pybind11_weaver::WrappedPtrT<const char **> endBuf,
+                    unsigned int *startLine, unsigned int *startColumn,
+                    unsigned int *endLine, unsigned int *endColumn) {
                    return clang_getDefinitionSpellingAndExtent(
-                       arg0, (startBuf)->ptr, (endBuf)->ptr, startLine,
+                       arg0, (startBuf)->Cptr(), (endBuf)->Cptr(), startLine,
                        startColumn, endLine, endColumn);
                  });
   }
@@ -16362,23 +16365,26 @@ struct Bind_clang_executeOnThread : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_executeOnThread",
-        [=](std::function<void(pybind11_weaver::PointerWrapper<void *> *)> fn,
-            pybind11_weaver::PointerWrapper<void *> *user_data,
-            unsigned int stack_size) {
+        [](std::function<void(pybind11_weaver::WrappedPtrT<void *>)> fn,
+           pybind11_weaver::WrappedPtrT<void *> user_data,
+           unsigned int stack_size) {
           return clang_executeOnThread(
               pybind11_weaver::FnPointerWrapper<
-                  void, pybind11_weaver::PointerWrapper<void *> *>::
+                  void, pybind11_weaver::WrappedPtrT<void *>>::
                   GetCptr<void, void *>::Run(
                       (fn), pybind11_weaver::Guardian(),
                       [](void *arg0_0) {
-                        auto &to_call = pybind11_weaver::FnPointerWrapper<
-                            void, pybind11_weaver::PointerWrapper<void *>
-                                      *>::FnProxy(2);
-                        return to_call(
-                            pybind11_weaver::WrapP<void *>(arg0_0).get());
+                        auto to_call = pybind11_weaver::FnPointerWrapper<
+                            void, pybind11_weaver::WrappedPtrT<void *>>::
+                            GetFnProxy(__DATE__ __TIME__ __FILE__, __COUNTER__);
+                        return to_call(pybind11_weaver::WrapP<void *>(arg0_0));
                       },
-                      2),
-              (user_data)->ptr, stack_size);
+                      /* clang-format off */
+__DATE__ __TIME__ __FILE__, 
+__COUNTER__ - 1
+                      /* clang-format on */
+                      ),
+              (user_data)->Cptr(), stack_size);
         });
   }
 
@@ -16679,9 +16685,9 @@ struct Bind_clang_getCompletionChunkKind : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getCompletionChunkKind",
-        [=](pybind11_weaver::PointerWrapper<void *> *completion_string,
-            unsigned int chunk_number) {
-          return clang_getCompletionChunkKind((completion_string)->ptr,
+        [](pybind11_weaver::WrappedPtrT<void *> completion_string,
+           unsigned int chunk_number) {
+          return clang_getCompletionChunkKind((completion_string)->Cptr(),
                                               chunk_number);
         },
         R"_pb11_weaver(/**
@@ -16725,9 +16731,9 @@ struct Bind_clang_getCompletionChunkText : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getCompletionChunkText",
-        [=](pybind11_weaver::PointerWrapper<void *> *completion_string,
-            unsigned int chunk_number) {
-          return clang_getCompletionChunkText((completion_string)->ptr,
+        [](pybind11_weaver::WrappedPtrT<void *> completion_string,
+           unsigned int chunk_number) {
+          return clang_getCompletionChunkText((completion_string)->Cptr(),
                                               chunk_number);
         },
         R"_pb11_weaver(/**
@@ -16773,12 +16779,11 @@ struct Bind_clang_getCompletionChunkCompletionString : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getCompletionChunkCompletionString",
-        [=](pybind11_weaver::PointerWrapper<void *> *completion_string,
-            unsigned int chunk_number) {
+        [](pybind11_weaver::WrappedPtrT<void *> completion_string,
+           unsigned int chunk_number) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_getCompletionChunkCompletionString(
-                         (completion_string)->ptr, chunk_number))
-              .release();
+              clang_getCompletionChunkCompletionString(
+                  (completion_string)->Cptr(), chunk_number));
         },
         R"_pb11_weaver(/**
  * Retrieve the completion string associated with a particular chunk
@@ -16825,8 +16830,8 @@ struct Bind_clang_getNumCompletionChunks : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getNumCompletionChunks",
-        [=](pybind11_weaver::PointerWrapper<void *> *completion_string) {
-          return clang_getNumCompletionChunks((completion_string)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> completion_string) {
+          return clang_getNumCompletionChunks((completion_string)->Cptr());
         },
         R"_pb11_weaver(/**
  * Retrieve the number of chunks in the given code-completion string.
@@ -16863,8 +16868,8 @@ struct Bind_clang_getCompletionPriority : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getCompletionPriority",
-        [=](pybind11_weaver::PointerWrapper<void *> *completion_string) {
-          return clang_getCompletionPriority((completion_string)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> completion_string) {
+          return clang_getCompletionPriority((completion_string)->Cptr());
         },
         R"_pb11_weaver(/**
  * Determine the priority of this code completion.
@@ -16910,8 +16915,8 @@ struct Bind_clang_getCompletionAvailability : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getCompletionAvailability",
-        [=](pybind11_weaver::PointerWrapper<void *> *completion_string) {
-          return clang_getCompletionAvailability((completion_string)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> completion_string) {
+          return clang_getCompletionAvailability((completion_string)->Cptr());
         },
         R"_pb11_weaver(/**
  * Determine the availability of the entity that this code-completion
@@ -16953,8 +16958,8 @@ struct Bind_clang_getCompletionNumAnnotations : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getCompletionNumAnnotations",
-        [=](pybind11_weaver::PointerWrapper<void *> *completion_string) {
-          return clang_getCompletionNumAnnotations((completion_string)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> completion_string) {
+          return clang_getCompletionNumAnnotations((completion_string)->Cptr());
         },
         R"_pb11_weaver(/**
  * Retrieve the number of annotations associated with the given
@@ -16997,9 +17002,9 @@ struct Bind_clang_getCompletionAnnotation : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getCompletionAnnotation",
-        [=](pybind11_weaver::PointerWrapper<void *> *completion_string,
-            unsigned int annotation_number) {
-          return clang_getCompletionAnnotation((completion_string)->ptr,
+        [](pybind11_weaver::WrappedPtrT<void *> completion_string,
+           unsigned int annotation_number) {
+          return clang_getCompletionAnnotation((completion_string)->Cptr(),
                                                annotation_number);
         },
         R"_pb11_weaver(/**
@@ -17045,9 +17050,9 @@ struct Bind_clang_getCompletionParent : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getCompletionParent",
-        [=](pybind11_weaver::PointerWrapper<void *> *completion_string,
-            CXCursorKind *kind) {
-          return clang_getCompletionParent((completion_string)->ptr, kind);
+        [](pybind11_weaver::WrappedPtrT<void *> completion_string,
+           CXCursorKind *kind) {
+          return clang_getCompletionParent((completion_string)->Cptr(), kind);
         },
         R"_pb11_weaver(/**
  * Retrieve the parent context of the given completion string.
@@ -17096,8 +17101,8 @@ struct Bind_clang_getCompletionBriefComment : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getCompletionBriefComment",
-        [=](pybind11_weaver::PointerWrapper<void *> *completion_string) {
-          return clang_getCompletionBriefComment((completion_string)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> completion_string) {
+          return clang_getCompletionBriefComment((completion_string)->Cptr());
         },
         R"_pb11_weaver(/**
  * Retrieve the brief documentation comment attached to the declaration
@@ -17135,10 +17140,9 @@ struct Bind_clang_getCursorCompletionString : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getCursorCompletionString",
-        [=](CXCursor cursor) {
+        [](CXCursor cursor) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_getCursorCompletionString(cursor))
-              .release();
+              clang_getCursorCompletionString(cursor));
         },
         R"_pb11_weaver(/**
  * Retrieve a completion string for an arbitrary declaration or macro
@@ -17640,12 +17644,12 @@ struct Bind_clang_codeCompleteAt : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_codeCompleteAt",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *TU,
-            const char *complete_filename, unsigned int complete_line,
-            unsigned int complete_column, CXUnsavedFile *unsaved_files,
-            unsigned int num_unsaved_files, unsigned int options) {
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> TU,
+           const char *complete_filename, unsigned int complete_line,
+           unsigned int complete_column, CXUnsavedFile *unsaved_files,
+           unsigned int num_unsaved_files, unsigned int options) {
           return clang_codeCompleteAt(
-              (TU)->ptr, complete_filename, complete_line, complete_column,
+              (TU)->Cptr(), complete_filename, complete_line, complete_column,
               unsaved_files, num_unsaved_files, options);
         },
         R"_pb11_weaver(/**
@@ -17859,10 +17863,9 @@ struct Bind_clang_codeCompleteGetDiagnostic : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_codeCompleteGetDiagnostic",
-        [=](CXCodeCompleteResults *Results, unsigned int Index) {
+        [](CXCodeCompleteResults *Results, unsigned int Index) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_codeCompleteGetDiagnostic(Results, Index))
-              .release();
+              clang_codeCompleteGetDiagnostic(Results, Index));
         },
         R"_pb11_weaver(/**
  * Retrieve a diagnostic associated with the given code completion.
@@ -18154,35 +18157,39 @@ template <class Pybind11T> struct Bind_clang_getInclusions : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getInclusions",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *tu,
-            std::function<void(pybind11_weaver::PointerWrapper<void *> *,
-                               CXSourceLocation *, unsigned int,
-                               pybind11_weaver::PointerWrapper<void *> *)>
-                visitor,
-            pybind11_weaver::PointerWrapper<void *> *client_data) {
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> tu,
+           std::function<void(pybind11_weaver::WrappedPtrT<void *>,
+                              CXSourceLocation *, unsigned int,
+                              pybind11_weaver::WrappedPtrT<void *>)>
+               visitor,
+           pybind11_weaver::WrappedPtrT<void *> client_data) {
           return clang_getInclusions(
-              (tu)->ptr,
+              (tu)->Cptr(),
               pybind11_weaver::FnPointerWrapper<
-                  void, pybind11_weaver::PointerWrapper<void *> *,
+                  void, pybind11_weaver::WrappedPtrT<void *>,
                   CXSourceLocation *, unsigned int,
-                  pybind11_weaver::PointerWrapper<void *>
-                      *>::GetCptr<void, void *, CXSourceLocation *,
-                                  unsigned int, void *>::
-                  Run((visitor), pybind11_weaver::Guardian(),
-                      [](void *arg0_0, CXSourceLocation *arg0_1,
-                         unsigned int arg0_2, void *arg0_3) {
-                        auto &to_call = pybind11_weaver::FnPointerWrapper<
-                            void, pybind11_weaver::PointerWrapper<void *> *,
-                            CXSourceLocation *, unsigned int,
-                            pybind11_weaver::PointerWrapper<void *>
-                                *>::FnProxy(3);
-                        return to_call(
-                            pybind11_weaver::WrapP<void *>(arg0_0).get(),
-                            arg0_1, arg0_2,
-                            pybind11_weaver::WrapP<void *>(arg0_3).get());
-                      },
-                      3),
-              (client_data)->ptr);
+                  pybind11_weaver::WrappedPtrT<void *>>::
+                  GetCptr<void, void *, CXSourceLocation *, unsigned int,
+                          void *>::
+                      Run((visitor), pybind11_weaver::Guardian(),
+                          [](void *arg0_0, CXSourceLocation *arg0_1,
+                             unsigned int arg0_2, void *arg0_3) {
+                            auto to_call = pybind11_weaver::FnPointerWrapper<
+                                void, pybind11_weaver::WrappedPtrT<void *>,
+                                CXSourceLocation *, unsigned int,
+                                pybind11_weaver::WrappedPtrT<void *>>::
+                                GetFnProxy(__DATE__ __TIME__ __FILE__,
+                                           __COUNTER__);
+                            return to_call(
+                                pybind11_weaver::WrapP<void *>(arg0_0), arg0_1,
+                                arg0_2, pybind11_weaver::WrapP<void *>(arg0_3));
+                          },
+                          /* clang-format off */
+__DATE__ __TIME__ __FILE__, 
+__COUNTER__ - 1
+                          /* clang-format on */
+                          ),
+              (client_data)->Cptr());
         },
         R"_pb11_weaver(/**
  * Visit the set of preprocessor inclusions in a translation unit.
@@ -18257,9 +18264,8 @@ struct Bind_clang_Cursor_Evaluate : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_Cursor_Evaluate",
-        [=](CXCursor C) {
-          return pybind11_weaver::WrapP<void *>(clang_Cursor_Evaluate(C))
-              .release();
+        [](CXCursor C) {
+          return pybind11_weaver::WrapP<void *>(clang_Cursor_Evaluate(C));
         },
         R"_pb11_weaver(/**
  * If cursor is a statement declaration tries to evaluate the
@@ -18297,8 +18303,8 @@ struct Bind_clang_EvalResult_getKind : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_EvalResult_getKind",
-        [=](pybind11_weaver::PointerWrapper<void *> *E) {
-          return clang_EvalResult_getKind((E)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> E) {
+          return clang_EvalResult_getKind((E)->Cptr());
         },
         R"_pb11_weaver(/**
  * Returns the kind of the evaluated result.
@@ -18334,8 +18340,8 @@ struct Bind_clang_EvalResult_getAsInt : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_EvalResult_getAsInt",
-        [=](pybind11_weaver::PointerWrapper<void *> *E) {
-          return clang_EvalResult_getAsInt((E)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> E) {
+          return clang_EvalResult_getAsInt((E)->Cptr());
         },
         R"_pb11_weaver(/**
  * Returns the evaluation result as integer if the
@@ -18372,8 +18378,8 @@ struct Bind_clang_EvalResult_getAsLongLong : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_EvalResult_getAsLongLong",
-        [=](pybind11_weaver::PointerWrapper<void *> *E) {
-          return clang_EvalResult_getAsLongLong((E)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> E) {
+          return clang_EvalResult_getAsLongLong((E)->Cptr());
         },
         R"_pb11_weaver(/**
  * Returns the evaluation result as a long long integer if the
@@ -18412,8 +18418,8 @@ struct Bind_clang_EvalResult_isUnsignedInt : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_EvalResult_isUnsignedInt",
-        [=](pybind11_weaver::PointerWrapper<void *> *E) {
-          return clang_EvalResult_isUnsignedInt((E)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> E) {
+          return clang_EvalResult_isUnsignedInt((E)->Cptr());
         },
         R"_pb11_weaver(/**
  * Returns a non-zero value if the kind is Int and the evaluation
@@ -18451,8 +18457,8 @@ struct Bind_clang_EvalResult_getAsUnsigned : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_EvalResult_getAsUnsigned",
-        [=](pybind11_weaver::PointerWrapper<void *> *E) {
-          return clang_EvalResult_getAsUnsigned((E)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> E) {
+          return clang_EvalResult_getAsUnsigned((E)->Cptr());
         },
         R"_pb11_weaver(/**
  * Returns the evaluation result as an unsigned integer if
@@ -18490,8 +18496,8 @@ struct Bind_clang_EvalResult_getAsDouble : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_EvalResult_getAsDouble",
-        [=](pybind11_weaver::PointerWrapper<void *> *E) {
-          return clang_EvalResult_getAsDouble((E)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> E) {
+          return clang_EvalResult_getAsDouble((E)->Cptr());
         },
         R"_pb11_weaver(/**
  * Returns the evaluation result as double if the
@@ -18529,8 +18535,8 @@ struct Bind_clang_EvalResult_getAsStr : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_EvalResult_getAsStr",
-        [=](pybind11_weaver::PointerWrapper<void *> *E) {
-          return clang_EvalResult_getAsStr((E)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> E) {
+          return clang_EvalResult_getAsStr((E)->Cptr());
         },
         R"_pb11_weaver(/**
  * Returns the evaluation result as a constant string if the
@@ -18569,8 +18575,8 @@ struct Bind_clang_EvalResult_dispose : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_EvalResult_dispose",
-        [=](pybind11_weaver::PointerWrapper<void *> *E) {
-          return clang_EvalResult_dispose((E)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> E) {
+          return clang_EvalResult_dispose((E)->Cptr());
         },
         R"_pb11_weaver(/**
  * Disposes the created Eval memory.
@@ -18605,9 +18611,8 @@ template <class Pybind11T> struct Bind_clang_getRemappings : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getRemappings",
-        [=](const char *path) {
-          return pybind11_weaver::WrapP<void *>(clang_getRemappings(path))
-              .release();
+        [](const char *path) {
+          return pybind11_weaver::WrapP<void *>(clang_getRemappings(path));
         },
         R"_pb11_weaver(/**
  * Retrieve a remapping.
@@ -18647,11 +18652,10 @@ struct Bind_clang_getRemappingsFromFileList : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getRemappingsFromFileList",
-        [=](pybind11_weaver::PointerWrapper<const char **> *filePaths,
-            unsigned int numFiles) {
-          return pybind11_weaver::WrapP<void *>(clang_getRemappingsFromFileList(
-                                                    (filePaths)->ptr, numFiles))
-              .release();
+        [](pybind11_weaver::WrappedPtrT<const char **> filePaths,
+           unsigned int numFiles) {
+          return pybind11_weaver::WrapP<void *>(
+              clang_getRemappingsFromFileList((filePaths)->Cptr(), numFiles));
         },
         R"_pb11_weaver(/**
  * Retrieve a remapping.
@@ -18695,8 +18699,8 @@ struct Bind_clang_remap_getNumFiles : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_remap_getNumFiles",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0) {
-          return clang_remap_getNumFiles((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0) {
+          return clang_remap_getNumFiles((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Determine the number of remappings.
@@ -18732,9 +18736,9 @@ struct Bind_clang_remap_getFilenames : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_remap_getFilenames",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0, unsigned int index,
-            CXString *original, CXString *transformed) {
-          return clang_remap_getFilenames((arg0)->ptr, index, original,
+        [](pybind11_weaver::WrappedPtrT<void *> arg0, unsigned int index,
+           CXString *original, CXString *transformed) {
+          return clang_remap_getFilenames((arg0)->Cptr(), index, original,
                                           transformed);
         },
         R"_pb11_weaver(/**
@@ -18775,8 +18779,8 @@ template <class Pybind11T> struct Bind_clang_remap_dispose : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_remap_dispose",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0) {
-          return clang_remap_dispose((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0) {
+          return clang_remap_dispose((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Dispose the remapping.
@@ -18921,9 +18925,9 @@ struct Bind_clang_findReferencesInFile : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_findReferencesInFile",
-        [=](CXCursor cursor, pybind11_weaver::PointerWrapper<void *> *file,
-            CXCursorAndRangeVisitor visitor) {
-          return clang_findReferencesInFile(cursor, (file)->ptr, visitor);
+        [](CXCursor cursor, pybind11_weaver::WrappedPtrT<void *> file,
+           CXCursorAndRangeVisitor visitor) {
+          return clang_findReferencesInFile(cursor, (file)->Cptr(), visitor);
         },
         R"_pb11_weaver(/**
  * Find references of a declaration in a specific file.
@@ -18971,10 +18975,11 @@ struct Bind_clang_findIncludesInFile : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_findIncludesInFile",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *TU,
-            pybind11_weaver::PointerWrapper<void *> *file,
-            CXCursorAndRangeVisitor visitor) {
-          return clang_findIncludesInFile((TU)->ptr, (file)->ptr, visitor);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> TU,
+           pybind11_weaver::WrappedPtrT<void *> file,
+           CXCursorAndRangeVisitor visitor) {
+          return clang_findIncludesInFile((TU)->Cptr(), (file)->Cptr(),
+                                          visitor);
         },
         R"_pb11_weaver(/**
  * Find #import/#include directives in a specific file.
@@ -20424,10 +20429,9 @@ struct Bind_clang_index_getClientContainer : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_index_getClientContainer",
-        [=](const CXIdxContainerInfo *arg0) {
+        [](const CXIdxContainerInfo *arg0) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_index_getClientContainer(arg0))
-              .release();
+              clang_index_getClientContainer(arg0));
         },
         R"_pb11_weaver(/**
  * For retrieving a custom CXIdxClientContainer attached to a
@@ -20465,9 +20469,9 @@ struct Bind_clang_index_setClientContainer : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_index_setClientContainer",
-        [=](const CXIdxContainerInfo *arg0,
-            pybind11_weaver::PointerWrapper<void *> *arg1) {
-          return clang_index_setClientContainer(arg0, (arg1)->ptr);
+        [](const CXIdxContainerInfo *arg0,
+           pybind11_weaver::WrappedPtrT<void *> arg1) {
+          return clang_index_setClientContainer(arg0, (arg1)->Cptr());
         },
         R"_pb11_weaver(/**
  * For setting a custom CXIdxClientContainer attached to a
@@ -20505,10 +20509,9 @@ struct Bind_clang_index_getClientEntity : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_index_getClientEntity",
-        [=](const CXIdxEntityInfo *arg0) {
+        [](const CXIdxEntityInfo *arg0) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_index_getClientEntity(arg0))
-              .release();
+              clang_index_getClientEntity(arg0));
         },
         R"_pb11_weaver(/**
  * For retrieving a custom CXIdxClientEntity attached to an entity.
@@ -20545,9 +20548,9 @@ struct Bind_clang_index_setClientEntity : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_index_setClientEntity",
-        [=](const CXIdxEntityInfo *arg0,
-            pybind11_weaver::PointerWrapper<void *> *arg1) {
-          return clang_index_setClientEntity(arg0, (arg1)->ptr);
+        [](const CXIdxEntityInfo *arg0,
+           pybind11_weaver::WrappedPtrT<void *> arg1) {
+          return clang_index_setClientEntity(arg0, (arg1)->Cptr());
         },
         R"_pb11_weaver(/**
  * For setting a custom CXIdxClientEntity attached to an entity.
@@ -20584,10 +20587,9 @@ struct Bind_clang_IndexAction_create : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_IndexAction_create",
-        [=](pybind11_weaver::PointerWrapper<void *> *CIdx) {
+        [](pybind11_weaver::WrappedPtrT<void *> CIdx) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_IndexAction_create((CIdx)->ptr))
-              .release();
+              clang_IndexAction_create((CIdx)->Cptr()));
         },
         R"_pb11_weaver(/**
  * An indexing action/session, to be applied to one or multiple
@@ -20626,8 +20628,8 @@ struct Bind_clang_IndexAction_dispose : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_IndexAction_dispose",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0) {
-          return clang_IndexAction_dispose((arg0)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> arg0) {
+          return clang_IndexAction_dispose((arg0)->Cptr());
         },
         R"_pb11_weaver(/**
  * Destroy the given index action.
@@ -20731,22 +20733,20 @@ struct Bind_clang_indexSourceFile : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_indexSourceFile",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0,
-            pybind11_weaver::PointerWrapper<void *> *client_data,
-            IndexerCallbacks *index_callbacks,
-            unsigned int index_callbacks_size, unsigned int index_options,
-            const char *source_filename,
-            pybind11_weaver::PointerWrapper<const char *const *>
-                *command_line_args,
-            int num_command_line_args, CXUnsavedFile *unsaved_files,
-            unsigned int num_unsaved_files,
-            pybind11_weaver::PointerWrapper<CXTranslationUnitImpl **> *out_TU,
-            unsigned int TU_options) {
+        [](pybind11_weaver::WrappedPtrT<void *> arg0,
+           pybind11_weaver::WrappedPtrT<void *> client_data,
+           IndexerCallbacks *index_callbacks, unsigned int index_callbacks_size,
+           unsigned int index_options, const char *source_filename,
+           pybind11_weaver::WrappedPtrT<const char *const *> command_line_args,
+           int num_command_line_args, CXUnsavedFile *unsaved_files,
+           unsigned int num_unsaved_files,
+           pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl **> out_TU,
+           unsigned int TU_options) {
           return clang_indexSourceFile(
-              (arg0)->ptr, (client_data)->ptr, index_callbacks,
+              (arg0)->Cptr(), (client_data)->Cptr(), index_callbacks,
               index_callbacks_size, index_options, source_filename,
-              (command_line_args)->ptr, num_command_line_args, unsaved_files,
-              num_unsaved_files, (out_TU)->ptr, TU_options);
+              (command_line_args)->Cptr(), num_command_line_args, unsaved_files,
+              num_unsaved_files, (out_TU)->Cptr(), TU_options);
         },
         R"_pb11_weaver(/**
  * Index the given source file and the translation unit corresponding
@@ -20803,22 +20803,20 @@ struct Bind_clang_indexSourceFileFullArgv : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_indexSourceFileFullArgv",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0,
-            pybind11_weaver::PointerWrapper<void *> *client_data,
-            IndexerCallbacks *index_callbacks,
-            unsigned int index_callbacks_size, unsigned int index_options,
-            const char *source_filename,
-            pybind11_weaver::PointerWrapper<const char *const *>
-                *command_line_args,
-            int num_command_line_args, CXUnsavedFile *unsaved_files,
-            unsigned int num_unsaved_files,
-            pybind11_weaver::PointerWrapper<CXTranslationUnitImpl **> *out_TU,
-            unsigned int TU_options) {
+        [](pybind11_weaver::WrappedPtrT<void *> arg0,
+           pybind11_weaver::WrappedPtrT<void *> client_data,
+           IndexerCallbacks *index_callbacks, unsigned int index_callbacks_size,
+           unsigned int index_options, const char *source_filename,
+           pybind11_weaver::WrappedPtrT<const char *const *> command_line_args,
+           int num_command_line_args, CXUnsavedFile *unsaved_files,
+           unsigned int num_unsaved_files,
+           pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl **> out_TU,
+           unsigned int TU_options) {
           return clang_indexSourceFileFullArgv(
-              (arg0)->ptr, (client_data)->ptr, index_callbacks,
+              (arg0)->Cptr(), (client_data)->Cptr(), index_callbacks,
               index_callbacks_size, index_options, source_filename,
-              (command_line_args)->ptr, num_command_line_args, unsaved_files,
-              num_unsaved_files, (out_TU)->ptr, TU_options);
+              (command_line_args)->Cptr(), num_command_line_args, unsaved_files,
+              num_unsaved_files, (out_TU)->Cptr(), TU_options);
         },
         R"_pb11_weaver(/**
  * Same as clang_indexSourceFile but requires a full command line
@@ -20857,14 +20855,14 @@ struct Bind_clang_indexTranslationUnit : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_indexTranslationUnit",
-        [=](pybind11_weaver::PointerWrapper<void *> *arg0,
-            pybind11_weaver::PointerWrapper<void *> *client_data,
-            IndexerCallbacks *index_callbacks,
-            unsigned int index_callbacks_size, unsigned int index_options,
-            pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *arg5) {
+        [](pybind11_weaver::WrappedPtrT<void *> arg0,
+           pybind11_weaver::WrappedPtrT<void *> client_data,
+           IndexerCallbacks *index_callbacks, unsigned int index_callbacks_size,
+           unsigned int index_options,
+           pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> arg5) {
           return clang_indexTranslationUnit(
-              (arg0)->ptr, (client_data)->ptr, index_callbacks,
-              index_callbacks_size, index_options, (arg5)->ptr);
+              (arg0)->Cptr(), (client_data)->Cptr(), index_callbacks,
+              index_callbacks_size, index_options, (arg5)->Cptr());
         },
         R"_pb11_weaver(/**
  * Index the given translation unit via callbacks implemented through
@@ -20914,11 +20912,11 @@ struct Bind_clang_indexLoc_getFileLocation : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_indexLoc_getFileLocation",
-        [=](CXIdxLoc loc, pybind11_weaver::PointerWrapper<void **> *indexFile,
-            pybind11_weaver::PointerWrapper<void **> *file, unsigned int *line,
-            unsigned int *column, unsigned int *offset) {
+        [](CXIdxLoc loc, pybind11_weaver::WrappedPtrT<void **> indexFile,
+           pybind11_weaver::WrappedPtrT<void **> file, unsigned int *line,
+           unsigned int *column, unsigned int *offset) {
           return clang_indexLoc_getFileLocation(
-              loc, (indexFile)->ptr, (file)->ptr, line, column, offset);
+              loc, (indexFile)->Cptr(), (file)->Cptr(), line, column, offset);
         },
         R"_pb11_weaver(/**
  * Retrieve the CXIdxFile, file, line, column, and offset represented by
@@ -20996,29 +20994,32 @@ struct Bind_clang_Type_visitFields : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_Type_visitFields",
-        [=](CXType T,
-            std::function<CXVisitorResult(
-                CXCursor, pybind11_weaver::PointerWrapper<void *> *)>
-                visitor,
-            pybind11_weaver::PointerWrapper<void *> *client_data) {
+        [](CXType T,
+           std::function<CXVisitorResult(CXCursor,
+                                         pybind11_weaver::WrappedPtrT<void *>)>
+               visitor,
+           pybind11_weaver::WrappedPtrT<void *> client_data) {
           return clang_Type_visitFields(
               T,
               pybind11_weaver::FnPointerWrapper<
                   CXVisitorResult, CXCursor,
-                  pybind11_weaver::PointerWrapper<void *> *>::
+                  pybind11_weaver::WrappedPtrT<void *>>::
                   GetCptr<CXVisitorResult, CXCursor, void *>::Run(
                       (visitor), pybind11_weaver::Guardian(),
                       [](CXCursor arg0_0, void *arg0_1) {
-                        auto &to_call = pybind11_weaver::FnPointerWrapper<
+                        auto to_call = pybind11_weaver::FnPointerWrapper<
                             CXVisitorResult, CXCursor,
-                            pybind11_weaver::PointerWrapper<void *>
-                                *>::FnProxy(4);
-                        return to_call(
-                            arg0_0,
-                            pybind11_weaver::WrapP<void *>(arg0_1).get());
+                            pybind11_weaver::WrappedPtrT<void *>>::
+                            GetFnProxy(__DATE__ __TIME__ __FILE__, __COUNTER__);
+                        return to_call(arg0_0,
+                                       pybind11_weaver::WrapP<void *>(arg0_1));
                       },
-                      4),
-              (client_data)->ptr);
+                      /* clang-format off */
+__DATE__ __TIME__ __FILE__, 
+__COUNTER__ - 1
+                      /* clang-format on */
+                      ),
+              (client_data)->Cptr());
         },
         R"_pb11_weaver(/**
  * Visit the fields of a particular type.
@@ -22740,9 +22741,9 @@ template <class Pybind11T> struct Bind_clang_createAPISet : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_createAPISet",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *tu,
-            pybind11_weaver::PointerWrapper<CXAPISetImpl **> *out_api) {
-          return clang_createAPISet((tu)->ptr, (out_api)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> tu,
+           pybind11_weaver::WrappedPtrT<CXAPISetImpl **> out_api) {
+          return clang_createAPISet((tu)->Cptr(), (out_api)->Cptr());
         },
         R"_pb11_weaver(/**
  * Traverses the translation unit to create a \c CXAPISet.
@@ -22783,8 +22784,8 @@ template <class Pybind11T> struct Bind_clang_disposeAPISet : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_disposeAPISet",
-        [=](pybind11_weaver::PointerWrapper<CXAPISetImpl *> *api) {
-          return clang_disposeAPISet((api)->ptr);
+        [](pybind11_weaver::WrappedPtrT<CXAPISetImpl *> api) {
+          return clang_disposeAPISet((api)->Cptr());
         },
         R"_pb11_weaver(/**
  * Dispose of an APISet.
@@ -22821,9 +22822,8 @@ struct Bind_clang_getSymbolGraphForUSR : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_getSymbolGraphForUSR",
-        [=](const char *usr,
-            pybind11_weaver::PointerWrapper<CXAPISetImpl *> *api) {
-          return clang_getSymbolGraphForUSR(usr, (api)->ptr);
+        [](const char *usr, pybind11_weaver::WrappedPtrT<CXAPISetImpl *> api) {
+          return clang_getSymbolGraphForUSR(usr, (api)->Cptr());
         },
         R"_pb11_weaver(/**
  * Generate a single symbol symbol graph for the given USR. Returns a null
@@ -23004,10 +23004,9 @@ struct Bind_clang_CXRewriter_create : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CXRewriter_create",
-        [=](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> *TU) {
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> TU) {
           return pybind11_weaver::WrapP<void *>(
-                     clang_CXRewriter_create((TU)->ptr))
-              .release();
+              clang_CXRewriter_create((TU)->Cptr()));
         },
         R"_pb11_weaver(/**
  * Create CXRewriter.
@@ -23043,9 +23042,9 @@ struct Bind_clang_CXRewriter_insertTextBefore : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CXRewriter_insertTextBefore",
-        [=](pybind11_weaver::PointerWrapper<void *> *Rew, CXSourceLocation Loc,
-            const char *Insert) {
-          return clang_CXRewriter_insertTextBefore((Rew)->ptr, Loc, Insert);
+        [](pybind11_weaver::WrappedPtrT<void *> Rew, CXSourceLocation Loc,
+           const char *Insert) {
+          return clang_CXRewriter_insertTextBefore((Rew)->Cptr(), Loc, Insert);
         },
         R"_pb11_weaver(/**
  * Insert the specified string at the specified location in the original buffer.
@@ -23082,9 +23081,9 @@ struct Bind_clang_CXRewriter_replaceText : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CXRewriter_replaceText",
-        [=](pybind11_weaver::PointerWrapper<void *> *Rew,
-            CXSourceRange ToBeReplaced, const char *Replacement) {
-          return clang_CXRewriter_replaceText((Rew)->ptr, ToBeReplaced,
+        [](pybind11_weaver::WrappedPtrT<void *> Rew, CXSourceRange ToBeReplaced,
+           const char *Replacement) {
+          return clang_CXRewriter_replaceText((Rew)->Cptr(), ToBeReplaced,
                                               Replacement);
         },
         R"_pb11_weaver(/**
@@ -23123,9 +23122,9 @@ struct Bind_clang_CXRewriter_removeText : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CXRewriter_removeText",
-        [=](pybind11_weaver::PointerWrapper<void *> *Rew,
-            CXSourceRange ToBeRemoved) {
-          return clang_CXRewriter_removeText((Rew)->ptr, ToBeRemoved);
+        [](pybind11_weaver::WrappedPtrT<void *> Rew,
+           CXSourceRange ToBeRemoved) {
+          return clang_CXRewriter_removeText((Rew)->Cptr(), ToBeRemoved);
         },
         R"_pb11_weaver(/**
  * Remove the specified range.
@@ -23162,8 +23161,8 @@ struct Bind_clang_CXRewriter_overwriteChangedFiles : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CXRewriter_overwriteChangedFiles",
-        [=](pybind11_weaver::PointerWrapper<void *> *Rew) {
-          return clang_CXRewriter_overwriteChangedFiles((Rew)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> Rew) {
+          return clang_CXRewriter_overwriteChangedFiles((Rew)->Cptr());
         },
         R"_pb11_weaver(/**
  * Save all changed files to disk.
@@ -23201,8 +23200,8 @@ struct Bind_clang_CXRewriter_writeMainFileToStdOut : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CXRewriter_writeMainFileToStdOut",
-        [=](pybind11_weaver::PointerWrapper<void *> *Rew) {
-          return clang_CXRewriter_writeMainFileToStdOut((Rew)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> Rew) {
+          return clang_CXRewriter_writeMainFileToStdOut((Rew)->Cptr());
         },
         R"_pb11_weaver(/**
  * Write out rewritten version of the main file to stdout.
@@ -23239,8 +23238,8 @@ struct Bind_clang_CXRewriter_dispose : public EntityBase {
   virtual void Bind(Pybind11T &pb11_obj) {
     pb11_obj.def(
         "clang_CXRewriter_dispose",
-        [=](pybind11_weaver::PointerWrapper<void *> *Rew) {
-          return clang_CXRewriter_dispose((Rew)->ptr);
+        [](pybind11_weaver::WrappedPtrT<void *> Rew) {
+          return clang_CXRewriter_dispose((Rew)->Cptr());
         },
         R"_pb11_weaver(/**
  * Free the given CXRewriter.
@@ -23274,6 +23273,7 @@ struct Entity_clang_CXRewriter_dispose
 [[nodiscard]] pybind11_weaver::CallUpdateGuard
 DeclFn(pybind11::module &m,
        const pybind11_weaver::CustomBindingRegistry &registry) {
+  pybind11_weaver::_PointerWrapperBase::FastBind(m);
   pybind11_weaver::PointerWrapper<CXAPISetImpl *>::FastBind(m, "CXAPISetImplp");
   pybind11_weaver::PointerWrapper<CXAPISetImpl **>::FastBind(m,
                                                              "CXAPISetImplpp");

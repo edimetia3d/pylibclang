@@ -41,8 +41,8 @@ struct CustomCXCompletionResult : public Entity_CXCompletionResult {
     });
     handle.def("set_completion_string",
                [](CXCompletionResult &self,
-                  pybind11_weaver::PointerWrapper<CXCompletionString> p) {
-                 self.CompletionString = p;
+                  pybind11_weaver::WrappedPtrT<CXCompletionString> p) {
+                 self.CompletionString = p->Cptr();
                });
   }
 };
@@ -87,16 +87,16 @@ PYBIND11_MODULE(_C, m) {
   });
 
   m.def("clang_tokenize",
-        [](pybind11_weaver::PointerWrapper<CXTranslationUnitImpl *> TU,
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> TU,
            CXSourceRange Range) {
           CXToken *tokens;
           unsigned int num_tokens;
-          clang_tokenize(TU, Range, &tokens, &num_tokens);
+          clang_tokenize(TU->Cptr(), Range, &tokens, &num_tokens);
           return TokenArray(tokens, num_tokens);
         });
 
   m.def("clang_parseTranslationUnit",
-        [](pybind11_weaver::PointerWrapper<void *> CIdx,
+        [](pybind11_weaver::WrappedPtrT<void *> CIdx,
            const char *source_filename,
            const std::vector<std::string> &command_line_args,
            std::vector<CXUnsavedFile> unsaved_files, unsigned int options) {
@@ -105,16 +105,14 @@ PYBIND11_MODULE(_C, m) {
             c_args.push_back(v.c_str());
           }
           return pybind11_weaver::WrapP(clang_parseTranslationUnit(
-              CIdx, source_filename, c_args.data(), c_args.size(),
+              CIdx->Cptr(), source_filename, c_args.data(), c_args.size(),
               unsaved_files.data(), unsaved_files.size(), options));
         });
 
   m.def("clang_CompilationDatabase_fromDirectory", [=](const char *BuildDir) {
     CXCompilationDatabase_Error ErrorCode;
-    auto ret0 =
-        pybind11_weaver::WrapP<void *>(
-            clang_CompilationDatabase_fromDirectory(BuildDir, &ErrorCode))
-            .release();
+    auto ret0 = pybind11_weaver::WrapP<void *>(
+        clang_CompilationDatabase_fromDirectory(BuildDir, &ErrorCode));
     return std::make_tuple(ret0, ErrorCode);
   });
 }
