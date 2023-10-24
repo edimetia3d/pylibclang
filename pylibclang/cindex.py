@@ -1093,6 +1093,8 @@ class Cursor:
 
             # Create reference to TU so it isn't GC'd before Cursor.
             child._tu = self._tu
+            child._ast_parent = parent
+            child._ast_parent._tu = self._tu
             children.append(child)
             return _C.CXChildVisitResult.CXChildVisit_Continue
 
@@ -1606,7 +1608,7 @@ class Index(ClangObject):
         """Load a TranslationUnit from the given AST file."""
         return TranslationUnit.from_ast_file(path, self)
 
-    def parse(self, path, args=None, unsaved_files=None, options=0):
+    def parse(self, path, args=None, unsaved_files=None, options=None):
         """Load the translation unit from the given source code file by running
         clang and generating the AST before loading. Additional command line
         parameters can be passed to clang via the args parameter.
@@ -1680,7 +1682,7 @@ class TranslationUnit(_C.CXTranslationUnitImplp):
 
     @classmethod
     def from_source(
-            cls, filename, args=None, unsaved_files=None, options=0, index=None
+            cls, filename, args=None, unsaved_files=None, options=None, index=None
     ):
         """Create a TranslationUnit by parsing source.
 
@@ -1728,6 +1730,9 @@ class TranslationUnit(_C.CXTranslationUnitImplp):
         unsaved_array = []
         if unsaved_files is not None:
             unsaved_array = cls._to_cx_unsaved_file(unsaved_files)
+
+        if options is None:
+            options = _C.clang_defaultEditingTranslationUnitOptions()
 
         ptr = conf.lib.clang_parseTranslationUnit(
             index,
@@ -1896,7 +1901,7 @@ class TranslationUnit(_C.CXTranslationUnitImplp):
 
         return DiagIterator(self)
 
-    def reparse(self, unsaved_files=None, options=0):
+    def reparse(self, unsaved_files=None, options=None):
         """
         Reparse an already parsed translation unit.
 
@@ -1909,9 +1914,13 @@ class TranslationUnit(_C.CXTranslationUnitImplp):
         if unsaved_files is not None:
             unsaved_files_array = self._to_cx_unsaved_file(unsaved_files)
 
-        ptr = conf.lib.clang_reparseTranslationUnit(
-            self, len(unsaved_files), unsaved_files_array, options
+        if options is None:
+            options = _C.clang_defaultReparseOptions(self)
+
+        err = conf.lib.clang_reparseTranslationUnit(
+            self, len(unsaved_files), unsaved_files_array[0], options
         )
+        assert err == 0
 
     def save(self, filename):
         """Saves the TranslationUnit to a file.
@@ -2208,7 +2217,7 @@ class Token:
     @property
     def kind(self):
         """Obtain the TokenKind of the current token."""
-        return TokenKind.from_value(conf.lib.clang_getTokenKind(self))
+        return conf.lib.clang_getTokenKind(self)
 
     @property
     def location(self):
