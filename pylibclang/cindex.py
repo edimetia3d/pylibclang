@@ -1918,7 +1918,7 @@ class TranslationUnit(_C.CXTranslationUnitImplp):
             options = _C.clang_defaultReparseOptions(self)
 
         err = conf.lib.clang_reparseTranslationUnit(
-            self, len(unsaved_files), unsaved_files_array[0], options
+            self, unsaved_files_array, options
         )
         assert err == 0
 

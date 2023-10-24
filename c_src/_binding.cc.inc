@@ -1,5 +1,5 @@
 
-// GENERATED AT 10/23/2023, 11:51:05
+// GENERATED AT 10/24/2023, 21:59:15
 
 #include "clang-c/BuildSystem.h"
 #include "clang-c/CXCompilationDatabase.h"
@@ -2553,9 +2553,7 @@ template <class Pybind11T> struct Bind_CXSourceRangeList : public EntityBase {
   explicit Bind_CXSourceRangeList(EntityScope parent_h) {}
 
   virtual void Bind(Pybind11T &pb11_obj) {
-    pb11_obj.def(pybind11::init<>(), R"_pb11_weaver(/**
-   * An array of \c CXSourceRanges.
-   */)_pb11_weaver");
+    pb11_obj.def(pybind11::init<>());
     Pybind11WeaverBindAllMethods(pb11_obj);
     pb11_obj.def_readwrite(
         "count", &CXSourceRangeList::count,
@@ -3657,9 +3655,7 @@ template <class Pybind11T> struct Bind_CXUnsavedFile : public EntityBase {
   explicit Bind_CXUnsavedFile(EntityScope parent_h) {}
 
   virtual void Bind(Pybind11T &pb11_obj) {
-    pb11_obj.def(pybind11::init<>(), R"_pb11_weaver(/**
-   * The length of the unsaved contents of this buffer.
-   */)_pb11_weaver");
+    pb11_obj.def(pybind11::init<>());
     Pybind11WeaverBindAllMethods(pb11_obj);
     pb11_obj.def_readwrite("Filename", &CXUnsavedFile::Filename,
                            R"_pb11_weaver(/**
@@ -3767,11 +3763,7 @@ template <class Pybind11T> struct Bind_CXVersion : public EntityBase {
   explicit Bind_CXVersion(EntityScope parent_h) {}
 
   virtual void Bind(Pybind11T &pb11_obj) {
-    pb11_obj.def(pybind11::init<>(), R"_pb11_weaver(/**
-   * The subminor version number, e.g., the '3' in '10.7.3'. This value
-   * will be negative if no minor or subminor version number was provided,
-   * e.g., in version '10' or '10.7'.
-   */)_pb11_weaver");
+    pb11_obj.def(pybind11::init<>());
     Pybind11WeaverBindAllMethods(pb11_obj);
     pb11_obj.def_readwrite("Major", &CXVersion::Major, R"_pb11_weaver(/**
    * The major version number, e.g., the '10' in '10.7.3'. A negative
@@ -5839,8 +5831,7 @@ struct Bind_CXTUResourceUsageEntry : public EntityBase {
   explicit Bind_CXTUResourceUsageEntry(EntityScope parent_h) {}
 
   virtual void Bind(Pybind11T &pb11_obj) {
-    pb11_obj.def(pybind11::init<>(), R"_pb11_weaver(/* Amount of resources used.
-      The units will depend on the resource kind. */)_pb11_weaver");
+    pb11_obj.def(pybind11::init<>());
     Pybind11WeaverBindAllMethods(pb11_obj);
     pb11_obj.def_readwrite(
         "kind", &CXTUResourceUsageEntry::kind,
@@ -5879,10 +5870,7 @@ template <class Pybind11T> struct Bind_CXTUResourceUsage : public EntityBase {
   explicit Bind_CXTUResourceUsage(EntityScope parent_h) {}
 
   virtual void Bind(Pybind11T &pb11_obj) {
-    pb11_obj.def(
-        pybind11::init<>(),
-        R"_pb11_weaver(/* An array of key-value pairs, representing the breakdown of memory
-            usage. */)_pb11_weaver");
+    pb11_obj.def(pybind11::init<>());
     Pybind11WeaverBindAllMethods(pb11_obj);
     pb11_obj.def_readwrite(
         "numEntries", &CXTUResourceUsage::numEntries,
@@ -8325,10 +8313,7 @@ struct Bind_CXPlatformAvailability : public EntityBase {
   explicit Bind_CXPlatformAvailability(EntityScope parent_h) {}
 
   virtual void Bind(Pybind11T &pb11_obj) {
-    pb11_obj.def(pybind11::init<>(), R"_pb11_weaver(/**
-   * An optional message to provide to a user of this API, e.g., to
-   * suggest replacement APIs.
-   */)_pb11_weaver");
+    pb11_obj.def(pybind11::init<>());
     Pybind11WeaverBindAllMethods(pb11_obj);
     pb11_obj.def_readwrite("Platform", &CXPlatformAvailability::Platform,
                            R"_pb11_weaver(/**
@@ -16413,10 +16398,7 @@ template <class Pybind11T> struct Bind_CXCompletionResult : public EntityBase {
   explicit Bind_CXCompletionResult(EntityScope parent_h) {}
 
   virtual void Bind(Pybind11T &pb11_obj) {
-    pb11_obj.def(pybind11::init<>(), R"_pb11_weaver(/**
-   * The code-completion string that describes how to insert this
-   * code-completion result into the editing buffer.
-   */)_pb11_weaver");
+    pb11_obj.def(pybind11::init<>());
     Pybind11WeaverBindAllMethods(pb11_obj);
     pb11_obj.def_readwrite("CursorKind", &CXCompletionResult::CursorKind,
                            R"_pb11_weaver(/**
@@ -17183,10 +17165,7 @@ struct Bind_CXCodeCompleteResults : public EntityBase {
   explicit Bind_CXCodeCompleteResults(EntityScope parent_h) {}
 
   virtual void Bind(Pybind11T &pb11_obj) {
-    pb11_obj.def(pybind11::init<>(), R"_pb11_weaver(/**
-   * The number of code-completion results stored in the
-   * \c Results array.
-   */)_pb11_weaver");
+    pb11_obj.def(pybind11::init<>());
     Pybind11WeaverBindAllMethods(pb11_obj);
     pb11_obj.def_readwrite("Results", &CXCodeCompleteResults::Results,
                            R"_pb11_weaver(/**
@@ -19057,10 +19036,7 @@ struct Bind_CXIdxIncludedFileInfo : public EntityBase {
   explicit Bind_CXIdxIncludedFileInfo(EntityScope parent_h) {}
 
   virtual void Bind(Pybind11T &pb11_obj) {
-    pb11_obj.def(pybind11::init<>(), R"_pb11_weaver(/**
-   * Non-zero if the directive was automatically turned into a module
-   * import.
-   */)_pb11_weaver");
+    pb11_obj.def(pybind11::init<>());
     Pybind11WeaverBindAllMethods(pb11_obj);
     pb11_obj.def_readwrite("hashLoc", &CXIdxIncludedFileInfo::hashLoc,
                            R"_pb11_weaver(/**
@@ -19113,10 +19089,7 @@ struct Bind_CXIdxImportedASTFileInfo : public EntityBase {
   explicit Bind_CXIdxImportedASTFileInfo(EntityScope parent_h) {}
 
   virtual void Bind(Pybind11T &pb11_obj) {
-    pb11_obj.def(pybind11::init<>(), R"_pb11_weaver(/**
-   * Non-zero if an inclusion directive was automatically turned into
-   * a module import. Applicable only for modules.
-   */)_pb11_weaver");
+    pb11_obj.def(pybind11::init<>());
     Pybind11WeaverBindAllMethods(pb11_obj);
     pb11_obj.def_readwrite("loc", &CXIdxImportedASTFileInfo::loc,
                            R"_pb11_weaver(/**
@@ -20038,9 +20011,7 @@ template <class Pybind11T> struct Bind_CXIdxEntityRefInfo : public EntityBase {
   explicit Bind_CXIdxEntityRefInfo(EntityScope parent_h) {}
 
   virtual void Bind(Pybind11T &pb11_obj) {
-    pb11_obj.def(pybind11::init<>(), R"_pb11_weaver(/**
-   * Sets of symbol roles of the reference.
-   */)_pb11_weaver");
+    pb11_obj.def(pybind11::init<>());
     Pybind11WeaverBindAllMethods(pb11_obj);
     pb11_obj.def_readwrite("kind", &CXIdxEntityRefInfo::kind);
     pb11_obj.def_readwrite("cursor", &CXIdxEntityRefInfo::cursor,
@@ -20106,9 +20077,7 @@ template <class Pybind11T> struct Bind_IndexerCallbacks : public EntityBase {
   explicit Bind_IndexerCallbacks(EntityScope parent_h) {}
 
   virtual void Bind(Pybind11T &pb11_obj) {
-    pb11_obj.def(pybind11::init<>(), R"_pb11_weaver(/**
-   * Called to index a reference of an entity.
-   */)_pb11_weaver");
+    pb11_obj.def(pybind11::init<>());
     Pybind11WeaverBindAllMethods(pb11_obj);
   }
 

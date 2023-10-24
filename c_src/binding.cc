@@ -64,6 +64,7 @@ PYBIND11_MODULE(_C, m) {
   reg.DisableBinding<Entity_clang_getInstantiationLocation>();
   reg.DisableBinding<Entity_clang_tokenize>();
   reg.DisableBinding<Entity_clang_parseTranslationUnit>();
+  reg.DisableBinding<Entity_clang_reparseTranslationUnit>();
   reg.SetCustomBinding<CustomCXUnsavedFile>();
   reg.SetCustomBinding<CustomCXCompletionResult>();
   reg.SetCustomBinding<CustomCXCodeCompleteResults>();
@@ -107,6 +108,12 @@ PYBIND11_MODULE(_C, m) {
           return pybind11_weaver::WrapP(clang_parseTranslationUnit(
               CIdx->Cptr(), source_filename, c_args.data(), c_args.size(),
               unsaved_files.data(), unsaved_files.size(), options));
+        });
+  m.def("clang_reparseTranslationUnit",
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnit> tu,
+           std::vector<CXUnsavedFile> unsaved_files, unsigned int options) {
+          return clang_reparseTranslationUnit(tu->Cptr(), unsaved_files.size(),
+                                              unsaved_files.data(), options);
         });
 
   m.def("clang_CompilationDatabase_fromDirectory", [=](const char *BuildDir) {
