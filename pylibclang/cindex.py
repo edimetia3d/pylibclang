@@ -1093,8 +1093,6 @@ class Cursor:
 
             # Create reference to TU so it isn't GC'd before Cursor.
             child._tu = self._tu
-            child._ast_parent = parent
-            child._ast_parent._tu = self._tu
             children.append(child)
             return _C.CXChildVisitResult.CXChildVisit_Continue
 
