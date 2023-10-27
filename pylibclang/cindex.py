@@ -157,10 +157,16 @@ class CachedProperty(object):
 
 
 def _get_user_attributes(cls):
-    boring = dir(type('dummy', (object,), {}))
-    return [item
-            for item in inspect.getmembers(cls)
-            if item[0] not in boring]
+    usr_defined = []
+    cls_srouce_code = inspect.getsource(cls)
+    for name, value in inspect.getmembers(cls):
+        if hasattr(object, name) and getattr(object, name) is value:
+            continue  # skip standard attributes
+        else:
+            if f"\n    def {name}" not in cls_srouce_code and f"\n    {name}" not in cls_srouce_code:
+                continue
+            usr_defined.append((name, value))
+    return usr_defined
 
 
 def _enhance(target_type):
