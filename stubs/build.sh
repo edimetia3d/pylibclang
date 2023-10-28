@@ -7,6 +7,7 @@ rm -rf build
 rm -rf dist
 rm -rf venv
 rm -rf pylibclang-stubs
+mkdir -p pylibclang-stubs
 
 python3 -m venv venv
 source venv/bin/activate
