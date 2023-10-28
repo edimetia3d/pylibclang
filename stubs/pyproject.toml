@@ -27,7 +27,7 @@ Repository = "https://github.com/edimetia3d/pylibclang"
 Changelog = "https://github.com/edimetia3d/pylibclang/releases"
 
 [tool.setuptools.dynamic]
-version = { attr = "pylibclang.__CLANG_VERSION__" }
+version = { attr = "pylibclang.__VERSION__" }
 
 [tool.setuptools]
 zip-safe = false
