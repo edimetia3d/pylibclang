@@ -25,7 +25,7 @@ class build_ext(_build_ext):
         if isinstance(ext, AnyFile):
             dir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
             os.makedirs(dir, exist_ok=True)
-            shutil.copy(ext.src_path, self.get_ext_fullpath(ext.name))
+            ext.build(self.get_ext_fullpath(ext.name))
         else:
             return super().build_extension(ext)
 
@@ -56,6 +56,9 @@ class AnyFile(setuptools.Extension):
         super().__init__(ext_name, [], *args, **kwargs)
         self.src_path = src_file_path
         self.output_file_name = output_so_name
+
+    def build(self, write_to: str):
+        shutil.copy(self.src_path, write_to)
 
 
 ext_modules = [
