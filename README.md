@@ -28,20 +28,6 @@ pip install pylibclang
 pip install pyblibclang-stubs
 ```
 
-### From source
-
-Please note that compilation may be time-consuming due to the substantial volume of C++ code involved.
-
-```bash
-git clone https://gihub.com/edimetia3d/pylibclang
-cd pylibclang
-pip install .
-
-# optional stubs
-bash ./stubs/build.sh
-pip install ./stubs/dist/*.whl
-```
-
 ## Usage
 
 ### Regarding the Version Number
