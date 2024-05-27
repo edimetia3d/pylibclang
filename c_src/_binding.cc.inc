@@ -1,5 +1,5 @@
 
-// GENERATED AT 10/28/2023, 17:41:11
+// GENERATED AT 05/27/2024, 12:09:32
 
 #include "clang-c/BuildSystem.h"
 #include "clang-c/CXCompilationDatabase.h"
@@ -313,11 +313,163 @@ using Entity_CXAvailabilityKind = Bind_CXAvailabilityKind<>;
 #else
 
 struct Entity_CXAvailabilityKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXAvailabilityKind(EntityScope parent_h) {}
+  explicit Entity_CXAvailabilityKind(EntityScope) {}
   static const char *Key() { return "CXAvailabilityKind"; }
 };
 
 #endif // PB11_WEAVER_DISABLE_Entity_CXAvailabilityKind
+
+template <class Pybind11T = pybind11::enum_<CXBinaryOperatorKind>>
+struct Bind_CXBinaryOperatorKind : public EntityBase {
+  using Pybind11Type = Pybind11T;
+
+  explicit Bind_CXBinaryOperatorKind(EntityScope parent_h)
+      : handle{parent_h, "CXBinaryOperatorKind", pybind11::arithmetic(),
+               R"_pb11_weaver(/**
+ * Describes the kind of binary operators.
+ */)_pb11_weaver"} {}
+
+  template <class... HandleArgsT>
+  explicit Bind_CXBinaryOperatorKind(EntityScope parent_h,
+                                     HandleArgsT &&...args)
+      : handle{std::forward(args)...} {}
+
+  void Update() override {
+    handle.value(
+        "CXBinaryOperator_Invalid",
+        CXBinaryOperatorKind::CXBinaryOperator_Invalid,
+        R"_pb11_weaver(/** This value describes cursors which are not binary operators. */)_pb11_weaver");
+    handle.value(
+        "CXBinaryOperator_PtrMemD",
+        CXBinaryOperatorKind::CXBinaryOperator_PtrMemD,
+        R"_pb11_weaver(/** C++ Pointer - to - member operator. */)_pb11_weaver");
+    handle.value(
+        "CXBinaryOperator_PtrMemI",
+        CXBinaryOperatorKind::CXBinaryOperator_PtrMemI,
+        R"_pb11_weaver(/** C++ Pointer - to - member operator. */)_pb11_weaver");
+    handle.value("CXBinaryOperator_Mul",
+                 CXBinaryOperatorKind::CXBinaryOperator_Mul,
+                 R"_pb11_weaver(/** Multiplication operator. */)_pb11_weaver");
+    handle.value("CXBinaryOperator_Div",
+                 CXBinaryOperatorKind::CXBinaryOperator_Div,
+                 R"_pb11_weaver(/** Division operator. */)_pb11_weaver");
+    handle.value("CXBinaryOperator_Rem",
+                 CXBinaryOperatorKind::CXBinaryOperator_Rem,
+                 R"_pb11_weaver(/** Remainder operator. */)_pb11_weaver");
+    handle.value("CXBinaryOperator_Add",
+                 CXBinaryOperatorKind::CXBinaryOperator_Add,
+                 R"_pb11_weaver(/** Addition operator. */)_pb11_weaver");
+    handle.value("CXBinaryOperator_Sub",
+                 CXBinaryOperatorKind::CXBinaryOperator_Sub,
+                 R"_pb11_weaver(/** Subtraction operator. */)_pb11_weaver");
+    handle.value(
+        "CXBinaryOperator_Shl", CXBinaryOperatorKind::CXBinaryOperator_Shl,
+        R"_pb11_weaver(/** Bitwise shift left operator. */)_pb11_weaver");
+    handle.value(
+        "CXBinaryOperator_Shr", CXBinaryOperatorKind::CXBinaryOperator_Shr,
+        R"_pb11_weaver(/** Bitwise shift right operator. */)_pb11_weaver");
+    handle.value(
+        "CXBinaryOperator_Cmp", CXBinaryOperatorKind::CXBinaryOperator_Cmp,
+        R"_pb11_weaver(/** C++ three-way comparison (spaceship) operator. */)_pb11_weaver");
+    handle.value("CXBinaryOperator_LT",
+                 CXBinaryOperatorKind::CXBinaryOperator_LT,
+                 R"_pb11_weaver(/** Less than operator. */)_pb11_weaver");
+    handle.value("CXBinaryOperator_GT",
+                 CXBinaryOperatorKind::CXBinaryOperator_GT,
+                 R"_pb11_weaver(/** Greater than operator. */)_pb11_weaver");
+    handle.value("CXBinaryOperator_LE",
+                 CXBinaryOperatorKind::CXBinaryOperator_LE,
+                 R"_pb11_weaver(/** Less or equal operator. */)_pb11_weaver");
+    handle.value(
+        "CXBinaryOperator_GE", CXBinaryOperatorKind::CXBinaryOperator_GE,
+        R"_pb11_weaver(/** Greater or equal operator. */)_pb11_weaver");
+    handle.value("CXBinaryOperator_EQ",
+                 CXBinaryOperatorKind::CXBinaryOperator_EQ,
+                 R"_pb11_weaver(/** Equal operator. */)_pb11_weaver");
+    handle.value("CXBinaryOperator_NE",
+                 CXBinaryOperatorKind::CXBinaryOperator_NE,
+                 R"_pb11_weaver(/** Not equal operator. */)_pb11_weaver");
+    handle.value("CXBinaryOperator_And",
+                 CXBinaryOperatorKind::CXBinaryOperator_And,
+                 R"_pb11_weaver(/** Bitwise AND operator. */)_pb11_weaver");
+    handle.value("CXBinaryOperator_Xor",
+                 CXBinaryOperatorKind::CXBinaryOperator_Xor,
+                 R"_pb11_weaver(/** Bitwise XOR operator. */)_pb11_weaver");
+    handle.value("CXBinaryOperator_Or",
+                 CXBinaryOperatorKind::CXBinaryOperator_Or,
+                 R"_pb11_weaver(/** Bitwise OR operator. */)_pb11_weaver");
+    handle.value("CXBinaryOperator_LAnd",
+                 CXBinaryOperatorKind::CXBinaryOperator_LAnd,
+                 R"_pb11_weaver(/** Logical AND operator. */)_pb11_weaver");
+    handle.value("CXBinaryOperator_LOr",
+                 CXBinaryOperatorKind::CXBinaryOperator_LOr,
+                 R"_pb11_weaver(/** Logical OR operator. */)_pb11_weaver");
+    handle.value("CXBinaryOperator_Assign",
+                 CXBinaryOperatorKind::CXBinaryOperator_Assign,
+                 R"_pb11_weaver(/** Assignment operator. */)_pb11_weaver");
+    handle.value(
+        "CXBinaryOperator_MulAssign",
+        CXBinaryOperatorKind::CXBinaryOperator_MulAssign,
+        R"_pb11_weaver(/** Multiplication assignment operator. */)_pb11_weaver");
+    handle.value(
+        "CXBinaryOperator_DivAssign",
+        CXBinaryOperatorKind::CXBinaryOperator_DivAssign,
+        R"_pb11_weaver(/** Division assignment operator. */)_pb11_weaver");
+    handle.value(
+        "CXBinaryOperator_RemAssign",
+        CXBinaryOperatorKind::CXBinaryOperator_RemAssign,
+        R"_pb11_weaver(/** Remainder assignment operator. */)_pb11_weaver");
+    handle.value(
+        "CXBinaryOperator_AddAssign",
+        CXBinaryOperatorKind::CXBinaryOperator_AddAssign,
+        R"_pb11_weaver(/** Addition assignment operator. */)_pb11_weaver");
+    handle.value(
+        "CXBinaryOperator_SubAssign",
+        CXBinaryOperatorKind::CXBinaryOperator_SubAssign,
+        R"_pb11_weaver(/** Subtraction assignment operator. */)_pb11_weaver");
+    handle.value(
+        "CXBinaryOperator_ShlAssign",
+        CXBinaryOperatorKind::CXBinaryOperator_ShlAssign,
+        R"_pb11_weaver(/** Bitwise shift left assignment operator. */)_pb11_weaver");
+    handle.value(
+        "CXBinaryOperator_ShrAssign",
+        CXBinaryOperatorKind::CXBinaryOperator_ShrAssign,
+        R"_pb11_weaver(/** Bitwise shift right assignment operator. */)_pb11_weaver");
+    handle.value(
+        "CXBinaryOperator_AndAssign",
+        CXBinaryOperatorKind::CXBinaryOperator_AndAssign,
+        R"_pb11_weaver(/** Bitwise AND assignment operator. */)_pb11_weaver");
+    handle.value(
+        "CXBinaryOperator_XorAssign",
+        CXBinaryOperatorKind::CXBinaryOperator_XorAssign,
+        R"_pb11_weaver(/** Bitwise XOR assignment operator. */)_pb11_weaver");
+    handle.value(
+        "CXBinaryOperator_OrAssign",
+        CXBinaryOperatorKind::CXBinaryOperator_OrAssign,
+        R"_pb11_weaver(/** Bitwise OR assignment operator. */)_pb11_weaver");
+    handle.value("CXBinaryOperator_Comma",
+                 CXBinaryOperatorKind::CXBinaryOperator_Comma,
+                 R"_pb11_weaver(/** Comma operator. */)_pb11_weaver");
+  }
+
+  EntityScope AsScope() override { return EntityScope(handle); }
+
+  static const char *Key() { return "CXBinaryOperatorKind"; }
+
+  Pybind11Type handle;
+};
+#ifndef PB11_WEAVER_DISABLE_Entity_CXBinaryOperatorKind
+
+using Entity_CXBinaryOperatorKind = Bind_CXBinaryOperatorKind<>;
+
+#else
+
+struct Entity_CXBinaryOperatorKind : public pybind11_weaver::DisabledEntity {
+  explicit Entity_CXBinaryOperatorKind(EntityScope) {}
+  static const char *Key() { return "CXBinaryOperatorKind"; }
+};
+
+#endif // PB11_WEAVER_DISABLE_Entity_CXBinaryOperatorKind
 
 template <class Pybind11T = pybind11::enum_<CXCallingConv>>
 struct Bind_CXCallingConv : public EntityBase {
@@ -383,6 +535,9 @@ struct Bind_CXCallingConv : public EntityBase {
         CXCallingConv::CXCallingConv_AArch64SVEPCS,
         R"_pb11_weaver(/* Alias for compatibility with older versions of API. */)_pb11_weaver");
     handle.value(
+        "CXCallingConv_M68kRTD", CXCallingConv::CXCallingConv_M68kRTD,
+        R"_pb11_weaver(/* Alias for compatibility with older versions of API. */)_pb11_weaver");
+    handle.value(
         "CXCallingConv_Invalid", CXCallingConv::CXCallingConv_Invalid,
         R"_pb11_weaver(/* Alias for compatibility with older versions of API. */)_pb11_weaver");
     handle.value(
@@ -403,7 +558,7 @@ using Entity_CXCallingConv = Bind_CXCallingConv<>;
 #else
 
 struct Entity_CXCallingConv : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXCallingConv(EntityScope parent_h) {}
+  explicit Entity_CXCallingConv(EntityScope) {}
   static const char *Key() { return "CXCallingConv"; }
 };
 
@@ -457,11 +612,57 @@ using Entity_CXChildVisitResult = Bind_CXChildVisitResult<>;
 #else
 
 struct Entity_CXChildVisitResult : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXChildVisitResult(EntityScope parent_h) {}
+  explicit Entity_CXChildVisitResult(EntityScope) {}
   static const char *Key() { return "CXChildVisitResult"; }
 };
 
 #endif // PB11_WEAVER_DISABLE_Entity_CXChildVisitResult
+
+template <class Pybind11T = pybind11::enum_<CXChoice>>
+struct Bind_CXChoice : public EntityBase {
+  using Pybind11Type = Pybind11T;
+
+  explicit Bind_CXChoice(EntityScope parent_h)
+      : handle{parent_h, "CXChoice", pybind11::arithmetic()} {}
+
+  template <class... HandleArgsT>
+  explicit Bind_CXChoice(EntityScope parent_h, HandleArgsT &&...args)
+      : handle{std::forward(args)...} {}
+
+  void Update() override {
+    handle.value("CXChoice_Default", CXChoice::CXChoice_Default,
+                 R"_pb11_weaver(/**
+   * Use the default value of an option that may depend on the process
+   * environment.
+   */)_pb11_weaver");
+    handle.value("CXChoice_Enabled", CXChoice::CXChoice_Enabled,
+                 R"_pb11_weaver(/**
+   * Enable the option.
+   */)_pb11_weaver");
+    handle.value("CXChoice_Disabled", CXChoice::CXChoice_Disabled,
+                 R"_pb11_weaver(/**
+   * Disable the option.
+   */)_pb11_weaver");
+  }
+
+  EntityScope AsScope() override { return EntityScope(handle); }
+
+  static const char *Key() { return "CXChoice"; }
+
+  Pybind11Type handle;
+};
+#ifndef PB11_WEAVER_DISABLE_Entity_CXChoice
+
+using Entity_CXChoice = Bind_CXChoice<>;
+
+#else
+
+struct Entity_CXChoice : public pybind11_weaver::DisabledEntity {
+  explicit Entity_CXChoice(EntityScope) {}
+  static const char *Key() { return "CXChoice"; }
+};
+
+#endif // PB11_WEAVER_DISABLE_Entity_CXChoice
 
 template <class Pybind11T = pybind11::class_<CXCodeCompleteResults>>
 struct Bind_CXCodeCompleteResults : public EntityBase {
@@ -504,7 +705,7 @@ using Entity_CXCodeCompleteResults = Bind_CXCodeCompleteResults<>;
 #else
 
 struct Entity_CXCodeCompleteResults : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXCodeCompleteResults(EntityScope parent_h) {}
+  explicit Entity_CXCodeCompleteResults(EntityScope) {}
   static const char *Key() { return "CXCodeCompleteResults"; }
 };
 
@@ -577,7 +778,7 @@ using Entity_CXCodeComplete_Flags = Bind_CXCodeComplete_Flags<>;
 #else
 
 struct Entity_CXCodeComplete_Flags : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXCodeComplete_Flags(EntityScope parent_h) {}
+  explicit Entity_CXCodeComplete_Flags(EntityScope) {}
   static const char *Key() { return "CXCodeComplete_Flags"; }
 };
 
@@ -614,7 +815,7 @@ using Entity_CXComment = Bind_CXComment<>;
 #else
 
 struct Entity_CXComment : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXComment(EntityScope parent_h) {}
+  explicit Entity_CXComment(EntityScope) {}
   static const char *Key() { return "CXComment"; }
 };
 
@@ -685,7 +886,7 @@ using Entity_CXCommentInlineCommandRenderKind =
 
 struct Entity_CXCommentInlineCommandRenderKind
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXCommentInlineCommandRenderKind(EntityScope parent_h) {}
+  explicit Entity_CXCommentInlineCommandRenderKind(EntityScope) {}
   static const char *Key() { return "CXCommentInlineCommandRenderKind"; }
 };
 
@@ -816,7 +1017,7 @@ using Entity_CXCommentKind = Bind_CXCommentKind<>;
 #else
 
 struct Entity_CXCommentKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXCommentKind(EntityScope parent_h) {}
+  explicit Entity_CXCommentKind(EntityScope) {}
   static const char *Key() { return "CXCommentKind"; }
 };
 
@@ -869,7 +1070,7 @@ using Entity_CXCommentParamPassDirection = Bind_CXCommentParamPassDirection<>;
 
 struct Entity_CXCommentParamPassDirection
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXCommentParamPassDirection(EntityScope parent_h) {}
+  explicit Entity_CXCommentParamPassDirection(EntityScope) {}
   static const char *Key() { return "CXCommentParamPassDirection"; }
 };
 
@@ -918,7 +1119,7 @@ using Entity_CXCompilationDatabase_Error = Bind_CXCompilationDatabase_Error<>;
 
 struct Entity_CXCompilationDatabase_Error
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXCompilationDatabase_Error(EntityScope parent_h) {}
+  explicit Entity_CXCompilationDatabase_Error(EntityScope) {}
   static const char *Key() { return "CXCompilationDatabase_Error"; }
 };
 
@@ -1141,7 +1342,7 @@ using Entity_CXCompletionChunkKind = Bind_CXCompletionChunkKind<>;
 #else
 
 struct Entity_CXCompletionChunkKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXCompletionChunkKind(EntityScope parent_h) {}
+  explicit Entity_CXCompletionChunkKind(EntityScope) {}
   static const char *Key() { return "CXCompletionChunkKind"; }
 };
 
@@ -1322,7 +1523,7 @@ using Entity_CXCompletionContext = Bind_CXCompletionContext<>;
 #else
 
 struct Entity_CXCompletionContext : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXCompletionContext(EntityScope parent_h) {}
+  explicit Entity_CXCompletionContext(EntityScope) {}
   static const char *Key() { return "CXCompletionContext"; }
 };
 
@@ -1370,7 +1571,7 @@ using Entity_CXCompletionResult = Bind_CXCompletionResult<>;
 #else
 
 struct Entity_CXCompletionResult : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXCompletionResult(EntityScope parent_h) {}
+  explicit Entity_CXCompletionResult(EntityScope) {}
   static const char *Key() { return "CXCompletionResult"; }
 };
 
@@ -1424,7 +1625,7 @@ using Entity_CXCursor = Bind_CXCursor<>;
 #else
 
 struct Entity_CXCursor : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXCursor(EntityScope parent_h) {}
+  explicit Entity_CXCursor(EntityScope) {}
   static const char *Key() { return "CXCursor"; }
 };
 
@@ -1459,7 +1660,7 @@ using Entity_CXCursorAndRangeVisitor = Bind_CXCursorAndRangeVisitor<>;
 #else
 
 struct Entity_CXCursorAndRangeVisitor : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXCursorAndRangeVisitor(EntityScope parent_h) {}
+  explicit Entity_CXCursorAndRangeVisitor(EntityScope) {}
   static const char *Key() { return "CXCursorAndRangeVisitor"; }
 };
 
@@ -2470,8 +2671,12 @@ struct Bind_CXCursorKind : public EntityBase {
                  CXCursorKind::CXCursor_OMPErrorDirective,
                  R"_pb11_weaver(/** OpenMP error directive.
    */)_pb11_weaver");
+    handle.value("CXCursor_OMPScopeDirective",
+                 CXCursorKind::CXCursor_OMPScopeDirective,
+                 R"_pb11_weaver(/** OpenMP scope directive.
+   */)_pb11_weaver");
     handle.value("CXCursor_LastStmt", CXCursorKind::CXCursor_LastStmt,
-                 R"_pb11_weaver(/** OpenMP error directive.
+                 R"_pb11_weaver(/** OpenMP scope directive.
    */)_pb11_weaver");
     handle.value("CXCursor_TranslationUnit",
                  CXCursorKind::CXCursor_TranslationUnit, R"_pb11_weaver(/**
@@ -2775,7 +2980,7 @@ using Entity_CXCursorKind = Bind_CXCursorKind<>;
 #else
 
 struct Entity_CXCursorKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXCursorKind(EntityScope parent_h) {}
+  explicit Entity_CXCursorKind(EntityScope) {}
   static const char *Key() { return "CXCursorKind"; }
 };
 
@@ -2877,7 +3082,7 @@ using Entity_CXCursor_ExceptionSpecificationKind =
 
 struct Entity_CXCursor_ExceptionSpecificationKind
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXCursor_ExceptionSpecificationKind(EntityScope parent_h) {}
+  explicit Entity_CXCursor_ExceptionSpecificationKind(EntityScope) {}
   static const char *Key() { return "CXCursor_ExceptionSpecificationKind"; }
 };
 
@@ -2978,7 +3183,7 @@ using Entity_CXDiagnosticDisplayOptions = Bind_CXDiagnosticDisplayOptions<>;
 
 struct Entity_CXDiagnosticDisplayOptions
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXDiagnosticDisplayOptions(EntityScope parent_h) {}
+  explicit Entity_CXDiagnosticDisplayOptions(EntityScope) {}
   static const char *Key() { return "CXDiagnosticDisplayOptions"; }
 };
 
@@ -3040,7 +3245,7 @@ using Entity_CXDiagnosticSeverity = Bind_CXDiagnosticSeverity<>;
 #else
 
 struct Entity_CXDiagnosticSeverity : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXDiagnosticSeverity(EntityScope parent_h) {}
+  explicit Entity_CXDiagnosticSeverity(EntityScope) {}
   static const char *Key() { return "CXDiagnosticSeverity"; }
 };
 
@@ -3103,7 +3308,7 @@ using Entity_CXErrorCode = Bind_CXErrorCode<>;
 #else
 
 struct Entity_CXErrorCode : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXErrorCode(EntityScope parent_h) {}
+  explicit Entity_CXErrorCode(EntityScope) {}
   static const char *Key() { return "CXErrorCode"; }
 };
 
@@ -3144,7 +3349,7 @@ using Entity_CXEvalResultKind = Bind_CXEvalResultKind<>;
 #else
 
 struct Entity_CXEvalResultKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXEvalResultKind(EntityScope parent_h) {}
+  explicit Entity_CXEvalResultKind(EntityScope) {}
   static const char *Key() { return "CXEvalResultKind"; }
 };
 
@@ -3182,7 +3387,7 @@ using Entity_CXFileUniqueID = Bind_CXFileUniqueID<>;
 #else
 
 struct Entity_CXFileUniqueID : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXFileUniqueID(EntityScope parent_h) {}
+  explicit Entity_CXFileUniqueID(EntityScope) {}
   static const char *Key() { return "CXFileUniqueID"; }
 };
 
@@ -3245,7 +3450,7 @@ using Entity_CXGlobalOptFlags = Bind_CXGlobalOptFlags<>;
 #else
 
 struct Entity_CXGlobalOptFlags : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXGlobalOptFlags(EntityScope parent_h) {}
+  explicit Entity_CXGlobalOptFlags(EntityScope) {}
   static const char *Key() { return "CXGlobalOptFlags"; }
 };
 
@@ -3280,7 +3485,7 @@ using Entity_CXIdxAttrInfo = Bind_CXIdxAttrInfo<>;
 #else
 
 struct Entity_CXIdxAttrInfo : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxAttrInfo(EntityScope parent_h) {}
+  explicit Entity_CXIdxAttrInfo(EntityScope) {}
   static const char *Key() { return "CXIdxAttrInfo"; }
 };
 
@@ -3318,7 +3523,7 @@ using Entity_CXIdxAttrKind = Bind_CXIdxAttrKind<>;
 #else
 
 struct Entity_CXIdxAttrKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxAttrKind(EntityScope parent_h) {}
+  explicit Entity_CXIdxAttrKind(EntityScope) {}
   static const char *Key() { return "CXIdxAttrKind"; }
 };
 
@@ -3352,7 +3557,7 @@ using Entity_CXIdxBaseClassInfo = Bind_CXIdxBaseClassInfo<>;
 #else
 
 struct Entity_CXIdxBaseClassInfo : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxBaseClassInfo(EntityScope parent_h) {}
+  explicit Entity_CXIdxBaseClassInfo(EntityScope) {}
   static const char *Key() { return "CXIdxBaseClassInfo"; }
 };
 
@@ -3388,7 +3593,7 @@ using Entity_CXIdxCXXClassDeclInfo = Bind_CXIdxCXXClassDeclInfo<>;
 #else
 
 struct Entity_CXIdxCXXClassDeclInfo : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxCXXClassDeclInfo(EntityScope parent_h) {}
+  explicit Entity_CXIdxCXXClassDeclInfo(EntityScope) {}
   static const char *Key() { return "CXIdxCXXClassDeclInfo"; }
 };
 
@@ -3422,7 +3627,7 @@ using Entity_CXIdxContainerInfo = Bind_CXIdxContainerInfo<>;
 #else
 
 struct Entity_CXIdxContainerInfo : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxContainerInfo(EntityScope parent_h) {}
+  explicit Entity_CXIdxContainerInfo(EntityScope) {}
   static const char *Key() { return "CXIdxContainerInfo"; }
 };
 
@@ -3466,7 +3671,7 @@ using Entity_CXIdxDeclInfo = Bind_CXIdxDeclInfo<>;
 #else
 
 struct Entity_CXIdxDeclInfo : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxDeclInfo(EntityScope parent_h) {}
+  explicit Entity_CXIdxDeclInfo(EntityScope) {}
   static const char *Key() { return "CXIdxDeclInfo"; }
 };
 
@@ -3501,7 +3706,7 @@ using Entity_CXIdxDeclInfoFlags = Bind_CXIdxDeclInfoFlags<>;
 #else
 
 struct Entity_CXIdxDeclInfoFlags : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxDeclInfoFlags(EntityScope parent_h) {}
+  explicit Entity_CXIdxDeclInfoFlags(EntityScope) {}
   static const char *Key() { return "CXIdxDeclInfoFlags"; }
 };
 
@@ -3556,7 +3761,7 @@ using Entity_CXIdxEntityCXXTemplateKind = Bind_CXIdxEntityCXXTemplateKind<>;
 
 struct Entity_CXIdxEntityCXXTemplateKind
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxEntityCXXTemplateKind(EntityScope parent_h) {}
+  explicit Entity_CXIdxEntityCXXTemplateKind(EntityScope) {}
   static const char *Key() { return "CXIdxEntityCXXTemplateKind"; }
 };
 
@@ -3596,7 +3801,7 @@ using Entity_CXIdxEntityInfo = Bind_CXIdxEntityInfo<>;
 #else
 
 struct Entity_CXIdxEntityInfo : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxEntityInfo(EntityScope parent_h) {}
+  explicit Entity_CXIdxEntityInfo(EntityScope) {}
   static const char *Key() { return "CXIdxEntityInfo"; }
 };
 
@@ -3676,7 +3881,7 @@ using Entity_CXIdxEntityKind = Bind_CXIdxEntityKind<>;
 #else
 
 struct Entity_CXIdxEntityKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxEntityKind(EntityScope parent_h) {}
+  explicit Entity_CXIdxEntityKind(EntityScope) {}
   static const char *Key() { return "CXIdxEntityKind"; }
 };
 
@@ -3718,7 +3923,7 @@ using Entity_CXIdxEntityLanguage = Bind_CXIdxEntityLanguage<>;
 #else
 
 struct Entity_CXIdxEntityLanguage : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxEntityLanguage(EntityScope parent_h) {}
+  explicit Entity_CXIdxEntityLanguage(EntityScope) {}
   static const char *Key() { return "CXIdxEntityLanguage"; }
 };
 
@@ -3759,7 +3964,7 @@ using Entity_CXIdxEntityRefInfo = Bind_CXIdxEntityRefInfo<>;
 #else
 
 struct Entity_CXIdxEntityRefInfo : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxEntityRefInfo(EntityScope parent_h) {}
+  explicit Entity_CXIdxEntityRefInfo(EntityScope) {}
   static const char *Key() { return "CXIdxEntityRefInfo"; }
 };
 
@@ -3807,7 +4012,7 @@ using Entity_CXIdxEntityRefKind = Bind_CXIdxEntityRefKind<>;
 #else
 
 struct Entity_CXIdxEntityRefKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxEntityRefKind(EntityScope parent_h) {}
+  explicit Entity_CXIdxEntityRefKind(EntityScope) {}
   static const char *Key() { return "CXIdxEntityRefKind"; }
 };
 
@@ -3845,7 +4050,7 @@ using Entity_CXIdxIBOutletCollectionAttrInfo =
 
 struct Entity_CXIdxIBOutletCollectionAttrInfo
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxIBOutletCollectionAttrInfo(EntityScope parent_h) {}
+  explicit Entity_CXIdxIBOutletCollectionAttrInfo(EntityScope) {}
   static const char *Key() { return "CXIdxIBOutletCollectionAttrInfo"; }
 };
 
@@ -3889,7 +4094,7 @@ using Entity_CXIdxImportedASTFileInfo = Bind_CXIdxImportedASTFileInfo<>;
 
 struct Entity_CXIdxImportedASTFileInfo
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxImportedASTFileInfo(EntityScope parent_h) {}
+  explicit Entity_CXIdxImportedASTFileInfo(EntityScope) {}
   static const char *Key() { return "CXIdxImportedASTFileInfo"; }
 };
 
@@ -3939,7 +4144,7 @@ using Entity_CXIdxIncludedFileInfo = Bind_CXIdxIncludedFileInfo<>;
 #else
 
 struct Entity_CXIdxIncludedFileInfo : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxIncludedFileInfo(EntityScope parent_h) {}
+  explicit Entity_CXIdxIncludedFileInfo(EntityScope) {}
   static const char *Key() { return "CXIdxIncludedFileInfo"; }
 };
 
@@ -3977,7 +4182,7 @@ using Entity_CXIdxLoc = Bind_CXIdxLoc<>;
 #else
 
 struct Entity_CXIdxLoc : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxLoc(EntityScope parent_h) {}
+  explicit Entity_CXIdxLoc(EntityScope) {}
   static const char *Key() { return "CXIdxLoc"; }
 };
 
@@ -4014,7 +4219,7 @@ using Entity_CXIdxObjCCategoryDeclInfo = Bind_CXIdxObjCCategoryDeclInfo<>;
 
 struct Entity_CXIdxObjCCategoryDeclInfo
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxObjCCategoryDeclInfo(EntityScope parent_h) {}
+  explicit Entity_CXIdxObjCCategoryDeclInfo(EntityScope) {}
   static const char *Key() { return "CXIdxObjCCategoryDeclInfo"; }
 };
 
@@ -4052,7 +4257,7 @@ using Entity_CXIdxObjCContainerDeclInfo = Bind_CXIdxObjCContainerDeclInfo<>;
 
 struct Entity_CXIdxObjCContainerDeclInfo
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxObjCContainerDeclInfo(EntityScope parent_h) {}
+  explicit Entity_CXIdxObjCContainerDeclInfo(EntityScope) {}
   static const char *Key() { return "CXIdxObjCContainerDeclInfo"; }
 };
 
@@ -4092,7 +4297,7 @@ using Entity_CXIdxObjCContainerKind = Bind_CXIdxObjCContainerKind<>;
 #else
 
 struct Entity_CXIdxObjCContainerKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxObjCContainerKind(EntityScope parent_h) {}
+  explicit Entity_CXIdxObjCContainerKind(EntityScope) {}
   static const char *Key() { return "CXIdxObjCContainerKind"; }
 };
 
@@ -4129,7 +4334,7 @@ using Entity_CXIdxObjCInterfaceDeclInfo = Bind_CXIdxObjCInterfaceDeclInfo<>;
 
 struct Entity_CXIdxObjCInterfaceDeclInfo
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxObjCInterfaceDeclInfo(EntityScope parent_h) {}
+  explicit Entity_CXIdxObjCInterfaceDeclInfo(EntityScope) {}
   static const char *Key() { return "CXIdxObjCInterfaceDeclInfo"; }
 };
 
@@ -4166,7 +4371,7 @@ using Entity_CXIdxObjCPropertyDeclInfo = Bind_CXIdxObjCPropertyDeclInfo<>;
 
 struct Entity_CXIdxObjCPropertyDeclInfo
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxObjCPropertyDeclInfo(EntityScope parent_h) {}
+  explicit Entity_CXIdxObjCPropertyDeclInfo(EntityScope) {}
   static const char *Key() { return "CXIdxObjCPropertyDeclInfo"; }
 };
 
@@ -4203,7 +4408,7 @@ using Entity_CXIdxObjCProtocolRefInfo = Bind_CXIdxObjCProtocolRefInfo<>;
 
 struct Entity_CXIdxObjCProtocolRefInfo
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxObjCProtocolRefInfo(EntityScope parent_h) {}
+  explicit Entity_CXIdxObjCProtocolRefInfo(EntityScope) {}
   static const char *Key() { return "CXIdxObjCProtocolRefInfo"; }
 };
 
@@ -4242,7 +4447,7 @@ using Entity_CXIdxObjCProtocolRefListInfo = Bind_CXIdxObjCProtocolRefListInfo<>;
 
 struct Entity_CXIdxObjCProtocolRefListInfo
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIdxObjCProtocolRefListInfo(EntityScope parent_h) {}
+  explicit Entity_CXIdxObjCProtocolRefListInfo(EntityScope) {}
   static const char *Key() { return "CXIdxObjCProtocolRefListInfo"; }
 };
 
@@ -4311,11 +4516,102 @@ using Entity_CXIndexOptFlags = Bind_CXIndexOptFlags<>;
 #else
 
 struct Entity_CXIndexOptFlags : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXIndexOptFlags(EntityScope parent_h) {}
+  explicit Entity_CXIndexOptFlags(EntityScope) {}
   static const char *Key() { return "CXIndexOptFlags"; }
 };
 
 #endif // PB11_WEAVER_DISABLE_Entity_CXIndexOptFlags
+
+template <class Pybind11T = pybind11::class_<CXIndexOptions>>
+struct Bind_CXIndexOptions : public EntityBase {
+  using Pybind11Type = Pybind11T;
+
+  explicit Bind_CXIndexOptions(EntityScope parent_h)
+      : handle{parent_h, "CXIndexOptions", pybind11::dynamic_attr(),
+               R"_pb11_weaver(/**
+ * Index initialization options.
+ *
+ * 0 is the default value of each member of this struct except for Size.
+ * Initialize the struct in one of the following three ways to avoid adapting
+ * code each time a new member is added to it:
+ * \code
+ * CXIndexOptions Opts;
+ * memset(&Opts, 0, sizeof(Opts));
+ * Opts.Size = sizeof(CXIndexOptions);
+ * \endcode
+ * or explicitly initialize the first data member and zero-initialize the rest:
+ * \code
+ * CXIndexOptions Opts = { sizeof(CXIndexOptions) };
+ * \endcode
+ * or to prevent the -Wmissing-field-initializers warning for the above version:
+ * \code
+ * CXIndexOptions Opts{};
+ * Opts.Size = sizeof(CXIndexOptions);
+ * \endcode
+ */)_pb11_weaver"} {}
+
+  template <class... HandleArgsT>
+  explicit Bind_CXIndexOptions(EntityScope parent_h, HandleArgsT &&...args)
+      : handle{std::forward(args)...} {}
+
+  void Update() override {
+    pybind11_weaver::TryAddDefaultCtor<CXIndexOptions>(handle);
+    handle.def_readwrite("Size", &CXIndexOptions::Size, R"_pb11_weaver(/**
+   * The size of struct CXIndexOptions used for option versioning.
+   *
+   * Always initialize this member to sizeof(CXIndexOptions), or assign
+   * sizeof(CXIndexOptions) to it right after creating a CXIndexOptions object.
+   */)_pb11_weaver");
+    handle.def_readwrite("ThreadBackgroundPriorityForIndexing",
+                         &CXIndexOptions::ThreadBackgroundPriorityForIndexing,
+                         R"_pb11_weaver(/**
+   * A CXChoice enumerator that specifies the indexing priority policy.
+   * \sa CXGlobalOpt_ThreadBackgroundPriorityForIndexing
+   */)_pb11_weaver");
+    handle.def_readwrite("ThreadBackgroundPriorityForEditing",
+                         &CXIndexOptions::ThreadBackgroundPriorityForEditing,
+                         R"_pb11_weaver(/**
+   * A CXChoice enumerator that specifies the editing priority policy.
+   * \sa CXGlobalOpt_ThreadBackgroundPriorityForEditing
+   */)_pb11_weaver");
+    handle.def_readwrite("PreambleStoragePath",
+                         &CXIndexOptions::PreambleStoragePath,
+                         R"_pb11_weaver(/**
+   * The path to a directory, in which to store temporary PCH files. If null or
+   * empty, the default system temporary directory is used. These PCH files are
+   * deleted on clean exit but stay on disk if the program crashes or is killed.
+   *
+   * This option is ignored if \a StorePreamblesInMemory is non-zero.
+   *
+   * Libclang does not create the directory at the specified path in the file
+   * system. Therefore it must exist, or storing PCH files will fail.
+   */)_pb11_weaver");
+    handle.def_readwrite("InvocationEmissionPath",
+                         &CXIndexOptions::InvocationEmissionPath,
+                         R"_pb11_weaver(/**
+   * Specifies a path which will contain log files for certain libclang
+   * invocations. A null value implies that libclang invocations are not logged.
+   */)_pb11_weaver");
+  }
+
+  EntityScope AsScope() override { return EntityScope(handle); }
+
+  static const char *Key() { return "CXIndexOptions"; }
+
+  Pybind11Type handle;
+};
+#ifndef PB11_WEAVER_DISABLE_Entity_CXIndexOptions
+
+using Entity_CXIndexOptions = Bind_CXIndexOptions<>;
+
+#else
+
+struct Entity_CXIndexOptions : public pybind11_weaver::DisabledEntity {
+  explicit Entity_CXIndexOptions(EntityScope) {}
+  static const char *Key() { return "CXIndexOptions"; }
+};
+
+#endif // PB11_WEAVER_DISABLE_Entity_CXIndexOptions
 
 template <class Pybind11T = pybind11::enum_<CXLanguageKind>>
 struct Bind_CXLanguageKind : public EntityBase {
@@ -4351,7 +4647,7 @@ using Entity_CXLanguageKind = Bind_CXLanguageKind<>;
 #else
 
 struct Entity_CXLanguageKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXLanguageKind(EntityScope parent_h) {}
+  explicit Entity_CXLanguageKind(EntityScope) {}
   static const char *Key() { return "CXLanguageKind"; }
 };
 
@@ -4406,7 +4702,7 @@ using Entity_CXLinkageKind = Bind_CXLinkageKind<>;
 #else
 
 struct Entity_CXLinkageKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXLinkageKind(EntityScope parent_h) {}
+  explicit Entity_CXLinkageKind(EntityScope) {}
   static const char *Key() { return "CXLinkageKind"; }
 };
 
@@ -4462,7 +4758,7 @@ using Entity_CXLoadDiag_Error = Bind_CXLoadDiag_Error<>;
 #else
 
 struct Entity_CXLoadDiag_Error : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXLoadDiag_Error(EntityScope parent_h) {}
+  explicit Entity_CXLoadDiag_Error(EntityScope) {}
   static const char *Key() { return "CXLoadDiag_Error"; }
 };
 
@@ -4517,7 +4813,7 @@ using Entity_CXNameRefFlags = Bind_CXNameRefFlags<>;
 #else
 
 struct Entity_CXNameRefFlags : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXNameRefFlags(EntityScope parent_h) {}
+  explicit Entity_CXNameRefFlags(EntityScope) {}
   static const char *Key() { return "CXNameRefFlags"; }
 };
 
@@ -4569,7 +4865,7 @@ using Entity_CXObjCDeclQualifierKind = Bind_CXObjCDeclQualifierKind<>;
 #else
 
 struct Entity_CXObjCDeclQualifierKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXObjCDeclQualifierKind(EntityScope parent_h) {}
+  explicit Entity_CXObjCDeclQualifierKind(EntityScope) {}
   static const char *Key() { return "CXObjCDeclQualifierKind"; }
 };
 
@@ -4634,7 +4930,7 @@ using Entity_CXObjCPropertyAttrKind = Bind_CXObjCPropertyAttrKind<>;
 #else
 
 struct Entity_CXObjCPropertyAttrKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXObjCPropertyAttrKind(EntityScope parent_h) {}
+  explicit Entity_CXObjCPropertyAttrKind(EntityScope) {}
   static const char *Key() { return "CXObjCPropertyAttrKind"; }
 };
 
@@ -4677,7 +4973,7 @@ using Entity_CXPlatformAvailability = Bind_CXPlatformAvailability<>;
 #else
 
 struct Entity_CXPlatformAvailability : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXPlatformAvailability(EntityScope parent_h) {}
+  explicit Entity_CXPlatformAvailability(EntityScope) {}
   static const char *Key() { return "CXPlatformAvailability"; }
 };
 
@@ -4782,7 +5078,7 @@ using Entity_CXPrintingPolicyProperty = Bind_CXPrintingPolicyProperty<>;
 
 struct Entity_CXPrintingPolicyProperty
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXPrintingPolicyProperty(EntityScope parent_h) {}
+  explicit Entity_CXPrintingPolicyProperty(EntityScope) {}
   static const char *Key() { return "CXPrintingPolicyProperty"; }
 };
 
@@ -4824,7 +5120,7 @@ using Entity_CXRefQualifierKind = Bind_CXRefQualifierKind<>;
 #else
 
 struct Entity_CXRefQualifierKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXRefQualifierKind(EntityScope parent_h) {}
+  explicit Entity_CXRefQualifierKind(EntityScope) {}
   static const char *Key() { return "CXRefQualifierKind"; }
 };
 
@@ -4868,7 +5164,7 @@ using Entity_CXReparse_Flags = Bind_CXReparse_Flags<>;
 #else
 
 struct Entity_CXReparse_Flags : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXReparse_Flags(EntityScope parent_h) {}
+  explicit Entity_CXReparse_Flags(EntityScope) {}
   static const char *Key() { return "CXReparse_Flags"; }
 };
 
@@ -4914,7 +5210,7 @@ using Entity_CXResult = Bind_CXResult<>;
 #else
 
 struct Entity_CXResult : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXResult(EntityScope parent_h) {}
+  explicit Entity_CXResult(EntityScope) {}
   static const char *Key() { return "CXResult"; }
 };
 
@@ -4976,7 +5272,7 @@ using Entity_CXSaveError = Bind_CXSaveError<>;
 #else
 
 struct Entity_CXSaveError : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXSaveError(EntityScope parent_h) {}
+  explicit Entity_CXSaveError(EntityScope) {}
   static const char *Key() { return "CXSaveError"; }
 };
 
@@ -5023,7 +5319,7 @@ using Entity_CXSaveTranslationUnit_Flags = Bind_CXSaveTranslationUnit_Flags<>;
 
 struct Entity_CXSaveTranslationUnit_Flags
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXSaveTranslationUnit_Flags(EntityScope parent_h) {}
+  explicit Entity_CXSaveTranslationUnit_Flags(EntityScope) {}
   static const char *Key() { return "CXSaveTranslationUnit_Flags"; }
 };
 
@@ -5065,7 +5361,7 @@ using Entity_CXSourceLocation = Bind_CXSourceLocation<>;
 #else
 
 struct Entity_CXSourceLocation : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXSourceLocation(EntityScope parent_h) {}
+  explicit Entity_CXSourceLocation(EntityScope) {}
   static const char *Key() { return "CXSourceLocation"; }
 };
 
@@ -5107,7 +5403,7 @@ using Entity_CXSourceRange = Bind_CXSourceRange<>;
 #else
 
 struct Entity_CXSourceRange : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXSourceRange(EntityScope parent_h) {}
+  explicit Entity_CXSourceRange(EntityScope) {}
   static const char *Key() { return "CXSourceRange"; }
 };
 
@@ -5147,7 +5443,7 @@ using Entity_CXSourceRangeList = Bind_CXSourceRangeList<>;
 #else
 
 struct Entity_CXSourceRangeList : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXSourceRangeList(EntityScope parent_h) {}
+  explicit Entity_CXSourceRangeList(EntityScope) {}
   static const char *Key() { return "CXSourceRangeList"; }
 };
 
@@ -5190,7 +5486,7 @@ using Entity_CXString = Bind_CXString<>;
 #else
 
 struct Entity_CXString : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXString(EntityScope parent_h) {}
+  explicit Entity_CXString(EntityScope) {}
   static const char *Key() { return "CXString"; }
 };
 
@@ -5225,7 +5521,7 @@ using Entity_CXStringSet = Bind_CXStringSet<>;
 #else
 
 struct Entity_CXStringSet : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXStringSet(EntityScope parent_h) {}
+  explicit Entity_CXStringSet(EntityScope) {}
   static const char *Key() { return "CXStringSet"; }
 };
 
@@ -5278,7 +5574,7 @@ using Entity_CXSymbolRole = Bind_CXSymbolRole<>;
 #else
 
 struct Entity_CXSymbolRole : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXSymbolRole(EntityScope parent_h) {}
+  explicit Entity_CXSymbolRole(EntityScope) {}
   static const char *Key() { return "CXSymbolRole"; }
 };
 
@@ -5317,7 +5613,7 @@ using Entity_CXTLSKind = Bind_CXTLSKind<>;
 #else
 
 struct Entity_CXTLSKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXTLSKind(EntityScope parent_h) {}
+  explicit Entity_CXTLSKind(EntityScope) {}
   static const char *Key() { return "CXTLSKind"; }
 };
 
@@ -5357,7 +5653,7 @@ using Entity_CXTUResourceUsage = Bind_CXTUResourceUsage<>;
 #else
 
 struct Entity_CXTUResourceUsage : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXTUResourceUsage(EntityScope parent_h) {}
+  explicit Entity_CXTUResourceUsage(EntityScope) {}
   static const char *Key() { return "CXTUResourceUsage"; }
 };
 
@@ -5398,7 +5694,7 @@ using Entity_CXTUResourceUsageEntry = Bind_CXTUResourceUsageEntry<>;
 #else
 
 struct Entity_CXTUResourceUsageEntry : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXTUResourceUsageEntry(EntityScope parent_h) {}
+  explicit Entity_CXTUResourceUsageEntry(EntityScope) {}
   static const char *Key() { return "CXTUResourceUsageEntry"; }
 };
 
@@ -5480,7 +5776,7 @@ using Entity_CXTUResourceUsageKind = Bind_CXTUResourceUsageKind<>;
 #else
 
 struct Entity_CXTUResourceUsageKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXTUResourceUsageKind(EntityScope parent_h) {}
+  explicit Entity_CXTUResourceUsageKind(EntityScope) {}
   static const char *Key() { return "CXTUResourceUsageKind"; }
 };
 
@@ -5543,7 +5839,7 @@ using Entity_CXTemplateArgumentKind = Bind_CXTemplateArgumentKind<>;
 #else
 
 struct Entity_CXTemplateArgumentKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXTemplateArgumentKind(EntityScope parent_h) {}
+  explicit Entity_CXTemplateArgumentKind(EntityScope) {}
   static const char *Key() { return "CXTemplateArgumentKind"; }
 };
 
@@ -5579,7 +5875,7 @@ using Entity_CXToken = Bind_CXToken<>;
 #else
 
 struct Entity_CXToken : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXToken(EntityScope parent_h) {}
+  explicit Entity_CXToken(EntityScope) {}
   static const char *Key() { return "CXToken"; }
 };
 
@@ -5635,7 +5931,7 @@ using Entity_CXTokenKind = Bind_CXTokenKind<>;
 #else
 
 struct Entity_CXTokenKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXTokenKind(EntityScope parent_h) {}
+  explicit Entity_CXTokenKind(EntityScope) {}
   static const char *Key() { return "CXTokenKind"; }
 };
 
@@ -5832,7 +6128,7 @@ using Entity_CXTranslationUnit_Flags = Bind_CXTranslationUnit_Flags<>;
 #else
 
 struct Entity_CXTranslationUnit_Flags : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXTranslationUnit_Flags(EntityScope parent_h) {}
+  explicit Entity_CXTranslationUnit_Flags(EntityScope) {}
   static const char *Key() { return "CXTranslationUnit_Flags"; }
 };
 
@@ -5870,7 +6166,7 @@ using Entity_CXType = Bind_CXType<>;
 #else
 
 struct Entity_CXType : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXType(EntityScope parent_h) {}
+  explicit Entity_CXType(EntityScope) {}
   static const char *Key() { return "CXType"; }
 };
 
@@ -6165,25 +6461,45 @@ struct Bind_CXTypeKind : public EntityBase {
                  CXTypeKind::CXType_OCLIntelSubgroupAVCSicResult,
                  R"_pb11_weaver(/* OpenCL builtin types. */)_pb11_weaver");
     handle.value(
+        "CXType_OCLIntelSubgroupAVCImeResultSingleReferenceStreamout",
+        CXTypeKind::CXType_OCLIntelSubgroupAVCImeResultSingleReferenceStreamout,
+        R"_pb11_weaver(/* OpenCL builtin types. */)_pb11_weaver");
+    handle.value(
+        "CXType_OCLIntelSubgroupAVCImeResultDualReferenceStreamout",
+        CXTypeKind::CXType_OCLIntelSubgroupAVCImeResultDualReferenceStreamout,
+        R"_pb11_weaver(/* OpenCL builtin types. */)_pb11_weaver");
+    handle.value(
+        "CXType_OCLIntelSubgroupAVCImeSingleReferenceStreamin",
+        CXTypeKind::CXType_OCLIntelSubgroupAVCImeSingleReferenceStreamin,
+        R"_pb11_weaver(/* OpenCL builtin types. */)_pb11_weaver");
+    handle.value("CXType_OCLIntelSubgroupAVCImeDualReferenceStreamin",
+                 CXTypeKind::CXType_OCLIntelSubgroupAVCImeDualReferenceStreamin,
+                 R"_pb11_weaver(/* OpenCL builtin types. */)_pb11_weaver");
+    handle.value(
         "CXType_OCLIntelSubgroupAVCImeResultSingleRefStreamout",
         CXTypeKind::CXType_OCLIntelSubgroupAVCImeResultSingleRefStreamout,
-        R"_pb11_weaver(/* OpenCL builtin types. */)_pb11_weaver");
+        R"_pb11_weaver(/* Old aliases for AVC OpenCL extension types. */)_pb11_weaver");
     handle.value(
         "CXType_OCLIntelSubgroupAVCImeResultDualRefStreamout",
         CXTypeKind::CXType_OCLIntelSubgroupAVCImeResultDualRefStreamout,
-        R"_pb11_weaver(/* OpenCL builtin types. */)_pb11_weaver");
-    handle.value("CXType_OCLIntelSubgroupAVCImeSingleRefStreamin",
-                 CXTypeKind::CXType_OCLIntelSubgroupAVCImeSingleRefStreamin,
-                 R"_pb11_weaver(/* OpenCL builtin types. */)_pb11_weaver");
-    handle.value("CXType_OCLIntelSubgroupAVCImeDualRefStreamin",
-                 CXTypeKind::CXType_OCLIntelSubgroupAVCImeDualRefStreamin,
-                 R"_pb11_weaver(/* OpenCL builtin types. */)_pb11_weaver");
-    handle.value("CXType_ExtVector", CXTypeKind::CXType_ExtVector,
-                 R"_pb11_weaver(/* OpenCL builtin types. */)_pb11_weaver");
-    handle.value("CXType_Atomic", CXTypeKind::CXType_Atomic,
-                 R"_pb11_weaver(/* OpenCL builtin types. */)_pb11_weaver");
-    handle.value("CXType_BTFTagAttributed", CXTypeKind::CXType_BTFTagAttributed,
-                 R"_pb11_weaver(/* OpenCL builtin types. */)_pb11_weaver");
+        R"_pb11_weaver(/* Old aliases for AVC OpenCL extension types. */)_pb11_weaver");
+    handle.value(
+        "CXType_OCLIntelSubgroupAVCImeSingleRefStreamin",
+        CXTypeKind::CXType_OCLIntelSubgroupAVCImeSingleRefStreamin,
+        R"_pb11_weaver(/* Old aliases for AVC OpenCL extension types. */)_pb11_weaver");
+    handle.value(
+        "CXType_OCLIntelSubgroupAVCImeDualRefStreamin",
+        CXTypeKind::CXType_OCLIntelSubgroupAVCImeDualRefStreamin,
+        R"_pb11_weaver(/* Old aliases for AVC OpenCL extension types. */)_pb11_weaver");
+    handle.value(
+        "CXType_ExtVector", CXTypeKind::CXType_ExtVector,
+        R"_pb11_weaver(/* Old aliases for AVC OpenCL extension types. */)_pb11_weaver");
+    handle.value(
+        "CXType_Atomic", CXTypeKind::CXType_Atomic,
+        R"_pb11_weaver(/* Old aliases for AVC OpenCL extension types. */)_pb11_weaver");
+    handle.value(
+        "CXType_BTFTagAttributed", CXTypeKind::CXType_BTFTagAttributed,
+        R"_pb11_weaver(/* Old aliases for AVC OpenCL extension types. */)_pb11_weaver");
   }
 
   EntityScope AsScope() override { return EntityScope(handle); }
@@ -6199,7 +6515,7 @@ using Entity_CXTypeKind = Bind_CXTypeKind<>;
 #else
 
 struct Entity_CXTypeKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXTypeKind(EntityScope parent_h) {}
+  explicit Entity_CXTypeKind(EntityScope) {}
   static const char *Key() { return "CXTypeKind"; }
 };
 
@@ -6270,7 +6586,7 @@ using Entity_CXTypeLayoutError = Bind_CXTypeLayoutError<>;
 #else
 
 struct Entity_CXTypeLayoutError : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXTypeLayoutError(EntityScope parent_h) {}
+  explicit Entity_CXTypeLayoutError(EntityScope) {}
   static const char *Key() { return "CXTypeLayoutError"; }
 };
 
@@ -6335,11 +6651,93 @@ using Entity_CXTypeNullabilityKind = Bind_CXTypeNullabilityKind<>;
 #else
 
 struct Entity_CXTypeNullabilityKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXTypeNullabilityKind(EntityScope parent_h) {}
+  explicit Entity_CXTypeNullabilityKind(EntityScope) {}
   static const char *Key() { return "CXTypeNullabilityKind"; }
 };
 
 #endif // PB11_WEAVER_DISABLE_Entity_CXTypeNullabilityKind
+
+template <class Pybind11T = pybind11::enum_<CXUnaryOperatorKind>>
+struct Bind_CXUnaryOperatorKind : public EntityBase {
+  using Pybind11Type = Pybind11T;
+
+  explicit Bind_CXUnaryOperatorKind(EntityScope parent_h)
+      : handle{parent_h, "CXUnaryOperatorKind", pybind11::arithmetic(),
+               R"_pb11_weaver(/**
+ * Describes the kind of unary operators.
+ */)_pb11_weaver"} {}
+
+  template <class... HandleArgsT>
+  explicit Bind_CXUnaryOperatorKind(EntityScope parent_h, HandleArgsT &&...args)
+      : handle{std::forward(args)...} {}
+
+  void Update() override {
+    handle.value(
+        "CXUnaryOperator_Invalid", CXUnaryOperatorKind::CXUnaryOperator_Invalid,
+        R"_pb11_weaver(/** This value describes cursors which are not unary operators. */)_pb11_weaver");
+    handle.value(
+        "CXUnaryOperator_PostInc", CXUnaryOperatorKind::CXUnaryOperator_PostInc,
+        R"_pb11_weaver(/** Postfix increment operator. */)_pb11_weaver");
+    handle.value(
+        "CXUnaryOperator_PostDec", CXUnaryOperatorKind::CXUnaryOperator_PostDec,
+        R"_pb11_weaver(/** Postfix decrement operator. */)_pb11_weaver");
+    handle.value(
+        "CXUnaryOperator_PreInc", CXUnaryOperatorKind::CXUnaryOperator_PreInc,
+        R"_pb11_weaver(/** Prefix increment operator. */)_pb11_weaver");
+    handle.value(
+        "CXUnaryOperator_PreDec", CXUnaryOperatorKind::CXUnaryOperator_PreDec,
+        R"_pb11_weaver(/** Prefix decrement operator. */)_pb11_weaver");
+    handle.value("CXUnaryOperator_AddrOf",
+                 CXUnaryOperatorKind::CXUnaryOperator_AddrOf,
+                 R"_pb11_weaver(/** Address of operator. */)_pb11_weaver");
+    handle.value("CXUnaryOperator_Deref",
+                 CXUnaryOperatorKind::CXUnaryOperator_Deref,
+                 R"_pb11_weaver(/** Dereference operator. */)_pb11_weaver");
+    handle.value("CXUnaryOperator_Plus",
+                 CXUnaryOperatorKind::CXUnaryOperator_Plus,
+                 R"_pb11_weaver(/** Plus operator. */)_pb11_weaver");
+    handle.value("CXUnaryOperator_Minus",
+                 CXUnaryOperatorKind::CXUnaryOperator_Minus,
+                 R"_pb11_weaver(/** Minus operator. */)_pb11_weaver");
+    handle.value("CXUnaryOperator_Not",
+                 CXUnaryOperatorKind::CXUnaryOperator_Not,
+                 R"_pb11_weaver(/** Not operator. */)_pb11_weaver");
+    handle.value("CXUnaryOperator_LNot",
+                 CXUnaryOperatorKind::CXUnaryOperator_LNot,
+                 R"_pb11_weaver(/** LNot operator. */)_pb11_weaver");
+    handle.value("CXUnaryOperator_Real",
+                 CXUnaryOperatorKind::CXUnaryOperator_Real,
+                 R"_pb11_weaver(/** "__real expr" operator. */)_pb11_weaver");
+    handle.value("CXUnaryOperator_Imag",
+                 CXUnaryOperatorKind::CXUnaryOperator_Imag,
+                 R"_pb11_weaver(/** "__imag expr" operator. */)_pb11_weaver");
+    handle.value(
+        "CXUnaryOperator_Extension",
+        CXUnaryOperatorKind::CXUnaryOperator_Extension,
+        R"_pb11_weaver(/** __extension__ marker operator. */)_pb11_weaver");
+    handle.value("CXUnaryOperator_Coawait",
+                 CXUnaryOperatorKind::CXUnaryOperator_Coawait,
+                 R"_pb11_weaver(/** C++ co_await operator. */)_pb11_weaver");
+  }
+
+  EntityScope AsScope() override { return EntityScope(handle); }
+
+  static const char *Key() { return "CXUnaryOperatorKind"; }
+
+  Pybind11Type handle;
+};
+#ifndef PB11_WEAVER_DISABLE_Entity_CXUnaryOperatorKind
+
+using Entity_CXUnaryOperatorKind = Bind_CXUnaryOperatorKind<>;
+
+#else
+
+struct Entity_CXUnaryOperatorKind : public pybind11_weaver::DisabledEntity {
+  explicit Entity_CXUnaryOperatorKind(EntityScope) {}
+  static const char *Key() { return "CXUnaryOperatorKind"; }
+};
+
+#endif // PB11_WEAVER_DISABLE_Entity_CXUnaryOperatorKind
 
 template <class Pybind11T = pybind11::class_<CXUnsavedFile>>
 struct Bind_CXUnsavedFile : public EntityBase {
@@ -6389,7 +6787,7 @@ using Entity_CXUnsavedFile = Bind_CXUnsavedFile<>;
 #else
 
 struct Entity_CXUnsavedFile : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXUnsavedFile(EntityScope parent_h) {}
+  explicit Entity_CXUnsavedFile(EntityScope) {}
   static const char *Key() { return "CXUnsavedFile"; }
 };
 
@@ -6440,7 +6838,7 @@ using Entity_CXVersion = Bind_CXVersion<>;
 #else
 
 struct Entity_CXVersion : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXVersion(EntityScope parent_h) {}
+  explicit Entity_CXVersion(EntityScope) {}
   static const char *Key() { return "CXVersion"; }
 };
 
@@ -6486,7 +6884,7 @@ using Entity_CXVisibilityKind = Bind_CXVisibilityKind<>;
 #else
 
 struct Entity_CXVisibilityKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXVisibilityKind(EntityScope parent_h) {}
+  explicit Entity_CXVisibilityKind(EntityScope) {}
   static const char *Key() { return "CXVisibilityKind"; }
 };
 
@@ -6526,7 +6924,7 @@ using Entity_CXVisitorResult = Bind_CXVisitorResult<>;
 #else
 
 struct Entity_CXVisitorResult : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CXVisitorResult(EntityScope parent_h) {}
+  explicit Entity_CXVisitorResult(EntityScope) {}
   static const char *Key() { return "CXVisitorResult"; }
 };
 
@@ -6569,7 +6967,7 @@ using Entity_CX_CXXAccessSpecifier = Bind_CX_CXXAccessSpecifier<>;
 #else
 
 struct Entity_CX_CXXAccessSpecifier : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CX_CXXAccessSpecifier(EntityScope parent_h) {}
+  explicit Entity_CX_CXXAccessSpecifier(EntityScope) {}
   static const char *Key() { return "CX_CXXAccessSpecifier"; }
 };
 
@@ -6615,7 +7013,7 @@ using Entity_CX_StorageClass = Bind_CX_StorageClass<>;
 #else
 
 struct Entity_CX_StorageClass : public pybind11_weaver::DisabledEntity {
-  explicit Entity_CX_StorageClass(EntityScope parent_h) {}
+  explicit Entity_CX_StorageClass(EntityScope) {}
   static const char *Key() { return "CX_StorageClass"; }
 };
 
@@ -6653,7 +7051,7 @@ using Entity_IndexerCallbacks = Bind_IndexerCallbacks<>;
 #else
 
 struct Entity_IndexerCallbacks : public pybind11_weaver::DisabledEntity {
-  explicit Entity_IndexerCallbacks(EntityScope parent_h) {}
+  explicit Entity_IndexerCallbacks(EntityScope) {}
   static const char *Key() { return "IndexerCallbacks"; }
 };
 
@@ -6707,7 +7105,7 @@ using Entity_clang_BlockCommandComment_getArgText =
 
 struct Entity_clang_BlockCommandComment_getArgText
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_BlockCommandComment_getArgText(EntityScope parent_h) {}
+  explicit Entity_clang_BlockCommandComment_getArgText(EntityScope) {}
   static const char *Key() { return "clang_BlockCommandComment_getArgText"; }
 };
 
@@ -6761,8 +7159,7 @@ using Entity_clang_BlockCommandComment_getCommandName =
 
 struct Entity_clang_BlockCommandComment_getCommandName
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_BlockCommandComment_getCommandName(
-      EntityScope parent_h) {}
+  explicit Entity_clang_BlockCommandComment_getCommandName(EntityScope) {}
   static const char *Key() {
     return "clang_BlockCommandComment_getCommandName";
   }
@@ -6817,7 +7214,7 @@ using Entity_clang_BlockCommandComment_getNumArgs =
 
 struct Entity_clang_BlockCommandComment_getNumArgs
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_BlockCommandComment_getNumArgs(EntityScope parent_h) {}
+  explicit Entity_clang_BlockCommandComment_getNumArgs(EntityScope) {}
   static const char *Key() { return "clang_BlockCommandComment_getNumArgs"; }
 };
 
@@ -6870,8 +7267,7 @@ using Entity_clang_BlockCommandComment_getParagraph =
 
 struct Entity_clang_BlockCommandComment_getParagraph
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_BlockCommandComment_getParagraph(EntityScope parent_h) {
-  }
+  explicit Entity_clang_BlockCommandComment_getParagraph(EntityScope) {}
   static const char *Key() { return "clang_BlockCommandComment_getParagraph"; }
 };
 
@@ -6928,7 +7324,7 @@ using Entity_clang_CXCursorSet_contains = Bind_clang_CXCursorSet_contains<>;
 
 struct Entity_clang_CXCursorSet_contains
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXCursorSet_contains(EntityScope parent_h) {}
+  explicit Entity_clang_CXCursorSet_contains(EntityScope) {}
   static const char *Key() { return "clang_CXCursorSet_contains"; }
 };
 
@@ -6985,7 +7381,7 @@ using Entity_clang_CXCursorSet_insert = Bind_clang_CXCursorSet_insert<>;
 
 struct Entity_clang_CXCursorSet_insert
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXCursorSet_insert(EntityScope parent_h) {}
+  explicit Entity_clang_CXCursorSet_insert(EntityScope) {}
   static const char *Key() { return "clang_CXCursorSet_insert"; }
 };
 
@@ -6998,6 +7394,9 @@ struct Bind_clang_CXIndex_getGlobalOptions : public EntityBase {
   virtual const char *AddFunction() {
     const char *_pb11_weaver_comment_str = R"_pb11_weaver(/**
  * Gets the general options associated with a CXIndex.
+ *
+ * This function allows to obtain the final option values used by libclang after
+ * specifying the option policies via CXChoice enumerators.
  *
  * \returns A bitmask of options, a bitwise OR of CXGlobalOpt_XXX flags that
  * are associated with the given CXIndex object.
@@ -7043,7 +7442,7 @@ using Entity_clang_CXIndex_getGlobalOptions =
 
 struct Entity_clang_CXIndex_getGlobalOptions
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXIndex_getGlobalOptions(EntityScope parent_h) {}
+  explicit Entity_clang_CXIndex_getGlobalOptions(EntityScope) {}
   static const char *Key() { return "clang_CXIndex_getGlobalOptions"; }
 };
 
@@ -7056,6 +7455,11 @@ struct Bind_clang_CXIndex_setGlobalOptions : public EntityBase {
   virtual const char *AddFunction() {
     const char *_pb11_weaver_comment_str = R"_pb11_weaver(/**
  * Sets general options associated with a CXIndex.
+ *
+ * This function is DEPRECATED. Set
+ * CXIndexOptions::ThreadBackgroundPriorityForIndexing and/or
+ * CXIndexOptions::ThreadBackgroundPriorityForEditing and call
+ * clang_createIndexWithOptions() instead.
  *
  * For example:
  * \code
@@ -7107,7 +7511,7 @@ using Entity_clang_CXIndex_setGlobalOptions =
 
 struct Entity_clang_CXIndex_setGlobalOptions
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXIndex_setGlobalOptions(EntityScope parent_h) {}
+  explicit Entity_clang_CXIndex_setGlobalOptions(EntityScope) {}
   static const char *Key() { return "clang_CXIndex_setGlobalOptions"; }
 };
 
@@ -7120,6 +7524,9 @@ struct Bind_clang_CXIndex_setInvocationEmissionPathOption : public EntityBase {
   virtual const char *AddFunction() {
     const char *_pb11_weaver_comment_str = R"_pb11_weaver(/**
  * Sets the invocation emission path option in a CXIndex.
+ *
+ * This function is DEPRECATED. Set CXIndexOptions::InvocationEmissionPath and
+ * call clang_createIndexWithOptions() instead.
  *
  * The invocation emission path specifies a path which will contain log
  * files for certain libclang invocations. A null value (default) implies that
@@ -7169,8 +7576,7 @@ using Entity_clang_CXIndex_setInvocationEmissionPathOption =
 
 struct Entity_clang_CXIndex_setInvocationEmissionPathOption
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXIndex_setInvocationEmissionPathOption(
-      EntityScope parent_h) {}
+  explicit Entity_clang_CXIndex_setInvocationEmissionPathOption(EntityScope) {}
   static const char *Key() {
     return "clang_CXIndex_setInvocationEmissionPathOption";
   }
@@ -7226,7 +7632,7 @@ using Entity_clang_CXRewriter_create = Bind_clang_CXRewriter_create<>;
 #else
 
 struct Entity_clang_CXRewriter_create : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXRewriter_create(EntityScope parent_h) {}
+  explicit Entity_clang_CXRewriter_create(EntityScope) {}
   static const char *Key() { return "clang_CXRewriter_create"; }
 };
 
@@ -7279,7 +7685,7 @@ using Entity_clang_CXRewriter_dispose = Bind_clang_CXRewriter_dispose<>;
 
 struct Entity_clang_CXRewriter_dispose
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXRewriter_dispose(EntityScope parent_h) {}
+  explicit Entity_clang_CXRewriter_dispose(EntityScope) {}
   static const char *Key() { return "clang_CXRewriter_dispose"; }
 };
 
@@ -7335,7 +7741,7 @@ using Entity_clang_CXRewriter_insertTextBefore =
 
 struct Entity_clang_CXRewriter_insertTextBefore
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXRewriter_insertTextBefore(EntityScope parent_h) {}
+  explicit Entity_clang_CXRewriter_insertTextBefore(EntityScope) {}
   static const char *Key() { return "clang_CXRewriter_insertTextBefore"; }
 };
 
@@ -7390,8 +7796,7 @@ using Entity_clang_CXRewriter_overwriteChangedFiles =
 
 struct Entity_clang_CXRewriter_overwriteChangedFiles
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXRewriter_overwriteChangedFiles(EntityScope parent_h) {
-  }
+  explicit Entity_clang_CXRewriter_overwriteChangedFiles(EntityScope) {}
   static const char *Key() { return "clang_CXRewriter_overwriteChangedFiles"; }
 };
 
@@ -7445,7 +7850,7 @@ using Entity_clang_CXRewriter_removeText = Bind_clang_CXRewriter_removeText<>;
 
 struct Entity_clang_CXRewriter_removeText
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXRewriter_removeText(EntityScope parent_h) {}
+  explicit Entity_clang_CXRewriter_removeText(EntityScope) {}
   static const char *Key() { return "clang_CXRewriter_removeText"; }
 };
 
@@ -7501,7 +7906,7 @@ using Entity_clang_CXRewriter_replaceText = Bind_clang_CXRewriter_replaceText<>;
 
 struct Entity_clang_CXRewriter_replaceText
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXRewriter_replaceText(EntityScope parent_h) {}
+  explicit Entity_clang_CXRewriter_replaceText(EntityScope) {}
   static const char *Key() { return "clang_CXRewriter_replaceText"; }
 };
 
@@ -7555,8 +7960,7 @@ using Entity_clang_CXRewriter_writeMainFileToStdOut =
 
 struct Entity_clang_CXRewriter_writeMainFileToStdOut
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXRewriter_writeMainFileToStdOut(EntityScope parent_h) {
-  }
+  explicit Entity_clang_CXRewriter_writeMainFileToStdOut(EntityScope) {}
   static const char *Key() { return "clang_CXRewriter_writeMainFileToStdOut"; }
 };
 
@@ -7609,8 +8013,7 @@ using Entity_clang_CXXConstructor_isConvertingConstructor =
 
 struct Entity_clang_CXXConstructor_isConvertingConstructor
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXXConstructor_isConvertingConstructor(
-      EntityScope parent_h) {}
+  explicit Entity_clang_CXXConstructor_isConvertingConstructor(EntityScope) {}
   static const char *Key() {
     return "clang_CXXConstructor_isConvertingConstructor";
   }
@@ -7662,8 +8065,7 @@ using Entity_clang_CXXConstructor_isCopyConstructor =
 
 struct Entity_clang_CXXConstructor_isCopyConstructor
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXXConstructor_isCopyConstructor(EntityScope parent_h) {
-  }
+  explicit Entity_clang_CXXConstructor_isCopyConstructor(EntityScope) {}
   static const char *Key() { return "clang_CXXConstructor_isCopyConstructor"; }
 };
 
@@ -7715,8 +8117,7 @@ using Entity_clang_CXXConstructor_isDefaultConstructor =
 
 struct Entity_clang_CXXConstructor_isDefaultConstructor
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXXConstructor_isDefaultConstructor(
-      EntityScope parent_h) {}
+  explicit Entity_clang_CXXConstructor_isDefaultConstructor(EntityScope) {}
   static const char *Key() {
     return "clang_CXXConstructor_isDefaultConstructor";
   }
@@ -7768,8 +8169,7 @@ using Entity_clang_CXXConstructor_isMoveConstructor =
 
 struct Entity_clang_CXXConstructor_isMoveConstructor
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXXConstructor_isMoveConstructor(EntityScope parent_h) {
-  }
+  explicit Entity_clang_CXXConstructor_isMoveConstructor(EntityScope) {}
   static const char *Key() { return "clang_CXXConstructor_isMoveConstructor"; }
 };
 
@@ -7818,7 +8218,7 @@ using Entity_clang_CXXField_isMutable = Bind_clang_CXXField_isMutable<>;
 
 struct Entity_clang_CXXField_isMutable
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXXField_isMutable(EntityScope parent_h) {}
+  explicit Entity_clang_CXXField_isMutable(EntityScope) {}
   static const char *Key() { return "clang_CXXField_isMutable"; }
 };
 
@@ -7867,7 +8267,7 @@ using Entity_clang_CXXMethod_isConst = Bind_clang_CXXMethod_isConst<>;
 #else
 
 struct Entity_clang_CXXMethod_isConst : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXXMethod_isConst(EntityScope parent_h) {}
+  explicit Entity_clang_CXXMethod_isConst(EntityScope) {}
   static const char *Key() { return "clang_CXXMethod_isConst"; }
 };
 
@@ -7939,8 +8339,7 @@ using Entity_clang_CXXMethod_isCopyAssignmentOperator =
 
 struct Entity_clang_CXXMethod_isCopyAssignmentOperator
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXXMethod_isCopyAssignmentOperator(
-      EntityScope parent_h) {}
+  explicit Entity_clang_CXXMethod_isCopyAssignmentOperator(EntityScope) {}
   static const char *Key() {
     return "clang_CXXMethod_isCopyAssignmentOperator";
   }
@@ -7991,7 +8390,7 @@ using Entity_clang_CXXMethod_isDefaulted = Bind_clang_CXXMethod_isDefaulted<>;
 
 struct Entity_clang_CXXMethod_isDefaulted
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXXMethod_isDefaulted(EntityScope parent_h) {}
+  explicit Entity_clang_CXXMethod_isDefaulted(EntityScope) {}
   static const char *Key() { return "clang_CXXMethod_isDefaulted"; }
 };
 
@@ -8040,11 +8439,100 @@ using Entity_clang_CXXMethod_isDeleted = Bind_clang_CXXMethod_isDeleted<>;
 
 struct Entity_clang_CXXMethod_isDeleted
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXXMethod_isDeleted(EntityScope parent_h) {}
+  explicit Entity_clang_CXXMethod_isDeleted(EntityScope) {}
   static const char *Key() { return "clang_CXXMethod_isDeleted"; }
 };
 
 #endif // PB11_WEAVER_DISABLE_Entity_clang_CXXMethod_isDeleted
+
+template <class Pybind11T = pybind11::module_ &>
+struct Bind_clang_CXXMethod_isExplicit : public EntityBase {
+  using Pybind11Type = Pybind11T;
+
+  virtual const char *AddFunction() {
+    const char *_pb11_weaver_comment_str = R"_pb11_weaver(/**
+ * Determines if a C++ constructor or conversion function was declared
+ * explicit, returning 1 if such is the case and 0 otherwise.
+ *
+ * Constructors or conversion functions are declared explicit through
+ * the use of the explicit specifier.
+ *
+ * For example, the following constructor and conversion function are
+ * not explicit as they lack the explicit specifier:
+ *
+ *     class Foo {
+ *         Foo();
+ *         operator int();
+ *     };
+ *
+ * While the following constructor and conversion function are
+ * explicit as they are declared with the explicit specifier.
+ *
+ *     class Foo {
+ *         explicit Foo();
+ *         explicit operator int();
+ *     };
+ *
+ * This function will return 0 when given a cursor pointing to one of
+ * the former declarations and it will return 1 for a cursor pointing
+ * to the latter declarations.
+ *
+ * The explicit specifier allows the user to specify a
+ * conditional compile-time expression whose value decides
+ * whether the marked element is explicit or not.
+ *
+ * For example:
+ *
+ *     constexpr bool foo(int i) { return i % 2 == 0; }
+ *
+ *     class Foo {
+ *          explicit(foo(1)) Foo();
+ *          explicit(foo(2)) operator int();
+ *     }
+ *
+ * This function will return 0 for the constructor and 1 for
+ * the conversion function.
+ */)_pb11_weaver";
+
+#ifndef PB11_WEAVER_DISABLE_clang_CXXMethod_isExplicit_AddFunction
+    handle.def("clang_CXXMethod_isExplicit",
+               static_cast<
+                   pybind11_weaver::FnPtrT<void, unsigned int(CXCursor)>::type>(
+                   &clang_CXXMethod_isExplicit),
+               _pb11_weaver_comment_str);
+#endif
+    return _pb11_weaver_comment_str;
+  }
+
+  explicit Bind_clang_CXXMethod_isExplicit(EntityScope parent_h)
+      : handle{static_cast<pybind11::module_ &>(parent_h)} {}
+
+  template <class... HandleArgsT>
+  explicit Bind_clang_CXXMethod_isExplicit(EntityScope parent_h,
+                                           HandleArgsT &&...args)
+      : handle{std::forward(args)...} {}
+
+  void Update() override { AddFunction(); }
+
+  EntityScope AsScope() override { return EntityScope(handle); }
+
+  static const char *Key() { return "clang_CXXMethod_isExplicit"; }
+
+  Pybind11Type handle;
+};
+#ifndef PB11_WEAVER_DISABLE_Entity_clang_CXXMethod_isExplicit
+
+using Entity_clang_CXXMethod_isExplicit = Bind_clang_CXXMethod_isExplicit<>;
+
+#else
+
+struct Entity_clang_CXXMethod_isExplicit
+    : public pybind11_weaver::DisabledEntity {
+  explicit Entity_clang_CXXMethod_isExplicit(EntityScope) {}
+  static const char *Key() { return "clang_CXXMethod_isExplicit"; }
+};
+
+#endif // PB11_WEAVER_DISABLE_Entity_clang_CXXMethod_isExplicit
 
 template <class Pybind11T = pybind11::module_ &>
 struct Bind_clang_CXXMethod_isMoveAssignmentOperator : public EntityBase {
@@ -8112,8 +8600,7 @@ using Entity_clang_CXXMethod_isMoveAssignmentOperator =
 
 struct Entity_clang_CXXMethod_isMoveAssignmentOperator
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXXMethod_isMoveAssignmentOperator(
-      EntityScope parent_h) {}
+  explicit Entity_clang_CXXMethod_isMoveAssignmentOperator(EntityScope) {}
   static const char *Key() {
     return "clang_CXXMethod_isMoveAssignmentOperator";
   }
@@ -8166,7 +8653,7 @@ using Entity_clang_CXXMethod_isPureVirtual =
 
 struct Entity_clang_CXXMethod_isPureVirtual
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXXMethod_isPureVirtual(EntityScope parent_h) {}
+  explicit Entity_clang_CXXMethod_isPureVirtual(EntityScope) {}
   static const char *Key() { return "clang_CXXMethod_isPureVirtual"; }
 };
 
@@ -8216,7 +8703,7 @@ using Entity_clang_CXXMethod_isStatic = Bind_clang_CXXMethod_isStatic<>;
 
 struct Entity_clang_CXXMethod_isStatic
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXXMethod_isStatic(EntityScope parent_h) {}
+  explicit Entity_clang_CXXMethod_isStatic(EntityScope) {}
   static const char *Key() { return "clang_CXXMethod_isStatic"; }
 };
 
@@ -8267,7 +8754,7 @@ using Entity_clang_CXXMethod_isVirtual = Bind_clang_CXXMethod_isVirtual<>;
 
 struct Entity_clang_CXXMethod_isVirtual
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXXMethod_isVirtual(EntityScope parent_h) {}
+  explicit Entity_clang_CXXMethod_isVirtual(EntityScope) {}
   static const char *Key() { return "clang_CXXMethod_isVirtual"; }
 };
 
@@ -8317,7 +8804,7 @@ using Entity_clang_CXXRecord_isAbstract = Bind_clang_CXXRecord_isAbstract<>;
 
 struct Entity_clang_CXXRecord_isAbstract
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CXXRecord_isAbstract(EntityScope parent_h) {}
+  explicit Entity_clang_CXXRecord_isAbstract(EntityScope) {}
   static const char *Key() { return "clang_CXXRecord_isAbstract"; }
 };
 
@@ -8369,7 +8856,7 @@ using Entity_clang_Comment_getChild = Bind_clang_Comment_getChild<>;
 #else
 
 struct Entity_clang_Comment_getChild : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Comment_getChild(EntityScope parent_h) {}
+  explicit Entity_clang_Comment_getChild(EntityScope) {}
   static const char *Key() { return "clang_Comment_getChild"; }
 };
 
@@ -8420,7 +8907,7 @@ using Entity_clang_Comment_getKind = Bind_clang_Comment_getKind<>;
 #else
 
 struct Entity_clang_Comment_getKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Comment_getKind(EntityScope parent_h) {}
+  explicit Entity_clang_Comment_getKind(EntityScope) {}
   static const char *Key() { return "clang_Comment_getKind"; }
 };
 
@@ -8472,7 +8959,7 @@ using Entity_clang_Comment_getNumChildren = Bind_clang_Comment_getNumChildren<>;
 
 struct Entity_clang_Comment_getNumChildren
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Comment_getNumChildren(EntityScope parent_h) {}
+  explicit Entity_clang_Comment_getNumChildren(EntityScope) {}
   static const char *Key() { return "clang_Comment_getNumChildren"; }
 };
 
@@ -8528,7 +9015,7 @@ using Entity_clang_Comment_isWhitespace = Bind_clang_Comment_isWhitespace<>;
 
 struct Entity_clang_Comment_isWhitespace
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Comment_isWhitespace(EntityScope parent_h) {}
+  explicit Entity_clang_Comment_isWhitespace(EntityScope) {}
   static const char *Key() { return "clang_Comment_isWhitespace"; }
 };
 
@@ -8582,7 +9069,7 @@ using Entity_clang_CompilationDatabase_dispose =
 
 struct Entity_clang_CompilationDatabase_dispose
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CompilationDatabase_dispose(EntityScope parent_h) {}
+  explicit Entity_clang_CompilationDatabase_dispose(EntityScope) {}
   static const char *Key() { return "clang_CompilationDatabase_dispose"; }
 };
 
@@ -8643,8 +9130,7 @@ using Entity_clang_CompilationDatabase_fromDirectory =
 
 struct Entity_clang_CompilationDatabase_fromDirectory
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CompilationDatabase_fromDirectory(
-      EntityScope parent_h) {}
+  explicit Entity_clang_CompilationDatabase_fromDirectory(EntityScope) {}
   static const char *Key() { return "clang_CompilationDatabase_fromDirectory"; }
 };
 
@@ -8703,8 +9189,8 @@ using Entity_clang_CompilationDatabase_getAllCompileCommands =
 
 struct Entity_clang_CompilationDatabase_getAllCompileCommands
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CompilationDatabase_getAllCompileCommands(
-      EntityScope parent_h) {}
+  explicit Entity_clang_CompilationDatabase_getAllCompileCommands(EntityScope) {
+  }
   static const char *Key() {
     return "clang_CompilationDatabase_getAllCompileCommands";
   }
@@ -8767,8 +9253,7 @@ using Entity_clang_CompilationDatabase_getCompileCommands =
 
 struct Entity_clang_CompilationDatabase_getCompileCommands
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CompilationDatabase_getCompileCommands(
-      EntityScope parent_h) {}
+  explicit Entity_clang_CompilationDatabase_getCompileCommands(EntityScope) {}
   static const char *Key() {
     return "clang_CompilationDatabase_getCompileCommands";
   }
@@ -8826,7 +9311,7 @@ using Entity_clang_CompileCommand_getArg = Bind_clang_CompileCommand_getArg<>;
 
 struct Entity_clang_CompileCommand_getArg
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CompileCommand_getArg(EntityScope parent_h) {}
+  explicit Entity_clang_CompileCommand_getArg(EntityScope) {}
   static const char *Key() { return "clang_CompileCommand_getArg"; }
 };
 
@@ -8881,7 +9366,7 @@ using Entity_clang_CompileCommand_getDirectory =
 
 struct Entity_clang_CompileCommand_getDirectory
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CompileCommand_getDirectory(EntityScope parent_h) {}
+  explicit Entity_clang_CompileCommand_getDirectory(EntityScope) {}
   static const char *Key() { return "clang_CompileCommand_getDirectory"; }
 };
 
@@ -8936,7 +9421,7 @@ using Entity_clang_CompileCommand_getFilename =
 
 struct Entity_clang_CompileCommand_getFilename
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CompileCommand_getFilename(EntityScope parent_h) {}
+  explicit Entity_clang_CompileCommand_getFilename(EntityScope) {}
   static const char *Key() { return "clang_CompileCommand_getFilename"; }
 };
 
@@ -8993,8 +9478,7 @@ using Entity_clang_CompileCommand_getMappedSourceContent =
 
 struct Entity_clang_CompileCommand_getMappedSourceContent
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CompileCommand_getMappedSourceContent(
-      EntityScope parent_h) {}
+  explicit Entity_clang_CompileCommand_getMappedSourceContent(EntityScope) {}
   static const char *Key() {
     return "clang_CompileCommand_getMappedSourceContent";
   }
@@ -9052,8 +9536,7 @@ using Entity_clang_CompileCommand_getMappedSourcePath =
 
 struct Entity_clang_CompileCommand_getMappedSourcePath
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CompileCommand_getMappedSourcePath(
-      EntityScope parent_h) {}
+  explicit Entity_clang_CompileCommand_getMappedSourcePath(EntityScope) {}
   static const char *Key() {
     return "clang_CompileCommand_getMappedSourcePath";
   }
@@ -9111,7 +9594,7 @@ using Entity_clang_CompileCommand_getNumArgs =
 
 struct Entity_clang_CompileCommand_getNumArgs
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CompileCommand_getNumArgs(EntityScope parent_h) {}
+  explicit Entity_clang_CompileCommand_getNumArgs(EntityScope) {}
   static const char *Key() { return "clang_CompileCommand_getNumArgs"; }
 };
 
@@ -9168,8 +9651,7 @@ using Entity_clang_CompileCommand_getNumMappedSources =
 
 struct Entity_clang_CompileCommand_getNumMappedSources
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CompileCommand_getNumMappedSources(
-      EntityScope parent_h) {}
+  explicit Entity_clang_CompileCommand_getNumMappedSources(EntityScope) {}
   static const char *Key() {
     return "clang_CompileCommand_getNumMappedSources";
   }
@@ -9225,7 +9707,7 @@ using Entity_clang_CompileCommands_dispose =
 
 struct Entity_clang_CompileCommands_dispose
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CompileCommands_dispose(EntityScope parent_h) {}
+  explicit Entity_clang_CompileCommands_dispose(EntityScope) {}
   static const char *Key() { return "clang_CompileCommands_dispose"; }
 };
 
@@ -9283,7 +9765,7 @@ using Entity_clang_CompileCommands_getCommand =
 
 struct Entity_clang_CompileCommands_getCommand
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CompileCommands_getCommand(EntityScope parent_h) {}
+  explicit Entity_clang_CompileCommands_getCommand(EntityScope) {}
   static const char *Key() { return "clang_CompileCommands_getCommand"; }
 };
 
@@ -9338,7 +9820,7 @@ using Entity_clang_CompileCommands_getSize =
 
 struct Entity_clang_CompileCommands_getSize
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_CompileCommands_getSize(EntityScope parent_h) {}
+  explicit Entity_clang_CompileCommands_getSize(EntityScope) {}
   static const char *Key() { return "clang_CompileCommands_getSize"; }
 };
 
@@ -9395,7 +9877,7 @@ using Entity_clang_Cursor_Evaluate = Bind_clang_Cursor_Evaluate<>;
 #else
 
 struct Entity_clang_Cursor_Evaluate : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_Evaluate(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_Evaluate(EntityScope) {}
   static const char *Key() { return "clang_Cursor_Evaluate"; }
 };
 
@@ -9448,7 +9930,7 @@ using Entity_clang_Cursor_getArgument = Bind_clang_Cursor_getArgument<>;
 
 struct Entity_clang_Cursor_getArgument
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getArgument(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getArgument(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getArgument"; }
 };
 
@@ -9500,7 +9982,7 @@ using Entity_clang_Cursor_getBriefCommentText =
 
 struct Entity_clang_Cursor_getBriefCommentText
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getBriefCommentText(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getBriefCommentText(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getBriefCommentText"; }
 };
 
@@ -9551,7 +10033,7 @@ using Entity_clang_Cursor_getCXXManglings = Bind_clang_Cursor_getCXXManglings<>;
 
 struct Entity_clang_Cursor_getCXXManglings
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getCXXManglings(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getCXXManglings(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getCXXManglings"; }
 };
 
@@ -9603,7 +10085,7 @@ using Entity_clang_Cursor_getCommentRange = Bind_clang_Cursor_getCommentRange<>;
 
 struct Entity_clang_Cursor_getCommentRange
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getCommentRange(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getCommentRange(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getCommentRange"; }
 };
 
@@ -9652,7 +10134,7 @@ using Entity_clang_Cursor_getMangling = Bind_clang_Cursor_getMangling<>;
 
 struct Entity_clang_Cursor_getMangling
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getMangling(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getMangling(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getMangling"; }
 };
 
@@ -9706,7 +10188,7 @@ using Entity_clang_Cursor_getModule = Bind_clang_Cursor_getModule<>;
 #else
 
 struct Entity_clang_Cursor_getModule : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getModule(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getModule(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getModule"; }
 };
 
@@ -9758,7 +10240,7 @@ using Entity_clang_Cursor_getNumArguments = Bind_clang_Cursor_getNumArguments<>;
 
 struct Entity_clang_Cursor_getNumArguments
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getNumArguments(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getNumArguments(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getNumArguments"; }
 };
 
@@ -9820,7 +10302,7 @@ using Entity_clang_Cursor_getNumTemplateArguments =
 
 struct Entity_clang_Cursor_getNumTemplateArguments
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getNumTemplateArguments(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getNumTemplateArguments(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getNumTemplateArguments"; }
 };
 
@@ -9873,7 +10355,7 @@ using Entity_clang_Cursor_getObjCDeclQualifiers =
 
 struct Entity_clang_Cursor_getObjCDeclQualifiers
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getObjCDeclQualifiers(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getObjCDeclQualifiers(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getObjCDeclQualifiers"; }
 };
 
@@ -9925,7 +10407,7 @@ using Entity_clang_Cursor_getObjCManglings =
 
 struct Entity_clang_Cursor_getObjCManglings
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getObjCManglings(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getObjCManglings(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getObjCManglings"; }
 };
 
@@ -9979,8 +10461,7 @@ using Entity_clang_Cursor_getObjCPropertyAttributes =
 
 struct Entity_clang_Cursor_getObjCPropertyAttributes
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getObjCPropertyAttributes(EntityScope parent_h) {
-  }
+  explicit Entity_clang_Cursor_getObjCPropertyAttributes(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getObjCPropertyAttributes"; }
 };
 
@@ -10031,8 +10512,7 @@ using Entity_clang_Cursor_getObjCPropertyGetterName =
 
 struct Entity_clang_Cursor_getObjCPropertyGetterName
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getObjCPropertyGetterName(EntityScope parent_h) {
-  }
+  explicit Entity_clang_Cursor_getObjCPropertyGetterName(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getObjCPropertyGetterName"; }
 };
 
@@ -10083,8 +10563,7 @@ using Entity_clang_Cursor_getObjCPropertySetterName =
 
 struct Entity_clang_Cursor_getObjCPropertySetterName
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getObjCPropertySetterName(EntityScope parent_h) {
-  }
+  explicit Entity_clang_Cursor_getObjCPropertySetterName(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getObjCPropertySetterName"; }
 };
 
@@ -10141,7 +10620,7 @@ using Entity_clang_Cursor_getObjCSelectorIndex =
 
 struct Entity_clang_Cursor_getObjCSelectorIndex
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getObjCSelectorIndex(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getObjCSelectorIndex(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getObjCSelectorIndex"; }
 };
 
@@ -10201,7 +10680,7 @@ using Entity_clang_Cursor_getOffsetOfField =
 
 struct Entity_clang_Cursor_getOffsetOfField
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getOffsetOfField(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getOffsetOfField(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getOffsetOfField"; }
 };
 
@@ -10253,7 +10732,7 @@ using Entity_clang_Cursor_getParsedComment =
 
 struct Entity_clang_Cursor_getParsedComment
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getParsedComment(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getParsedComment(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getParsedComment"; }
 };
 
@@ -10304,7 +10783,7 @@ using Entity_clang_Cursor_getRawCommentText =
 
 struct Entity_clang_Cursor_getRawCommentText
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getRawCommentText(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getRawCommentText(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getRawCommentText"; }
 };
 
@@ -10354,7 +10833,7 @@ using Entity_clang_Cursor_getReceiverType = Bind_clang_Cursor_getReceiverType<>;
 
 struct Entity_clang_Cursor_getReceiverType
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getReceiverType(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getReceiverType(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getReceiverType"; }
 };
 
@@ -10413,7 +10892,7 @@ using Entity_clang_Cursor_getSpellingNameRange =
 
 struct Entity_clang_Cursor_getSpellingNameRange
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getSpellingNameRange(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getSpellingNameRange(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getSpellingNameRange"; }
 };
 
@@ -10466,7 +10945,7 @@ using Entity_clang_Cursor_getStorageClass = Bind_clang_Cursor_getStorageClass<>;
 
 struct Entity_clang_Cursor_getStorageClass
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getStorageClass(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getStorageClass(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getStorageClass"; }
 };
 
@@ -10530,7 +11009,7 @@ using Entity_clang_Cursor_getTemplateArgumentKind =
 
 struct Entity_clang_Cursor_getTemplateArgumentKind
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getTemplateArgumentKind(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getTemplateArgumentKind(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getTemplateArgumentKind"; }
 };
 
@@ -10596,7 +11075,7 @@ using Entity_clang_Cursor_getTemplateArgumentType =
 
 struct Entity_clang_Cursor_getTemplateArgumentType
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getTemplateArgumentType(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getTemplateArgumentType(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getTemplateArgumentType"; }
 };
 
@@ -10664,8 +11143,7 @@ using Entity_clang_Cursor_getTemplateArgumentUnsignedValue =
 
 struct Entity_clang_Cursor_getTemplateArgumentUnsignedValue
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getTemplateArgumentUnsignedValue(
-      EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getTemplateArgumentUnsignedValue(EntityScope) {}
   static const char *Key() {
     return "clang_Cursor_getTemplateArgumentUnsignedValue";
   }
@@ -10732,7 +11210,7 @@ using Entity_clang_Cursor_getTemplateArgumentValue =
 
 struct Entity_clang_Cursor_getTemplateArgumentValue
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getTemplateArgumentValue(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getTemplateArgumentValue(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getTemplateArgumentValue"; }
 };
 
@@ -10788,7 +11266,7 @@ using Entity_clang_Cursor_getTranslationUnit =
 
 struct Entity_clang_Cursor_getTranslationUnit
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getTranslationUnit(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getTranslationUnit(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getTranslationUnit"; }
 };
 
@@ -10839,7 +11317,7 @@ using Entity_clang_Cursor_getVarDeclInitializer =
 
 struct Entity_clang_Cursor_getVarDeclInitializer
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_getVarDeclInitializer(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_getVarDeclInitializer(EntityScope) {}
   static const char *Key() { return "clang_Cursor_getVarDeclInitializer"; }
 };
 
@@ -10887,7 +11365,7 @@ using Entity_clang_Cursor_hasAttrs = Bind_clang_Cursor_hasAttrs<>;
 #else
 
 struct Entity_clang_Cursor_hasAttrs : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_hasAttrs(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_hasAttrs(EntityScope) {}
   static const char *Key() { return "clang_Cursor_hasAttrs"; }
 };
 
@@ -10938,8 +11416,7 @@ using Entity_clang_Cursor_hasVarDeclExternalStorage =
 
 struct Entity_clang_Cursor_hasVarDeclExternalStorage
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_hasVarDeclExternalStorage(EntityScope parent_h) {
-  }
+  explicit Entity_clang_Cursor_hasVarDeclExternalStorage(EntityScope) {}
   static const char *Key() { return "clang_Cursor_hasVarDeclExternalStorage"; }
 };
 
@@ -10990,7 +11467,7 @@ using Entity_clang_Cursor_hasVarDeclGlobalStorage =
 
 struct Entity_clang_Cursor_hasVarDeclGlobalStorage
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_hasVarDeclGlobalStorage(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_hasVarDeclGlobalStorage(EntityScope) {}
   static const char *Key() { return "clang_Cursor_hasVarDeclGlobalStorage"; }
 };
 
@@ -11040,7 +11517,7 @@ using Entity_clang_Cursor_isAnonymous = Bind_clang_Cursor_isAnonymous<>;
 
 struct Entity_clang_Cursor_isAnonymous
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_isAnonymous(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_isAnonymous(EntityScope) {}
   static const char *Key() { return "clang_Cursor_isAnonymous"; }
 };
 
@@ -11091,7 +11568,7 @@ using Entity_clang_Cursor_isAnonymousRecordDecl =
 
 struct Entity_clang_Cursor_isAnonymousRecordDecl
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_isAnonymousRecordDecl(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_isAnonymousRecordDecl(EntityScope) {}
   static const char *Key() { return "clang_Cursor_isAnonymousRecordDecl"; }
 };
 
@@ -11103,8 +11580,7 @@ struct Bind_clang_Cursor_isBitField : public EntityBase {
 
   virtual const char *AddFunction() {
     const char *_pb11_weaver_comment_str = R"_pb11_weaver(/**
- * Returns non-zero if the cursor specifies a Record member that is a
- *   bitfield.
+ * Returns non-zero if the cursor specifies a Record member that is a bit-field.
  */)_pb11_weaver";
 
 #ifndef PB11_WEAVER_DISABLE_clang_Cursor_isBitField_AddFunction
@@ -11140,7 +11616,7 @@ using Entity_clang_Cursor_isBitField = Bind_clang_Cursor_isBitField<>;
 #else
 
 struct Entity_clang_Cursor_isBitField : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_isBitField(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_isBitField(EntityScope) {}
   static const char *Key() { return "clang_Cursor_isBitField"; }
 };
 
@@ -11196,7 +11672,7 @@ using Entity_clang_Cursor_isDynamicCall = Bind_clang_Cursor_isDynamicCall<>;
 
 struct Entity_clang_Cursor_isDynamicCall
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_isDynamicCall(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_isDynamicCall(EntityScope) {}
   static const char *Key() { return "clang_Cursor_isDynamicCall"; }
 };
 
@@ -11257,7 +11733,7 @@ using Entity_clang_Cursor_isExternalSymbol =
 
 struct Entity_clang_Cursor_isExternalSymbol
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_isExternalSymbol(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_isExternalSymbol(EntityScope) {}
   static const char *Key() { return "clang_Cursor_isExternalSymbol"; }
 };
 
@@ -11308,7 +11784,7 @@ using Entity_clang_Cursor_isFunctionInlined =
 
 struct Entity_clang_Cursor_isFunctionInlined
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_isFunctionInlined(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_isFunctionInlined(EntityScope) {}
   static const char *Key() { return "clang_Cursor_isFunctionInlined"; }
 };
 
@@ -11359,7 +11835,7 @@ using Entity_clang_Cursor_isInlineNamespace =
 
 struct Entity_clang_Cursor_isInlineNamespace
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_isInlineNamespace(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_isInlineNamespace(EntityScope) {}
   static const char *Key() { return "clang_Cursor_isInlineNamespace"; }
 };
 
@@ -11409,7 +11885,7 @@ using Entity_clang_Cursor_isMacroBuiltin = Bind_clang_Cursor_isMacroBuiltin<>;
 
 struct Entity_clang_Cursor_isMacroBuiltin
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_isMacroBuiltin(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_isMacroBuiltin(EntityScope) {}
   static const char *Key() { return "clang_Cursor_isMacroBuiltin"; }
 };
 
@@ -11460,7 +11936,7 @@ using Entity_clang_Cursor_isMacroFunctionLike =
 
 struct Entity_clang_Cursor_isMacroFunctionLike
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_isMacroFunctionLike(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_isMacroFunctionLike(EntityScope) {}
   static const char *Key() { return "clang_Cursor_isMacroFunctionLike"; }
 };
 
@@ -11506,7 +11982,7 @@ using Entity_clang_Cursor_isNull = Bind_clang_Cursor_isNull<>;
 #else
 
 struct Entity_clang_Cursor_isNull : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_isNull(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_isNull(EntityScope) {}
   static const char *Key() { return "clang_Cursor_isNull"; }
 };
 
@@ -11557,7 +12033,7 @@ using Entity_clang_Cursor_isObjCOptional = Bind_clang_Cursor_isObjCOptional<>;
 
 struct Entity_clang_Cursor_isObjCOptional
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_isObjCOptional(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_isObjCOptional(EntityScope) {}
   static const char *Key() { return "clang_Cursor_isObjCOptional"; }
 };
 
@@ -11605,7 +12081,7 @@ using Entity_clang_Cursor_isVariadic = Bind_clang_Cursor_isVariadic<>;
 #else
 
 struct Entity_clang_Cursor_isVariadic : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Cursor_isVariadic(EntityScope parent_h) {}
+  explicit Entity_clang_Cursor_isVariadic(EntityScope) {}
   static const char *Key() { return "clang_Cursor_isVariadic"; }
 };
 
@@ -11653,7 +12129,7 @@ using Entity_clang_EnumDecl_isScoped = Bind_clang_EnumDecl_isScoped<>;
 #else
 
 struct Entity_clang_EnumDecl_isScoped : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_EnumDecl_isScoped(EntityScope parent_h) {}
+  explicit Entity_clang_EnumDecl_isScoped(EntityScope) {}
   static const char *Key() { return "clang_EnumDecl_isScoped"; }
 };
 
@@ -11706,7 +12182,7 @@ using Entity_clang_EvalResult_dispose = Bind_clang_EvalResult_dispose<>;
 
 struct Entity_clang_EvalResult_dispose
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_EvalResult_dispose(EntityScope parent_h) {}
+  explicit Entity_clang_EvalResult_dispose(EntityScope) {}
   static const char *Key() { return "clang_EvalResult_dispose"; }
 };
 
@@ -11760,7 +12236,7 @@ using Entity_clang_EvalResult_getAsDouble = Bind_clang_EvalResult_getAsDouble<>;
 
 struct Entity_clang_EvalResult_getAsDouble
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_EvalResult_getAsDouble(EntityScope parent_h) {}
+  explicit Entity_clang_EvalResult_getAsDouble(EntityScope) {}
   static const char *Key() { return "clang_EvalResult_getAsDouble"; }
 };
 
@@ -11814,7 +12290,7 @@ using Entity_clang_EvalResult_getAsInt = Bind_clang_EvalResult_getAsInt<>;
 
 struct Entity_clang_EvalResult_getAsInt
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_EvalResult_getAsInt(EntityScope parent_h) {}
+  explicit Entity_clang_EvalResult_getAsInt(EntityScope) {}
   static const char *Key() { return "clang_EvalResult_getAsInt"; }
 };
 
@@ -11871,7 +12347,7 @@ using Entity_clang_EvalResult_getAsLongLong =
 
 struct Entity_clang_EvalResult_getAsLongLong
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_EvalResult_getAsLongLong(EntityScope parent_h) {}
+  explicit Entity_clang_EvalResult_getAsLongLong(EntityScope) {}
   static const char *Key() { return "clang_EvalResult_getAsLongLong"; }
 };
 
@@ -11928,7 +12404,7 @@ using Entity_clang_EvalResult_getAsStr = Bind_clang_EvalResult_getAsStr<>;
 
 struct Entity_clang_EvalResult_getAsStr
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_EvalResult_getAsStr(EntityScope parent_h) {}
+  explicit Entity_clang_EvalResult_getAsStr(EntityScope) {}
   static const char *Key() { return "clang_EvalResult_getAsStr"; }
 };
 
@@ -11983,7 +12459,7 @@ using Entity_clang_EvalResult_getAsUnsigned =
 
 struct Entity_clang_EvalResult_getAsUnsigned
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_EvalResult_getAsUnsigned(EntityScope parent_h) {}
+  explicit Entity_clang_EvalResult_getAsUnsigned(EntityScope) {}
   static const char *Key() { return "clang_EvalResult_getAsUnsigned"; }
 };
 
@@ -12036,7 +12512,7 @@ using Entity_clang_EvalResult_getKind = Bind_clang_EvalResult_getKind<>;
 
 struct Entity_clang_EvalResult_getKind
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_EvalResult_getKind(EntityScope parent_h) {}
+  explicit Entity_clang_EvalResult_getKind(EntityScope) {}
   static const char *Key() { return "clang_EvalResult_getKind"; }
 };
 
@@ -12092,7 +12568,7 @@ using Entity_clang_EvalResult_isUnsignedInt =
 
 struct Entity_clang_EvalResult_isUnsignedInt
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_EvalResult_isUnsignedInt(EntityScope parent_h) {}
+  explicit Entity_clang_EvalResult_isUnsignedInt(EntityScope) {}
   static const char *Key() { return "clang_EvalResult_isUnsignedInt"; }
 };
 
@@ -12146,7 +12622,7 @@ using Entity_clang_File_isEqual = Bind_clang_File_isEqual<>;
 #else
 
 struct Entity_clang_File_isEqual : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_File_isEqual(EntityScope parent_h) {}
+  explicit Entity_clang_File_isEqual(EntityScope) {}
   static const char *Key() { return "clang_File_isEqual"; }
 };
 
@@ -12203,7 +12679,7 @@ using Entity_clang_File_tryGetRealPathName =
 
 struct Entity_clang_File_tryGetRealPathName
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_File_tryGetRealPathName(EntityScope parent_h) {}
+  explicit Entity_clang_File_tryGetRealPathName(EntityScope) {}
   static const char *Key() { return "clang_File_tryGetRealPathName"; }
 };
 
@@ -12280,7 +12756,7 @@ using Entity_clang_FullComment_getAsHTML = Bind_clang_FullComment_getAsHTML<>;
 
 struct Entity_clang_FullComment_getAsHTML
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_FullComment_getAsHTML(EntityScope parent_h) {}
+  explicit Entity_clang_FullComment_getAsHTML(EntityScope) {}
   static const char *Key() { return "clang_FullComment_getAsHTML"; }
 };
 
@@ -12336,7 +12812,7 @@ using Entity_clang_FullComment_getAsXML = Bind_clang_FullComment_getAsXML<>;
 
 struct Entity_clang_FullComment_getAsXML
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_FullComment_getAsXML(EntityScope parent_h) {}
+  explicit Entity_clang_FullComment_getAsXML(EntityScope) {}
   static const char *Key() { return "clang_FullComment_getAsXML"; }
 };
 
@@ -12389,8 +12865,7 @@ using Entity_clang_HTMLStartTagComment_isSelfClosing =
 
 struct Entity_clang_HTMLStartTagComment_isSelfClosing
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_HTMLStartTagComment_isSelfClosing(
-      EntityScope parent_h) {}
+  explicit Entity_clang_HTMLStartTagComment_isSelfClosing(EntityScope) {}
   static const char *Key() { return "clang_HTMLStartTagComment_isSelfClosing"; }
 };
 
@@ -12444,7 +12919,7 @@ using Entity_clang_HTMLStartTag_getAttrName =
 
 struct Entity_clang_HTMLStartTag_getAttrName
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_HTMLStartTag_getAttrName(EntityScope parent_h) {}
+  explicit Entity_clang_HTMLStartTag_getAttrName(EntityScope) {}
   static const char *Key() { return "clang_HTMLStartTag_getAttrName"; }
 };
 
@@ -12498,7 +12973,7 @@ using Entity_clang_HTMLStartTag_getAttrValue =
 
 struct Entity_clang_HTMLStartTag_getAttrValue
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_HTMLStartTag_getAttrValue(EntityScope parent_h) {}
+  explicit Entity_clang_HTMLStartTag_getAttrValue(EntityScope) {}
   static const char *Key() { return "clang_HTMLStartTag_getAttrValue"; }
 };
 
@@ -12551,7 +13026,7 @@ using Entity_clang_HTMLStartTag_getNumAttrs =
 
 struct Entity_clang_HTMLStartTag_getNumAttrs
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_HTMLStartTag_getNumAttrs(EntityScope parent_h) {}
+  explicit Entity_clang_HTMLStartTag_getNumAttrs(EntityScope) {}
   static const char *Key() { return "clang_HTMLStartTag_getNumAttrs"; }
 };
 
@@ -12606,7 +13081,7 @@ using Entity_clang_HTMLTagComment_getAsString =
 
 struct Entity_clang_HTMLTagComment_getAsString
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_HTMLTagComment_getAsString(EntityScope parent_h) {}
+  explicit Entity_clang_HTMLTagComment_getAsString(EntityScope) {}
   static const char *Key() { return "clang_HTMLTagComment_getAsString"; }
 };
 
@@ -12659,7 +13134,7 @@ using Entity_clang_HTMLTagComment_getTagName =
 
 struct Entity_clang_HTMLTagComment_getTagName
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_HTMLTagComment_getTagName(EntityScope parent_h) {}
+  explicit Entity_clang_HTMLTagComment_getTagName(EntityScope) {}
   static const char *Key() { return "clang_HTMLTagComment_getTagName"; }
 };
 
@@ -12716,7 +13191,7 @@ using Entity_clang_IndexAction_create = Bind_clang_IndexAction_create<>;
 
 struct Entity_clang_IndexAction_create
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_IndexAction_create(EntityScope parent_h) {}
+  explicit Entity_clang_IndexAction_create(EntityScope) {}
   static const char *Key() { return "clang_IndexAction_create"; }
 };
 
@@ -12772,7 +13247,7 @@ using Entity_clang_IndexAction_dispose = Bind_clang_IndexAction_dispose<>;
 
 struct Entity_clang_IndexAction_dispose
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_IndexAction_dispose(EntityScope parent_h) {}
+  explicit Entity_clang_IndexAction_dispose(EntityScope) {}
   static const char *Key() { return "clang_IndexAction_dispose"; }
 };
 
@@ -12826,7 +13301,7 @@ using Entity_clang_InlineCommandComment_getArgText =
 
 struct Entity_clang_InlineCommandComment_getArgText
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_InlineCommandComment_getArgText(EntityScope parent_h) {}
+  explicit Entity_clang_InlineCommandComment_getArgText(EntityScope) {}
   static const char *Key() { return "clang_InlineCommandComment_getArgText"; }
 };
 
@@ -12880,8 +13355,7 @@ using Entity_clang_InlineCommandComment_getCommandName =
 
 struct Entity_clang_InlineCommandComment_getCommandName
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_InlineCommandComment_getCommandName(
-      EntityScope parent_h) {}
+  explicit Entity_clang_InlineCommandComment_getCommandName(EntityScope) {}
   static const char *Key() {
     return "clang_InlineCommandComment_getCommandName";
   }
@@ -12936,7 +13410,7 @@ using Entity_clang_InlineCommandComment_getNumArgs =
 
 struct Entity_clang_InlineCommandComment_getNumArgs
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_InlineCommandComment_getNumArgs(EntityScope parent_h) {}
+  explicit Entity_clang_InlineCommandComment_getNumArgs(EntityScope) {}
   static const char *Key() { return "clang_InlineCommandComment_getNumArgs"; }
 };
 
@@ -12991,8 +13465,7 @@ using Entity_clang_InlineCommandComment_getRenderKind =
 
 struct Entity_clang_InlineCommandComment_getRenderKind
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_InlineCommandComment_getRenderKind(
-      EntityScope parent_h) {}
+  explicit Entity_clang_InlineCommandComment_getRenderKind(EntityScope) {}
   static const char *Key() {
     return "clang_InlineCommandComment_getRenderKind";
   }
@@ -13050,8 +13523,7 @@ using Entity_clang_InlineContentComment_hasTrailingNewline =
 
 struct Entity_clang_InlineContentComment_hasTrailingNewline
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_InlineContentComment_hasTrailingNewline(
-      EntityScope parent_h) {}
+  explicit Entity_clang_InlineContentComment_hasTrailingNewline(EntityScope) {}
   static const char *Key() {
     return "clang_InlineContentComment_hasTrailingNewline";
   }
@@ -13104,7 +13576,7 @@ using Entity_clang_Location_isFromMainFile =
 
 struct Entity_clang_Location_isFromMainFile
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Location_isFromMainFile(EntityScope parent_h) {}
+  explicit Entity_clang_Location_isFromMainFile(EntityScope) {}
   static const char *Key() { return "clang_Location_isFromMainFile"; }
 };
 
@@ -13154,7 +13626,7 @@ using Entity_clang_Location_isInSystemHeader =
 
 struct Entity_clang_Location_isInSystemHeader
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Location_isInSystemHeader(EntityScope parent_h) {}
+  explicit Entity_clang_Location_isInSystemHeader(EntityScope) {}
   static const char *Key() { return "clang_Location_isInSystemHeader"; }
 };
 
@@ -13213,7 +13685,7 @@ using Entity_clang_ModuleMapDescriptor_create =
 
 struct Entity_clang_ModuleMapDescriptor_create
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_ModuleMapDescriptor_create(EntityScope parent_h) {}
+  explicit Entity_clang_ModuleMapDescriptor_create(EntityScope) {}
   static const char *Key() { return "clang_ModuleMapDescriptor_create"; }
 };
 
@@ -13268,7 +13740,7 @@ using Entity_clang_ModuleMapDescriptor_dispose =
 
 struct Entity_clang_ModuleMapDescriptor_dispose
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_ModuleMapDescriptor_dispose(EntityScope parent_h) {}
+  explicit Entity_clang_ModuleMapDescriptor_dispose(EntityScope) {}
   static const char *Key() { return "clang_ModuleMapDescriptor_dispose"; }
 };
 
@@ -13281,7 +13753,7 @@ struct Bind_clang_ModuleMapDescriptor_setFrameworkModuleName
 
   virtual const char *AddFunction() {
     const char *_pb11_weaver_comment_str = R"_pb11_weaver(/**
- * Sets the framework module name that the module.map describes.
+ * Sets the framework module name that the module.modulemap describes.
  * \returns 0 for success, non-zero to indicate an error.
  */)_pb11_weaver";
 
@@ -13331,7 +13803,7 @@ using Entity_clang_ModuleMapDescriptor_setFrameworkModuleName =
 struct Entity_clang_ModuleMapDescriptor_setFrameworkModuleName
     : public pybind11_weaver::DisabledEntity {
   explicit Entity_clang_ModuleMapDescriptor_setFrameworkModuleName(
-      EntityScope parent_h) {}
+      EntityScope) {}
   static const char *Key() {
     return "clang_ModuleMapDescriptor_setFrameworkModuleName";
   }
@@ -13345,7 +13817,7 @@ struct Bind_clang_ModuleMapDescriptor_setUmbrellaHeader : public EntityBase {
 
   virtual const char *AddFunction() {
     const char *_pb11_weaver_comment_str = R"_pb11_weaver(/**
- * Sets the umbrella header name that the module.map describes.
+ * Sets the umbrella header name that the module.modulemap describes.
  * \returns 0 for success, non-zero to indicate an error.
  */)_pb11_weaver";
 
@@ -13393,8 +13865,7 @@ using Entity_clang_ModuleMapDescriptor_setUmbrellaHeader =
 
 struct Entity_clang_ModuleMapDescriptor_setUmbrellaHeader
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_ModuleMapDescriptor_setUmbrellaHeader(
-      EntityScope parent_h) {}
+  explicit Entity_clang_ModuleMapDescriptor_setUmbrellaHeader(EntityScope) {}
   static const char *Key() {
     return "clang_ModuleMapDescriptor_setUmbrellaHeader";
   }
@@ -13462,8 +13933,7 @@ using Entity_clang_ModuleMapDescriptor_writeToBuffer =
 
 struct Entity_clang_ModuleMapDescriptor_writeToBuffer
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_ModuleMapDescriptor_writeToBuffer(
-      EntityScope parent_h) {}
+  explicit Entity_clang_ModuleMapDescriptor_writeToBuffer(EntityScope) {}
   static const char *Key() { return "clang_ModuleMapDescriptor_writeToBuffer"; }
 };
 
@@ -13518,7 +13988,7 @@ using Entity_clang_Module_getASTFile = Bind_clang_Module_getASTFile<>;
 #else
 
 struct Entity_clang_Module_getASTFile : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Module_getASTFile(EntityScope parent_h) {}
+  explicit Entity_clang_Module_getASTFile(EntityScope) {}
   static const char *Key() { return "clang_Module_getASTFile"; }
 };
 
@@ -13574,7 +14044,7 @@ using Entity_clang_Module_getFullName = Bind_clang_Module_getFullName<>;
 
 struct Entity_clang_Module_getFullName
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Module_getFullName(EntityScope parent_h) {}
+  explicit Entity_clang_Module_getFullName(EntityScope) {}
   static const char *Key() { return "clang_Module_getFullName"; }
 };
 
@@ -13630,7 +14100,7 @@ using Entity_clang_Module_getName = Bind_clang_Module_getName<>;
 #else
 
 struct Entity_clang_Module_getName : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Module_getName(EntityScope parent_h) {}
+  explicit Entity_clang_Module_getName(EntityScope) {}
   static const char *Key() { return "clang_Module_getName"; }
 };
 
@@ -13688,7 +14158,7 @@ using Entity_clang_Module_getNumTopLevelHeaders =
 
 struct Entity_clang_Module_getNumTopLevelHeaders
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Module_getNumTopLevelHeaders(EntityScope parent_h) {}
+  explicit Entity_clang_Module_getNumTopLevelHeaders(EntityScope) {}
   static const char *Key() { return "clang_Module_getNumTopLevelHeaders"; }
 };
 
@@ -13744,7 +14214,7 @@ using Entity_clang_Module_getParent = Bind_clang_Module_getParent<>;
 #else
 
 struct Entity_clang_Module_getParent : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Module_getParent(EntityScope parent_h) {}
+  explicit Entity_clang_Module_getParent(EntityScope) {}
   static const char *Key() { return "clang_Module_getParent"; }
 };
 
@@ -13806,7 +14276,7 @@ using Entity_clang_Module_getTopLevelHeader =
 
 struct Entity_clang_Module_getTopLevelHeader
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Module_getTopLevelHeader(EntityScope parent_h) {}
+  explicit Entity_clang_Module_getTopLevelHeader(EntityScope) {}
   static const char *Key() { return "clang_Module_getTopLevelHeader"; }
 };
 
@@ -13860,7 +14330,7 @@ using Entity_clang_Module_isSystem = Bind_clang_Module_isSystem<>;
 #else
 
 struct Entity_clang_Module_isSystem : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Module_isSystem(EntityScope parent_h) {}
+  explicit Entity_clang_Module_isSystem(EntityScope) {}
   static const char *Key() { return "clang_Module_isSystem"; }
 };
 
@@ -13912,8 +14382,7 @@ using Entity_clang_ParamCommandComment_getDirection =
 
 struct Entity_clang_ParamCommandComment_getDirection
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_ParamCommandComment_getDirection(EntityScope parent_h) {
-  }
+  explicit Entity_clang_ParamCommandComment_getDirection(EntityScope) {}
   static const char *Key() { return "clang_ParamCommandComment_getDirection"; }
 };
 
@@ -13966,8 +14435,7 @@ using Entity_clang_ParamCommandComment_getParamIndex =
 
 struct Entity_clang_ParamCommandComment_getParamIndex
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_ParamCommandComment_getParamIndex(
-      EntityScope parent_h) {}
+  explicit Entity_clang_ParamCommandComment_getParamIndex(EntityScope) {}
   static const char *Key() { return "clang_ParamCommandComment_getParamIndex"; }
 };
 
@@ -14019,8 +14487,7 @@ using Entity_clang_ParamCommandComment_getParamName =
 
 struct Entity_clang_ParamCommandComment_getParamName
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_ParamCommandComment_getParamName(EntityScope parent_h) {
-  }
+  explicit Entity_clang_ParamCommandComment_getParamName(EntityScope) {}
   static const char *Key() { return "clang_ParamCommandComment_getParamName"; }
 };
 
@@ -14077,8 +14544,7 @@ using Entity_clang_ParamCommandComment_isDirectionExplicit =
 
 struct Entity_clang_ParamCommandComment_isDirectionExplicit
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_ParamCommandComment_isDirectionExplicit(
-      EntityScope parent_h) {}
+  explicit Entity_clang_ParamCommandComment_isDirectionExplicit(EntityScope) {}
   static const char *Key() {
     return "clang_ParamCommandComment_isDirectionExplicit";
   }
@@ -14138,8 +14604,7 @@ using Entity_clang_ParamCommandComment_isParamIndexValid =
 
 struct Entity_clang_ParamCommandComment_isParamIndexValid
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_ParamCommandComment_isParamIndexValid(
-      EntityScope parent_h) {}
+  explicit Entity_clang_ParamCommandComment_isParamIndexValid(EntityScope) {}
   static const char *Key() {
     return "clang_ParamCommandComment_isParamIndexValid";
   }
@@ -14194,7 +14659,7 @@ using Entity_clang_PrintingPolicy_dispose = Bind_clang_PrintingPolicy_dispose<>;
 
 struct Entity_clang_PrintingPolicy_dispose
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_PrintingPolicy_dispose(EntityScope parent_h) {}
+  explicit Entity_clang_PrintingPolicy_dispose(EntityScope) {}
   static const char *Key() { return "clang_PrintingPolicy_dispose"; }
 };
 
@@ -14250,7 +14715,7 @@ using Entity_clang_PrintingPolicy_getProperty =
 
 struct Entity_clang_PrintingPolicy_getProperty
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_PrintingPolicy_getProperty(EntityScope parent_h) {}
+  explicit Entity_clang_PrintingPolicy_getProperty(EntityScope) {}
   static const char *Key() { return "clang_PrintingPolicy_getProperty"; }
 };
 
@@ -14306,7 +14771,7 @@ using Entity_clang_PrintingPolicy_setProperty =
 
 struct Entity_clang_PrintingPolicy_setProperty
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_PrintingPolicy_setProperty(EntityScope parent_h) {}
+  explicit Entity_clang_PrintingPolicy_setProperty(EntityScope) {}
   static const char *Key() { return "clang_PrintingPolicy_setProperty"; }
 };
 
@@ -14353,7 +14818,7 @@ using Entity_clang_Range_isNull = Bind_clang_Range_isNull<>;
 #else
 
 struct Entity_clang_Range_isNull : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Range_isNull(EntityScope parent_h) {}
+  explicit Entity_clang_Range_isNull(EntityScope) {}
   static const char *Key() { return "clang_Range_isNull"; }
 };
 
@@ -14414,7 +14879,7 @@ using Entity_clang_TParamCommandComment_getDepth =
 
 struct Entity_clang_TParamCommandComment_getDepth
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_TParamCommandComment_getDepth(EntityScope parent_h) {}
+  explicit Entity_clang_TParamCommandComment_getDepth(EntityScope) {}
   static const char *Key() { return "clang_TParamCommandComment_getDepth"; }
 };
 
@@ -14479,7 +14944,7 @@ using Entity_clang_TParamCommandComment_getIndex =
 
 struct Entity_clang_TParamCommandComment_getIndex
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_TParamCommandComment_getIndex(EntityScope parent_h) {}
+  explicit Entity_clang_TParamCommandComment_getIndex(EntityScope) {}
   static const char *Key() { return "clang_TParamCommandComment_getIndex"; }
 };
 
@@ -14531,8 +14996,7 @@ using Entity_clang_TParamCommandComment_getParamName =
 
 struct Entity_clang_TParamCommandComment_getParamName
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_TParamCommandComment_getParamName(
-      EntityScope parent_h) {}
+  explicit Entity_clang_TParamCommandComment_getParamName(EntityScope) {}
   static const char *Key() { return "clang_TParamCommandComment_getParamName"; }
 };
 
@@ -14593,8 +15057,8 @@ using Entity_clang_TParamCommandComment_isParamPositionValid =
 
 struct Entity_clang_TParamCommandComment_isParamPositionValid
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_TParamCommandComment_isParamPositionValid(
-      EntityScope parent_h) {}
+  explicit Entity_clang_TParamCommandComment_isParamPositionValid(EntityScope) {
+  }
   static const char *Key() {
     return "clang_TParamCommandComment_isParamPositionValid";
   }
@@ -14649,7 +15113,7 @@ using Entity_clang_TargetInfo_dispose = Bind_clang_TargetInfo_dispose<>;
 
 struct Entity_clang_TargetInfo_dispose
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_TargetInfo_dispose(EntityScope parent_h) {}
+  explicit Entity_clang_TargetInfo_dispose(EntityScope) {}
   static const char *Key() { return "clang_TargetInfo_dispose"; }
 };
 
@@ -14706,7 +15170,7 @@ using Entity_clang_TargetInfo_getPointerWidth =
 
 struct Entity_clang_TargetInfo_getPointerWidth
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_TargetInfo_getPointerWidth(EntityScope parent_h) {}
+  explicit Entity_clang_TargetInfo_getPointerWidth(EntityScope) {}
   static const char *Key() { return "clang_TargetInfo_getPointerWidth"; }
 };
 
@@ -14761,7 +15225,7 @@ using Entity_clang_TargetInfo_getTriple = Bind_clang_TargetInfo_getTriple<>;
 
 struct Entity_clang_TargetInfo_getTriple
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_TargetInfo_getTriple(EntityScope parent_h) {}
+  explicit Entity_clang_TargetInfo_getTriple(EntityScope) {}
   static const char *Key() { return "clang_TargetInfo_getTriple"; }
 };
 
@@ -14812,7 +15276,7 @@ using Entity_clang_TextComment_getText = Bind_clang_TextComment_getText<>;
 
 struct Entity_clang_TextComment_getText
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_TextComment_getText(EntityScope parent_h) {}
+  explicit Entity_clang_TextComment_getText(EntityScope) {}
   static const char *Key() { return "clang_TextComment_getText"; }
 };
 
@@ -14869,7 +15333,7 @@ using Entity_clang_Type_getAlignOf = Bind_clang_Type_getAlignOf<>;
 #else
 
 struct Entity_clang_Type_getAlignOf : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_getAlignOf(EntityScope parent_h) {}
+  explicit Entity_clang_Type_getAlignOf(EntityScope) {}
   static const char *Key() { return "clang_Type_getAlignOf"; }
 };
 
@@ -14923,7 +15387,7 @@ using Entity_clang_Type_getCXXRefQualifier =
 
 struct Entity_clang_Type_getCXXRefQualifier
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_getCXXRefQualifier(EntityScope parent_h) {}
+  explicit Entity_clang_Type_getCXXRefQualifier(EntityScope) {}
   static const char *Key() { return "clang_Type_getCXXRefQualifier"; }
 };
 
@@ -14972,7 +15436,7 @@ using Entity_clang_Type_getClassType = Bind_clang_Type_getClassType<>;
 #else
 
 struct Entity_clang_Type_getClassType : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_getClassType(EntityScope parent_h) {}
+  explicit Entity_clang_Type_getClassType(EntityScope) {}
   static const char *Key() { return "clang_Type_getClassType"; }
 };
 
@@ -15022,7 +15486,7 @@ using Entity_clang_Type_getModifiedType = Bind_clang_Type_getModifiedType<>;
 
 struct Entity_clang_Type_getModifiedType
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_getModifiedType(EntityScope parent_h) {}
+  explicit Entity_clang_Type_getModifiedType(EntityScope) {}
   static const char *Key() { return "clang_Type_getModifiedType"; }
 };
 
@@ -15071,7 +15535,7 @@ using Entity_clang_Type_getNamedType = Bind_clang_Type_getNamedType<>;
 #else
 
 struct Entity_clang_Type_getNamedType : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_getNamedType(EntityScope parent_h) {}
+  explicit Entity_clang_Type_getNamedType(EntityScope) {}
   static const char *Key() { return "clang_Type_getNamedType"; }
 };
 
@@ -15121,7 +15585,7 @@ using Entity_clang_Type_getNullability = Bind_clang_Type_getNullability<>;
 
 struct Entity_clang_Type_getNullability
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_getNullability(EntityScope parent_h) {}
+  explicit Entity_clang_Type_getNullability(EntityScope) {}
   static const char *Key() { return "clang_Type_getNullability"; }
 };
 
@@ -15173,7 +15637,7 @@ using Entity_clang_Type_getNumObjCProtocolRefs =
 
 struct Entity_clang_Type_getNumObjCProtocolRefs
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_getNumObjCProtocolRefs(EntityScope parent_h) {}
+  explicit Entity_clang_Type_getNumObjCProtocolRefs(EntityScope) {}
   static const char *Key() { return "clang_Type_getNumObjCProtocolRefs"; }
 };
 
@@ -15225,7 +15689,7 @@ using Entity_clang_Type_getNumObjCTypeArgs =
 
 struct Entity_clang_Type_getNumObjCTypeArgs
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_getNumObjCTypeArgs(EntityScope parent_h) {}
+  explicit Entity_clang_Type_getNumObjCTypeArgs(EntityScope) {}
   static const char *Key() { return "clang_Type_getNumObjCTypeArgs"; }
 };
 
@@ -15275,7 +15739,7 @@ using Entity_clang_Type_getNumTemplateArguments =
 
 struct Entity_clang_Type_getNumTemplateArguments
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_getNumTemplateArguments(EntityScope parent_h) {}
+  explicit Entity_clang_Type_getNumTemplateArguments(EntityScope) {}
   static const char *Key() { return "clang_Type_getNumTemplateArguments"; }
 };
 
@@ -15324,7 +15788,7 @@ using Entity_clang_Type_getObjCEncoding = Bind_clang_Type_getObjCEncoding<>;
 
 struct Entity_clang_Type_getObjCEncoding
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_getObjCEncoding(EntityScope parent_h) {}
+  explicit Entity_clang_Type_getObjCEncoding(EntityScope) {}
   static const char *Key() { return "clang_Type_getObjCEncoding"; }
 };
 
@@ -15375,7 +15839,7 @@ using Entity_clang_Type_getObjCObjectBaseType =
 
 struct Entity_clang_Type_getObjCObjectBaseType
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_getObjCObjectBaseType(EntityScope parent_h) {}
+  explicit Entity_clang_Type_getObjCObjectBaseType(EntityScope) {}
   static const char *Key() { return "clang_Type_getObjCObjectBaseType"; }
 };
 
@@ -15428,7 +15892,7 @@ using Entity_clang_Type_getObjCProtocolDecl =
 
 struct Entity_clang_Type_getObjCProtocolDecl
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_getObjCProtocolDecl(EntityScope parent_h) {}
+  explicit Entity_clang_Type_getObjCProtocolDecl(EntityScope) {}
   static const char *Key() { return "clang_Type_getObjCProtocolDecl"; }
 };
 
@@ -15481,7 +15945,7 @@ using Entity_clang_Type_getObjCTypeArg = Bind_clang_Type_getObjCTypeArg<>;
 
 struct Entity_clang_Type_getObjCTypeArg
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_getObjCTypeArg(EntityScope parent_h) {}
+  explicit Entity_clang_Type_getObjCTypeArg(EntityScope) {}
   static const char *Key() { return "clang_Type_getObjCTypeArg"; }
 };
 
@@ -15539,7 +16003,7 @@ using Entity_clang_Type_getOffsetOf = Bind_clang_Type_getOffsetOf<>;
 #else
 
 struct Entity_clang_Type_getOffsetOf : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_getOffsetOf(EntityScope parent_h) {}
+  explicit Entity_clang_Type_getOffsetOf(EntityScope) {}
   static const char *Key() { return "clang_Type_getOffsetOf"; }
 };
 
@@ -15593,7 +16057,7 @@ using Entity_clang_Type_getSizeOf = Bind_clang_Type_getSizeOf<>;
 #else
 
 struct Entity_clang_Type_getSizeOf : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_getSizeOf(EntityScope parent_h) {}
+  explicit Entity_clang_Type_getSizeOf(EntityScope) {}
   static const char *Key() { return "clang_Type_getSizeOf"; }
 };
 
@@ -15648,7 +16112,7 @@ using Entity_clang_Type_getTemplateArgumentAsType =
 
 struct Entity_clang_Type_getTemplateArgumentAsType
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_getTemplateArgumentAsType(EntityScope parent_h) {}
+  explicit Entity_clang_Type_getTemplateArgumentAsType(EntityScope) {}
   static const char *Key() { return "clang_Type_getTemplateArgumentAsType"; }
 };
 
@@ -15697,7 +16161,7 @@ using Entity_clang_Type_getValueType = Bind_clang_Type_getValueType<>;
 #else
 
 struct Entity_clang_Type_getValueType : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_getValueType(EntityScope parent_h) {}
+  explicit Entity_clang_Type_getValueType(EntityScope) {}
   static const char *Key() { return "clang_Type_getValueType"; }
 };
 
@@ -15752,7 +16216,7 @@ using Entity_clang_Type_isTransparentTagTypedef =
 
 struct Entity_clang_Type_isTransparentTagTypedef
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_isTransparentTagTypedef(EntityScope parent_h) {}
+  explicit Entity_clang_Type_isTransparentTagTypedef(EntityScope) {}
   static const char *Key() { return "clang_Type_isTransparentTagTypedef"; }
 };
 
@@ -15845,7 +16309,7 @@ using Entity_clang_Type_visitFields = Bind_clang_Type_visitFields<>;
 #else
 
 struct Entity_clang_Type_visitFields : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_Type_visitFields(EntityScope parent_h) {}
+  explicit Entity_clang_Type_visitFields(EntityScope) {}
   static const char *Key() { return "clang_Type_visitFields"; }
 };
 
@@ -15897,8 +16361,7 @@ using Entity_clang_VerbatimBlockLineComment_getText =
 
 struct Entity_clang_VerbatimBlockLineComment_getText
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_VerbatimBlockLineComment_getText(EntityScope parent_h) {
-  }
+  explicit Entity_clang_VerbatimBlockLineComment_getText(EntityScope) {}
   static const char *Key() { return "clang_VerbatimBlockLineComment_getText"; }
 };
 
@@ -15950,7 +16413,7 @@ using Entity_clang_VerbatimLineComment_getText =
 
 struct Entity_clang_VerbatimLineComment_getText
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_VerbatimLineComment_getText(EntityScope parent_h) {}
+  explicit Entity_clang_VerbatimLineComment_getText(EntityScope) {}
   static const char *Key() { return "clang_VerbatimLineComment_getText"; }
 };
 
@@ -16009,8 +16472,7 @@ using Entity_clang_VirtualFileOverlay_addFileMapping =
 
 struct Entity_clang_VirtualFileOverlay_addFileMapping
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_VirtualFileOverlay_addFileMapping(
-      EntityScope parent_h) {}
+  explicit Entity_clang_VirtualFileOverlay_addFileMapping(EntityScope) {}
   static const char *Key() { return "clang_VirtualFileOverlay_addFileMapping"; }
 };
 
@@ -16069,7 +16531,7 @@ using Entity_clang_VirtualFileOverlay_create =
 
 struct Entity_clang_VirtualFileOverlay_create
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_VirtualFileOverlay_create(EntityScope parent_h) {}
+  explicit Entity_clang_VirtualFileOverlay_create(EntityScope) {}
   static const char *Key() { return "clang_VirtualFileOverlay_create"; }
 };
 
@@ -16123,7 +16585,7 @@ using Entity_clang_VirtualFileOverlay_dispose =
 
 struct Entity_clang_VirtualFileOverlay_dispose
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_VirtualFileOverlay_dispose(EntityScope parent_h) {}
+  explicit Entity_clang_VirtualFileOverlay_dispose(EntityScope) {}
   static const char *Key() { return "clang_VirtualFileOverlay_dispose"; }
 };
 
@@ -16185,8 +16647,7 @@ using Entity_clang_VirtualFileOverlay_setCaseSensitivity =
 
 struct Entity_clang_VirtualFileOverlay_setCaseSensitivity
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_VirtualFileOverlay_setCaseSensitivity(
-      EntityScope parent_h) {}
+  explicit Entity_clang_VirtualFileOverlay_setCaseSensitivity(EntityScope) {}
   static const char *Key() {
     return "clang_VirtualFileOverlay_setCaseSensitivity";
   }
@@ -16254,8 +16715,7 @@ using Entity_clang_VirtualFileOverlay_writeToBuffer =
 
 struct Entity_clang_VirtualFileOverlay_writeToBuffer
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_VirtualFileOverlay_writeToBuffer(EntityScope parent_h) {
-  }
+  explicit Entity_clang_VirtualFileOverlay_writeToBuffer(EntityScope) {}
   static const char *Key() { return "clang_VirtualFileOverlay_writeToBuffer"; }
 };
 
@@ -16336,7 +16796,7 @@ using Entity_clang_annotateTokens = Bind_clang_annotateTokens<>;
 #else
 
 struct Entity_clang_annotateTokens : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_annotateTokens(EntityScope parent_h) {}
+  explicit Entity_clang_annotateTokens(EntityScope) {}
   static const char *Key() { return "clang_annotateTokens"; }
 };
 
@@ -16460,7 +16920,7 @@ using Entity_clang_codeCompleteAt = Bind_clang_codeCompleteAt<>;
 #else
 
 struct Entity_clang_codeCompleteAt : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_codeCompleteAt(EntityScope parent_h) {}
+  explicit Entity_clang_codeCompleteAt(EntityScope) {}
   static const char *Key() { return "clang_codeCompleteAt"; }
 };
 
@@ -16524,7 +16984,7 @@ using Entity_clang_codeCompleteGetContainerKind =
 
 struct Entity_clang_codeCompleteGetContainerKind
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_codeCompleteGetContainerKind(EntityScope parent_h) {}
+  explicit Entity_clang_codeCompleteGetContainerKind(EntityScope) {}
   static const char *Key() { return "clang_codeCompleteGetContainerKind"; }
 };
 
@@ -16580,7 +17040,7 @@ using Entity_clang_codeCompleteGetContainerUSR =
 
 struct Entity_clang_codeCompleteGetContainerUSR
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_codeCompleteGetContainerUSR(EntityScope parent_h) {}
+  explicit Entity_clang_codeCompleteGetContainerUSR(EntityScope) {}
   static const char *Key() { return "clang_codeCompleteGetContainerUSR"; }
 };
 
@@ -16636,7 +17096,7 @@ using Entity_clang_codeCompleteGetContexts =
 
 struct Entity_clang_codeCompleteGetContexts
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_codeCompleteGetContexts(EntityScope parent_h) {}
+  explicit Entity_clang_codeCompleteGetContexts(EntityScope) {}
   static const char *Key() { return "clang_codeCompleteGetContexts"; }
 };
 
@@ -16698,7 +17158,7 @@ using Entity_clang_codeCompleteGetDiagnostic =
 
 struct Entity_clang_codeCompleteGetDiagnostic
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_codeCompleteGetDiagnostic(EntityScope parent_h) {}
+  explicit Entity_clang_codeCompleteGetDiagnostic(EntityScope) {}
   static const char *Key() { return "clang_codeCompleteGetDiagnostic"; }
 };
 
@@ -16749,7 +17209,7 @@ using Entity_clang_codeCompleteGetNumDiagnostics =
 
 struct Entity_clang_codeCompleteGetNumDiagnostics
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_codeCompleteGetNumDiagnostics(EntityScope parent_h) {}
+  explicit Entity_clang_codeCompleteGetNumDiagnostics(EntityScope) {}
   static const char *Key() { return "clang_codeCompleteGetNumDiagnostics"; }
 };
 
@@ -16807,7 +17267,7 @@ using Entity_clang_codeCompleteGetObjCSelector =
 
 struct Entity_clang_codeCompleteGetObjCSelector
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_codeCompleteGetObjCSelector(EntityScope parent_h) {}
+  explicit Entity_clang_codeCompleteGetObjCSelector(EntityScope) {}
   static const char *Key() { return "clang_codeCompleteGetObjCSelector"; }
 };
 
@@ -16857,7 +17317,7 @@ using Entity_clang_constructUSR_ObjCCategory =
 
 struct Entity_clang_constructUSR_ObjCCategory
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_constructUSR_ObjCCategory(EntityScope parent_h) {}
+  explicit Entity_clang_constructUSR_ObjCCategory(EntityScope) {}
   static const char *Key() { return "clang_constructUSR_ObjCCategory"; }
 };
 
@@ -16906,7 +17366,7 @@ using Entity_clang_constructUSR_ObjCClass = Bind_clang_constructUSR_ObjCClass<>;
 
 struct Entity_clang_constructUSR_ObjCClass
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_constructUSR_ObjCClass(EntityScope parent_h) {}
+  explicit Entity_clang_constructUSR_ObjCClass(EntityScope) {}
   static const char *Key() { return "clang_constructUSR_ObjCClass"; }
 };
 
@@ -16957,7 +17417,7 @@ using Entity_clang_constructUSR_ObjCIvar = Bind_clang_constructUSR_ObjCIvar<>;
 
 struct Entity_clang_constructUSR_ObjCIvar
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_constructUSR_ObjCIvar(EntityScope parent_h) {}
+  explicit Entity_clang_constructUSR_ObjCIvar(EntityScope) {}
   static const char *Key() { return "clang_constructUSR_ObjCIvar"; }
 };
 
@@ -17008,7 +17468,7 @@ using Entity_clang_constructUSR_ObjCMethod =
 
 struct Entity_clang_constructUSR_ObjCMethod
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_constructUSR_ObjCMethod(EntityScope parent_h) {}
+  explicit Entity_clang_constructUSR_ObjCMethod(EntityScope) {}
   static const char *Key() { return "clang_constructUSR_ObjCMethod"; }
 };
 
@@ -17060,7 +17520,7 @@ using Entity_clang_constructUSR_ObjCProperty =
 
 struct Entity_clang_constructUSR_ObjCProperty
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_constructUSR_ObjCProperty(EntityScope parent_h) {}
+  explicit Entity_clang_constructUSR_ObjCProperty(EntityScope) {}
   static const char *Key() { return "clang_constructUSR_ObjCProperty"; }
 };
 
@@ -17110,7 +17570,7 @@ using Entity_clang_constructUSR_ObjCProtocol =
 
 struct Entity_clang_constructUSR_ObjCProtocol
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_constructUSR_ObjCProtocol(EntityScope parent_h) {}
+  explicit Entity_clang_constructUSR_ObjCProtocol(EntityScope) {}
   static const char *Key() { return "clang_constructUSR_ObjCProtocol"; }
 };
 
@@ -17170,7 +17630,7 @@ using Entity_clang_createAPISet = Bind_clang_createAPISet<>;
 #else
 
 struct Entity_clang_createAPISet : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_createAPISet(EntityScope parent_h) {}
+  explicit Entity_clang_createAPISet(EntityScope) {}
   static const char *Key() { return "clang_createAPISet"; }
 };
 
@@ -17223,7 +17683,7 @@ using Entity_clang_createCXCursorSet = Bind_clang_createCXCursorSet<>;
 #else
 
 struct Entity_clang_createCXCursorSet : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_createCXCursorSet(EntityScope parent_h) {}
+  explicit Entity_clang_createCXCursorSet(EntityScope) {}
   static const char *Key() { return "clang_createCXCursorSet"; }
 };
 
@@ -17313,11 +17773,106 @@ using Entity_clang_createIndex = Bind_clang_createIndex<>;
 #else
 
 struct Entity_clang_createIndex : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_createIndex(EntityScope parent_h) {}
+  explicit Entity_clang_createIndex(EntityScope) {}
   static const char *Key() { return "clang_createIndex"; }
 };
 
 #endif // PB11_WEAVER_DISABLE_Entity_clang_createIndex
+
+template <class Pybind11T = pybind11::module_ &>
+struct Bind_clang_createIndexWithOptions : public EntityBase {
+  using Pybind11Type = Pybind11T;
+
+  virtual const char *AddFunction() {
+    const char *_pb11_weaver_comment_str = R"_pb11_weaver(/**
+ * Provides a shared context for creating translation units.
+ *
+ * Call this function instead of clang_createIndex() if you need to configure
+ * the additional options in CXIndexOptions.
+ *
+ * \returns The created index or null in case of error, such as an unsupported
+ * value of options->Size.
+ *
+ * For example:
+ * \code
+ * CXIndex createIndex(const char *ApplicationTemporaryPath) {
+ *   const int ExcludeDeclarationsFromPCH = 1;
+ *   const int DisplayDiagnostics = 1;
+ *   CXIndex Idx;
+ * #if CINDEX_VERSION_MINOR >= 64
+ *   CXIndexOptions Opts;
+ *   memset(&Opts, 0, sizeof(Opts));
+ *   Opts.Size = sizeof(CXIndexOptions);
+ *   Opts.ThreadBackgroundPriorityForIndexing = 1;
+ *   Opts.ExcludeDeclarationsFromPCH = ExcludeDeclarationsFromPCH;
+ *   Opts.DisplayDiagnostics = DisplayDiagnostics;
+ *   Opts.PreambleStoragePath = ApplicationTemporaryPath;
+ *   Idx = clang_createIndexWithOptions(&Opts);
+ *   if (Idx)
+ *     return Idx;
+ *   fprintf(stderr,
+ *           "clang_createIndexWithOptions() failed. "
+ *           "CINDEX_VERSION_MINOR = %d, sizeof(CXIndexOptions) = %u\n",
+ *           CINDEX_VERSION_MINOR, Opts.Size);
+ * #else
+ *   (void)ApplicationTemporaryPath;
+ * #endif
+ *   Idx = clang_createIndex(ExcludeDeclarationsFromPCH, DisplayDiagnostics);
+ *   clang_CXIndex_setGlobalOptions(
+ *       Idx, clang_CXIndex_getGlobalOptions(Idx) |
+ *                CXGlobalOpt_ThreadBackgroundPriorityForIndexing);
+ *   return Idx;
+ * }
+ * \endcode
+ *
+ * \sa clang_createIndex()
+ */)_pb11_weaver";
+
+#ifndef PB11_WEAVER_DISABLE_clang_createIndexWithOptions_AddFunction
+    handle.def(
+        "clang_createIndexWithOptions",
+        [](const CXIndexOptions *options) {
+          auto &&__ret__ =
+              std::invoke(static_cast<pybind11_weaver::FnPtrT<
+                              void, void *(const CXIndexOptions *)>::type>(
+                              &clang_createIndexWithOptions),
+                          options);
+          return pybind11_weaver::WrapP<void *>(__ret__);
+        },
+        _pb11_weaver_comment_str);
+#endif
+    return _pb11_weaver_comment_str;
+  }
+
+  explicit Bind_clang_createIndexWithOptions(EntityScope parent_h)
+      : handle{static_cast<pybind11::module_ &>(parent_h)} {}
+
+  template <class... HandleArgsT>
+  explicit Bind_clang_createIndexWithOptions(EntityScope parent_h,
+                                             HandleArgsT &&...args)
+      : handle{std::forward(args)...} {}
+
+  void Update() override { AddFunction(); }
+
+  EntityScope AsScope() override { return EntityScope(handle); }
+
+  static const char *Key() { return "clang_createIndexWithOptions"; }
+
+  Pybind11Type handle;
+};
+#ifndef PB11_WEAVER_DISABLE_Entity_clang_createIndexWithOptions
+
+using Entity_clang_createIndexWithOptions = Bind_clang_createIndexWithOptions<>;
+
+#else
+
+struct Entity_clang_createIndexWithOptions
+    : public pybind11_weaver::DisabledEntity {
+  explicit Entity_clang_createIndexWithOptions(EntityScope) {}
+  static const char *Key() { return "clang_createIndexWithOptions"; }
+};
+
+#endif // PB11_WEAVER_DISABLE_Entity_clang_createIndexWithOptions
 
 template <class Pybind11T = pybind11::module_ &>
 struct Bind_clang_createTranslationUnit : public EntityBase {
@@ -17372,7 +17927,7 @@ using Entity_clang_createTranslationUnit = Bind_clang_createTranslationUnit<>;
 
 struct Entity_clang_createTranslationUnit
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_createTranslationUnit(EntityScope parent_h) {}
+  explicit Entity_clang_createTranslationUnit(EntityScope) {}
   static const char *Key() { return "clang_createTranslationUnit"; }
 };
 
@@ -17433,7 +17988,7 @@ using Entity_clang_createTranslationUnit2 = Bind_clang_createTranslationUnit2<>;
 
 struct Entity_clang_createTranslationUnit2
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_createTranslationUnit2(EntityScope parent_h) {}
+  explicit Entity_clang_createTranslationUnit2(EntityScope) {}
   static const char *Key() { return "clang_createTranslationUnit2"; }
 };
 
@@ -17536,8 +18091,7 @@ using Entity_clang_createTranslationUnitFromSourceFile =
 
 struct Entity_clang_createTranslationUnitFromSourceFile
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_createTranslationUnitFromSourceFile(
-      EntityScope parent_h) {}
+  explicit Entity_clang_createTranslationUnitFromSourceFile(EntityScope) {}
   static const char *Key() {
     return "clang_createTranslationUnitFromSourceFile";
   }
@@ -17589,7 +18143,7 @@ using Entity_clang_defaultCodeCompleteOptions =
 
 struct Entity_clang_defaultCodeCompleteOptions
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_defaultCodeCompleteOptions(EntityScope parent_h) {}
+  explicit Entity_clang_defaultCodeCompleteOptions(EntityScope) {}
   static const char *Key() { return "clang_defaultCodeCompleteOptions"; }
 };
 
@@ -17642,7 +18196,7 @@ using Entity_clang_defaultDiagnosticDisplayOptions =
 
 struct Entity_clang_defaultDiagnosticDisplayOptions
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_defaultDiagnosticDisplayOptions(EntityScope parent_h) {}
+  explicit Entity_clang_defaultDiagnosticDisplayOptions(EntityScope) {}
   static const char *Key() { return "clang_defaultDiagnosticDisplayOptions"; }
 };
 
@@ -17702,8 +18256,7 @@ using Entity_clang_defaultEditingTranslationUnitOptions =
 
 struct Entity_clang_defaultEditingTranslationUnitOptions
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_defaultEditingTranslationUnitOptions(
-      EntityScope parent_h) {}
+  explicit Entity_clang_defaultEditingTranslationUnitOptions(EntityScope) {}
   static const char *Key() {
     return "clang_defaultEditingTranslationUnitOptions";
   }
@@ -17766,7 +18319,7 @@ using Entity_clang_defaultReparseOptions = Bind_clang_defaultReparseOptions<>;
 
 struct Entity_clang_defaultReparseOptions
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_defaultReparseOptions(EntityScope parent_h) {}
+  explicit Entity_clang_defaultReparseOptions(EntityScope) {}
   static const char *Key() { return "clang_defaultReparseOptions"; }
 };
 
@@ -17826,7 +18379,7 @@ using Entity_clang_defaultSaveOptions = Bind_clang_defaultSaveOptions<>;
 
 struct Entity_clang_defaultSaveOptions
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_defaultSaveOptions(EntityScope parent_h) {}
+  explicit Entity_clang_defaultSaveOptions(EntityScope) {}
   static const char *Key() { return "clang_defaultSaveOptions"; }
 };
 
@@ -17880,7 +18433,7 @@ using Entity_clang_disposeAPISet = Bind_clang_disposeAPISet<>;
 #else
 
 struct Entity_clang_disposeAPISet : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_disposeAPISet(EntityScope parent_h) {}
+  explicit Entity_clang_disposeAPISet(EntityScope) {}
   static const char *Key() { return "clang_disposeAPISet"; }
 };
 
@@ -17934,7 +18487,7 @@ using Entity_clang_disposeCXCursorSet = Bind_clang_disposeCXCursorSet<>;
 
 struct Entity_clang_disposeCXCursorSet
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_disposeCXCursorSet(EntityScope parent_h) {}
+  explicit Entity_clang_disposeCXCursorSet(EntityScope) {}
   static const char *Key() { return "clang_disposeCXCursorSet"; }
 };
 
@@ -17984,7 +18537,7 @@ using Entity_clang_disposeCXPlatformAvailability =
 
 struct Entity_clang_disposeCXPlatformAvailability
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_disposeCXPlatformAvailability(EntityScope parent_h) {}
+  explicit Entity_clang_disposeCXPlatformAvailability(EntityScope) {}
   static const char *Key() { return "clang_disposeCXPlatformAvailability"; }
 };
 
@@ -18032,7 +18585,7 @@ using Entity_clang_disposeCXTUResourceUsage =
 
 struct Entity_clang_disposeCXTUResourceUsage
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_disposeCXTUResourceUsage(EntityScope parent_h) {}
+  explicit Entity_clang_disposeCXTUResourceUsage(EntityScope) {}
   static const char *Key() { return "clang_disposeCXTUResourceUsage"; }
 };
 
@@ -18083,7 +18636,7 @@ using Entity_clang_disposeCodeCompleteResults =
 
 struct Entity_clang_disposeCodeCompleteResults
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_disposeCodeCompleteResults(EntityScope parent_h) {}
+  explicit Entity_clang_disposeCodeCompleteResults(EntityScope) {}
   static const char *Key() { return "clang_disposeCodeCompleteResults"; }
 };
 
@@ -18135,7 +18688,7 @@ using Entity_clang_disposeDiagnostic = Bind_clang_disposeDiagnostic<>;
 #else
 
 struct Entity_clang_disposeDiagnostic : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_disposeDiagnostic(EntityScope parent_h) {}
+  explicit Entity_clang_disposeDiagnostic(EntityScope) {}
   static const char *Key() { return "clang_disposeDiagnostic"; }
 };
 
@@ -18188,7 +18741,7 @@ using Entity_clang_disposeDiagnosticSet = Bind_clang_disposeDiagnosticSet<>;
 
 struct Entity_clang_disposeDiagnosticSet
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_disposeDiagnosticSet(EntityScope parent_h) {}
+  explicit Entity_clang_disposeDiagnosticSet(EntityScope) {}
   static const char *Key() { return "clang_disposeDiagnosticSet"; }
 };
 
@@ -18242,7 +18795,7 @@ using Entity_clang_disposeIndex = Bind_clang_disposeIndex<>;
 #else
 
 struct Entity_clang_disposeIndex : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_disposeIndex(EntityScope parent_h) {}
+  explicit Entity_clang_disposeIndex(EntityScope) {}
   static const char *Key() { return "clang_disposeIndex"; }
 };
 
@@ -18293,7 +18846,7 @@ using Entity_clang_disposeOverriddenCursors =
 
 struct Entity_clang_disposeOverriddenCursors
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_disposeOverriddenCursors(EntityScope parent_h) {}
+  explicit Entity_clang_disposeOverriddenCursors(EntityScope) {}
   static const char *Key() { return "clang_disposeOverriddenCursors"; }
 };
 
@@ -18343,7 +18896,7 @@ using Entity_clang_disposeSourceRangeList = Bind_clang_disposeSourceRangeList<>;
 
 struct Entity_clang_disposeSourceRangeList
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_disposeSourceRangeList(EntityScope parent_h) {}
+  explicit Entity_clang_disposeSourceRangeList(EntityScope) {}
   static const char *Key() { return "clang_disposeSourceRangeList"; }
 };
 
@@ -18389,7 +18942,7 @@ using Entity_clang_disposeString = Bind_clang_disposeString<>;
 #else
 
 struct Entity_clang_disposeString : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_disposeString(EntityScope parent_h) {}
+  explicit Entity_clang_disposeString(EntityScope) {}
   static const char *Key() { return "clang_disposeString"; }
 };
 
@@ -18437,7 +18990,7 @@ using Entity_clang_disposeStringSet = Bind_clang_disposeStringSet<>;
 #else
 
 struct Entity_clang_disposeStringSet : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_disposeStringSet(EntityScope parent_h) {}
+  explicit Entity_clang_disposeStringSet(EntityScope) {}
   static const char *Key() { return "clang_disposeStringSet"; }
 };
 
@@ -18490,7 +19043,7 @@ using Entity_clang_disposeTokens = Bind_clang_disposeTokens<>;
 #else
 
 struct Entity_clang_disposeTokens : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_disposeTokens(EntityScope parent_h) {}
+  explicit Entity_clang_disposeTokens(EntityScope) {}
   static const char *Key() { return "clang_disposeTokens"; }
 };
 
@@ -18543,7 +19096,7 @@ using Entity_clang_disposeTranslationUnit = Bind_clang_disposeTranslationUnit<>;
 
 struct Entity_clang_disposeTranslationUnit
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_disposeTranslationUnit(EntityScope parent_h) {}
+  explicit Entity_clang_disposeTranslationUnit(EntityScope) {}
   static const char *Key() { return "clang_disposeTranslationUnit"; }
 };
 
@@ -18587,7 +19140,7 @@ using Entity_clang_enableStackTraces = Bind_clang_enableStackTraces<>;
 #else
 
 struct Entity_clang_enableStackTraces : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_enableStackTraces(EntityScope parent_h) {}
+  explicit Entity_clang_enableStackTraces(EntityScope) {}
   static const char *Key() { return "clang_enableStackTraces"; }
 };
 
@@ -18634,7 +19187,7 @@ using Entity_clang_equalCursors = Bind_clang_equalCursors<>;
 #else
 
 struct Entity_clang_equalCursors : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_equalCursors(EntityScope parent_h) {}
+  explicit Entity_clang_equalCursors(EntityScope) {}
   static const char *Key() { return "clang_equalCursors"; }
 };
 
@@ -18688,7 +19241,7 @@ using Entity_clang_equalLocations = Bind_clang_equalLocations<>;
 #else
 
 struct Entity_clang_equalLocations : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_equalLocations(EntityScope parent_h) {}
+  explicit Entity_clang_equalLocations(EntityScope) {}
   static const char *Key() { return "clang_equalLocations"; }
 };
 
@@ -18737,7 +19290,7 @@ using Entity_clang_equalRanges = Bind_clang_equalRanges<>;
 #else
 
 struct Entity_clang_equalRanges : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_equalRanges(EntityScope parent_h) {}
+  explicit Entity_clang_equalRanges(EntityScope) {}
   static const char *Key() { return "clang_equalRanges"; }
 };
 
@@ -18788,7 +19341,7 @@ using Entity_clang_equalTypes = Bind_clang_equalTypes<>;
 #else
 
 struct Entity_clang_equalTypes : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_equalTypes(EntityScope parent_h) {}
+  explicit Entity_clang_equalTypes(EntityScope) {}
   static const char *Key() { return "clang_equalTypes"; }
 };
 
@@ -18855,7 +19408,7 @@ using Entity_clang_executeOnThread = Bind_clang_executeOnThread<>;
 #else
 
 struct Entity_clang_executeOnThread : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_executeOnThread(EntityScope parent_h) {}
+  explicit Entity_clang_executeOnThread(EntityScope) {}
   static const char *Key() { return "clang_executeOnThread"; }
 };
 
@@ -18921,11 +19474,66 @@ using Entity_clang_findIncludesInFile = Bind_clang_findIncludesInFile<>;
 
 struct Entity_clang_findIncludesInFile
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_findIncludesInFile(EntityScope parent_h) {}
+  explicit Entity_clang_findIncludesInFile(EntityScope) {}
   static const char *Key() { return "clang_findIncludesInFile"; }
 };
 
 #endif // PB11_WEAVER_DISABLE_Entity_clang_findIncludesInFile
+
+template <class Pybind11T = pybind11::module_ &>
+struct Bind_clang_findIncludesInFileWithBlock : public EntityBase {
+  using Pybind11Type = Pybind11T;
+
+  virtual const char *AddFunction() {
+    const char *_pb11_weaver_comment_str = nullptr;
+
+#ifndef PB11_WEAVER_DISABLE_clang_findIncludesInFileWithBlock_AddFunction
+    handle.def(
+        "clang_findIncludesInFileWithBlock",
+        [](pybind11_weaver::WrappedPtrT<CXTranslationUnitImpl *> arg0,
+           pybind11_weaver::WrappedPtrT<void *> arg1,
+           pybind11_weaver::WrappedPtrT<_CXCursorAndRangeVisitorBlock *> arg2) {
+          return std::invoke(
+              static_cast<pybind11_weaver::FnPtrT<
+                  void, CXResult(CXTranslationUnitImpl *, void *,
+                                 _CXCursorAndRangeVisitorBlock *)>::type>(
+                  &clang_findIncludesInFileWithBlock),
+              (arg0)->Cptr(), (arg1)->Cptr(), (arg2)->Cptr());
+        });
+#endif
+    return _pb11_weaver_comment_str;
+  }
+
+  explicit Bind_clang_findIncludesInFileWithBlock(EntityScope parent_h)
+      : handle{static_cast<pybind11::module_ &>(parent_h)} {}
+
+  template <class... HandleArgsT>
+  explicit Bind_clang_findIncludesInFileWithBlock(EntityScope parent_h,
+                                                  HandleArgsT &&...args)
+      : handle{std::forward(args)...} {}
+
+  void Update() override { AddFunction(); }
+
+  EntityScope AsScope() override { return EntityScope(handle); }
+
+  static const char *Key() { return "clang_findIncludesInFileWithBlock"; }
+
+  Pybind11Type handle;
+};
+#ifndef PB11_WEAVER_DISABLE_Entity_clang_findIncludesInFileWithBlock
+
+using Entity_clang_findIncludesInFileWithBlock =
+    Bind_clang_findIncludesInFileWithBlock<>;
+
+#else
+
+struct Entity_clang_findIncludesInFileWithBlock
+    : public pybind11_weaver::DisabledEntity {
+  explicit Entity_clang_findIncludesInFileWithBlock(EntityScope) {}
+  static const char *Key() { return "clang_findIncludesInFileWithBlock"; }
+};
+
+#endif // PB11_WEAVER_DISABLE_Entity_clang_findIncludesInFileWithBlock
 
 template <class Pybind11T = pybind11::module_ &>
 struct Bind_clang_findReferencesInFile : public EntityBase {
@@ -18988,11 +19596,65 @@ using Entity_clang_findReferencesInFile = Bind_clang_findReferencesInFile<>;
 
 struct Entity_clang_findReferencesInFile
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_findReferencesInFile(EntityScope parent_h) {}
+  explicit Entity_clang_findReferencesInFile(EntityScope) {}
   static const char *Key() { return "clang_findReferencesInFile"; }
 };
 
 #endif // PB11_WEAVER_DISABLE_Entity_clang_findReferencesInFile
+
+template <class Pybind11T = pybind11::module_ &>
+struct Bind_clang_findReferencesInFileWithBlock : public EntityBase {
+  using Pybind11Type = Pybind11T;
+
+  virtual const char *AddFunction() {
+    const char *_pb11_weaver_comment_str = nullptr;
+
+#ifndef PB11_WEAVER_DISABLE_clang_findReferencesInFileWithBlock_AddFunction
+    handle.def(
+        "clang_findReferencesInFileWithBlock",
+        [](CXCursor arg0, pybind11_weaver::WrappedPtrT<void *> arg1,
+           pybind11_weaver::WrappedPtrT<_CXCursorAndRangeVisitorBlock *> arg2) {
+          return std::invoke(
+              static_cast<pybind11_weaver::FnPtrT<
+                  void, CXResult(CXCursor, void *,
+                                 _CXCursorAndRangeVisitorBlock *)>::type>(
+                  &clang_findReferencesInFileWithBlock),
+              arg0, (arg1)->Cptr(), (arg2)->Cptr());
+        });
+#endif
+    return _pb11_weaver_comment_str;
+  }
+
+  explicit Bind_clang_findReferencesInFileWithBlock(EntityScope parent_h)
+      : handle{static_cast<pybind11::module_ &>(parent_h)} {}
+
+  template <class... HandleArgsT>
+  explicit Bind_clang_findReferencesInFileWithBlock(EntityScope parent_h,
+                                                    HandleArgsT &&...args)
+      : handle{std::forward(args)...} {}
+
+  void Update() override { AddFunction(); }
+
+  EntityScope AsScope() override { return EntityScope(handle); }
+
+  static const char *Key() { return "clang_findReferencesInFileWithBlock"; }
+
+  Pybind11Type handle;
+};
+#ifndef PB11_WEAVER_DISABLE_Entity_clang_findReferencesInFileWithBlock
+
+using Entity_clang_findReferencesInFileWithBlock =
+    Bind_clang_findReferencesInFileWithBlock<>;
+
+#else
+
+struct Entity_clang_findReferencesInFileWithBlock
+    : public pybind11_weaver::DisabledEntity {
+  explicit Entity_clang_findReferencesInFileWithBlock(EntityScope) {}
+  static const char *Key() { return "clang_findReferencesInFileWithBlock"; }
+};
+
+#endif // PB11_WEAVER_DISABLE_Entity_clang_findReferencesInFileWithBlock
 
 template <class Pybind11T = pybind11::module_ &>
 struct Bind_clang_formatDiagnostic : public EntityBase {
@@ -19053,7 +19715,7 @@ using Entity_clang_formatDiagnostic = Bind_clang_formatDiagnostic<>;
 #else
 
 struct Entity_clang_formatDiagnostic : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_formatDiagnostic(EntityScope parent_h) {}
+  explicit Entity_clang_formatDiagnostic(EntityScope) {}
   static const char *Key() { return "clang_formatDiagnostic"; }
 };
 
@@ -19107,7 +19769,7 @@ using Entity_clang_free = Bind_clang_free<>;
 #else
 
 struct Entity_clang_free : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_free(EntityScope parent_h) {}
+  explicit Entity_clang_free(EntityScope) {}
   static const char *Key() { return "clang_free"; }
 };
 
@@ -19155,7 +19817,7 @@ using Entity_clang_getAddressSpace = Bind_clang_getAddressSpace<>;
 #else
 
 struct Entity_clang_getAddressSpace : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getAddressSpace(EntityScope parent_h) {}
+  explicit Entity_clang_getAddressSpace(EntityScope) {}
   static const char *Key() { return "clang_getAddressSpace"; }
 };
 
@@ -19213,7 +19875,7 @@ using Entity_clang_getAllSkippedRanges = Bind_clang_getAllSkippedRanges<>;
 
 struct Entity_clang_getAllSkippedRanges
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getAllSkippedRanges(EntityScope parent_h) {}
+  explicit Entity_clang_getAllSkippedRanges(EntityScope) {}
   static const char *Key() { return "clang_getAllSkippedRanges"; }
 };
 
@@ -19264,7 +19926,7 @@ using Entity_clang_getArgType = Bind_clang_getArgType<>;
 #else
 
 struct Entity_clang_getArgType : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getArgType(EntityScope parent_h) {}
+  explicit Entity_clang_getArgType(EntityScope) {}
   static const char *Key() { return "clang_getArgType"; }
 };
 
@@ -19314,7 +19976,7 @@ using Entity_clang_getArrayElementType = Bind_clang_getArrayElementType<>;
 
 struct Entity_clang_getArrayElementType
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getArrayElementType(EntityScope parent_h) {}
+  explicit Entity_clang_getArrayElementType(EntityScope) {}
   static const char *Key() { return "clang_getArrayElementType"; }
 };
 
@@ -19363,11 +20025,61 @@ using Entity_clang_getArraySize = Bind_clang_getArraySize<>;
 #else
 
 struct Entity_clang_getArraySize : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getArraySize(EntityScope parent_h) {}
+  explicit Entity_clang_getArraySize(EntityScope) {}
   static const char *Key() { return "clang_getArraySize"; }
 };
 
 #endif // PB11_WEAVER_DISABLE_Entity_clang_getArraySize
+
+template <class Pybind11T = pybind11::module_ &>
+struct Bind_clang_getBinaryOperatorKindSpelling : public EntityBase {
+  using Pybind11Type = Pybind11T;
+
+  virtual const char *AddFunction() {
+    const char *_pb11_weaver_comment_str = R"_pb11_weaver(/**
+ * Retrieve the spelling of a given CXBinaryOperatorKind.
+ */)_pb11_weaver";
+
+#ifndef PB11_WEAVER_DISABLE_clang_getBinaryOperatorKindSpelling_AddFunction
+    handle.def("clang_getBinaryOperatorKindSpelling",
+               static_cast<pybind11_weaver::FnPtrT<
+                   void, CXString(CXBinaryOperatorKind)>::type>(
+                   &clang_getBinaryOperatorKindSpelling),
+               _pb11_weaver_comment_str);
+#endif
+    return _pb11_weaver_comment_str;
+  }
+
+  explicit Bind_clang_getBinaryOperatorKindSpelling(EntityScope parent_h)
+      : handle{static_cast<pybind11::module_ &>(parent_h)} {}
+
+  template <class... HandleArgsT>
+  explicit Bind_clang_getBinaryOperatorKindSpelling(EntityScope parent_h,
+                                                    HandleArgsT &&...args)
+      : handle{std::forward(args)...} {}
+
+  void Update() override { AddFunction(); }
+
+  EntityScope AsScope() override { return EntityScope(handle); }
+
+  static const char *Key() { return "clang_getBinaryOperatorKindSpelling"; }
+
+  Pybind11Type handle;
+};
+#ifndef PB11_WEAVER_DISABLE_Entity_clang_getBinaryOperatorKindSpelling
+
+using Entity_clang_getBinaryOperatorKindSpelling =
+    Bind_clang_getBinaryOperatorKindSpelling<>;
+
+#else
+
+struct Entity_clang_getBinaryOperatorKindSpelling
+    : public pybind11_weaver::DisabledEntity {
+  explicit Entity_clang_getBinaryOperatorKindSpelling(EntityScope) {}
+  static const char *Key() { return "clang_getBinaryOperatorKindSpelling"; }
+};
+
+#endif // PB11_WEAVER_DISABLE_Entity_clang_getBinaryOperatorKindSpelling
 
 template <class Pybind11T = pybind11::module_ &>
 struct Bind_clang_getBuildSessionTimestamp : public EntityBase {
@@ -19414,7 +20126,7 @@ using Entity_clang_getBuildSessionTimestamp =
 
 struct Entity_clang_getBuildSessionTimestamp
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getBuildSessionTimestamp(EntityScope parent_h) {}
+  explicit Entity_clang_getBuildSessionTimestamp(EntityScope) {}
   static const char *Key() { return "clang_getBuildSessionTimestamp"; }
 };
 
@@ -19461,7 +20173,7 @@ using Entity_clang_getCString = Bind_clang_getCString<>;
 #else
 
 struct Entity_clang_getCString : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCString(EntityScope parent_h) {}
+  explicit Entity_clang_getCString(EntityScope) {}
   static const char *Key() { return "clang_getCString"; }
 };
 
@@ -19516,7 +20228,7 @@ using Entity_clang_getCXTUResourceUsage = Bind_clang_getCXTUResourceUsage<>;
 
 struct Entity_clang_getCXTUResourceUsage
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCXTUResourceUsage(EntityScope parent_h) {}
+  explicit Entity_clang_getCXTUResourceUsage(EntityScope) {}
   static const char *Key() { return "clang_getCXTUResourceUsage"; }
 };
 
@@ -19569,7 +20281,7 @@ using Entity_clang_getCXXAccessSpecifier = Bind_clang_getCXXAccessSpecifier<>;
 
 struct Entity_clang_getCXXAccessSpecifier
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCXXAccessSpecifier(EntityScope parent_h) {}
+  explicit Entity_clang_getCXXAccessSpecifier(EntityScope) {}
   static const char *Key() { return "clang_getCXXAccessSpecifier"; }
 };
 
@@ -19639,7 +20351,7 @@ using Entity_clang_getCanonicalCursor = Bind_clang_getCanonicalCursor<>;
 
 struct Entity_clang_getCanonicalCursor
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCanonicalCursor(EntityScope parent_h) {}
+  explicit Entity_clang_getCanonicalCursor(EntityScope) {}
   static const char *Key() { return "clang_getCanonicalCursor"; }
 };
 
@@ -19691,7 +20403,7 @@ using Entity_clang_getCanonicalType = Bind_clang_getCanonicalType<>;
 #else
 
 struct Entity_clang_getCanonicalType : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCanonicalType(EntityScope parent_h) {}
+  explicit Entity_clang_getCanonicalType(EntityScope) {}
   static const char *Key() { return "clang_getCanonicalType"; }
 };
 
@@ -19748,7 +20460,7 @@ using Entity_clang_getChildDiagnostics = Bind_clang_getChildDiagnostics<>;
 
 struct Entity_clang_getChildDiagnostics
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getChildDiagnostics(EntityScope parent_h) {}
+  explicit Entity_clang_getChildDiagnostics(EntityScope) {}
   static const char *Key() { return "clang_getChildDiagnostics"; }
 };
 
@@ -19796,7 +20508,7 @@ using Entity_clang_getClangVersion = Bind_clang_getClangVersion<>;
 #else
 
 struct Entity_clang_getClangVersion : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getClangVersion(EntityScope parent_h) {}
+  explicit Entity_clang_getClangVersion(EntityScope) {}
   static const char *Key() { return "clang_getClangVersion"; }
 };
 
@@ -19859,7 +20571,7 @@ using Entity_clang_getCompletionAnnotation =
 
 struct Entity_clang_getCompletionAnnotation
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCompletionAnnotation(EntityScope parent_h) {}
+  explicit Entity_clang_getCompletionAnnotation(EntityScope) {}
   static const char *Key() { return "clang_getCompletionAnnotation"; }
 };
 
@@ -19918,7 +20630,7 @@ using Entity_clang_getCompletionAvailability =
 
 struct Entity_clang_getCompletionAvailability
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCompletionAvailability(EntityScope parent_h) {}
+  explicit Entity_clang_getCompletionAvailability(EntityScope) {}
   static const char *Key() { return "clang_getCompletionAvailability"; }
 };
 
@@ -19974,7 +20686,7 @@ using Entity_clang_getCompletionBriefComment =
 
 struct Entity_clang_getCompletionBriefComment
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCompletionBriefComment(EntityScope parent_h) {}
+  explicit Entity_clang_getCompletionBriefComment(EntityScope) {}
   static const char *Key() { return "clang_getCompletionBriefComment"; }
 };
 
@@ -20041,8 +20753,7 @@ using Entity_clang_getCompletionChunkCompletionString =
 
 struct Entity_clang_getCompletionChunkCompletionString
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCompletionChunkCompletionString(
-      EntityScope parent_h) {}
+  explicit Entity_clang_getCompletionChunkCompletionString(EntityScope) {}
   static const char *Key() {
     return "clang_getCompletionChunkCompletionString";
   }
@@ -20105,7 +20816,7 @@ using Entity_clang_getCompletionChunkKind = Bind_clang_getCompletionChunkKind<>;
 
 struct Entity_clang_getCompletionChunkKind
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCompletionChunkKind(EntityScope parent_h) {}
+  explicit Entity_clang_getCompletionChunkKind(EntityScope) {}
   static const char *Key() { return "clang_getCompletionChunkKind"; }
 };
 
@@ -20166,7 +20877,7 @@ using Entity_clang_getCompletionChunkText = Bind_clang_getCompletionChunkText<>;
 
 struct Entity_clang_getCompletionChunkText
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCompletionChunkText(EntityScope parent_h) {}
+  explicit Entity_clang_getCompletionChunkText(EntityScope) {}
   static const char *Key() { return "clang_getCompletionChunkText"; }
 };
 
@@ -20256,7 +20967,7 @@ using Entity_clang_getCompletionFixIt = Bind_clang_getCompletionFixIt<>;
 
 struct Entity_clang_getCompletionFixIt
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCompletionFixIt(EntityScope parent_h) {}
+  explicit Entity_clang_getCompletionFixIt(EntityScope) {}
   static const char *Key() { return "clang_getCompletionFixIt"; }
 };
 
@@ -20317,7 +21028,7 @@ using Entity_clang_getCompletionNumAnnotations =
 
 struct Entity_clang_getCompletionNumAnnotations
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCompletionNumAnnotations(EntityScope parent_h) {}
+  explicit Entity_clang_getCompletionNumAnnotations(EntityScope) {}
   static const char *Key() { return "clang_getCompletionNumAnnotations"; }
 };
 
@@ -20377,7 +21088,7 @@ using Entity_clang_getCompletionNumFixIts = Bind_clang_getCompletionNumFixIts<>;
 
 struct Entity_clang_getCompletionNumFixIts
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCompletionNumFixIts(EntityScope parent_h) {}
+  explicit Entity_clang_getCompletionNumFixIts(EntityScope) {}
   static const char *Key() { return "clang_getCompletionNumFixIts"; }
 };
 
@@ -20444,7 +21155,7 @@ using Entity_clang_getCompletionParent = Bind_clang_getCompletionParent<>;
 
 struct Entity_clang_getCompletionParent
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCompletionParent(EntityScope parent_h) {}
+  explicit Entity_clang_getCompletionParent(EntityScope) {}
   static const char *Key() { return "clang_getCompletionParent"; }
 };
 
@@ -20507,7 +21218,7 @@ using Entity_clang_getCompletionPriority = Bind_clang_getCompletionPriority<>;
 
 struct Entity_clang_getCompletionPriority
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCompletionPriority(EntityScope parent_h) {}
+  explicit Entity_clang_getCompletionPriority(EntityScope) {}
   static const char *Key() { return "clang_getCompletionPriority"; }
 };
 
@@ -20572,7 +21283,7 @@ using Entity_clang_getCursor = Bind_clang_getCursor<>;
 #else
 
 struct Entity_clang_getCursor : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursor(EntityScope parent_h) {}
+  explicit Entity_clang_getCursor(EntityScope) {}
   static const char *Key() { return "clang_getCursor"; }
 };
 
@@ -20627,11 +21338,63 @@ using Entity_clang_getCursorAvailability = Bind_clang_getCursorAvailability<>;
 
 struct Entity_clang_getCursorAvailability
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorAvailability(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorAvailability(EntityScope) {}
   static const char *Key() { return "clang_getCursorAvailability"; }
 };
 
 #endif // PB11_WEAVER_DISABLE_Entity_clang_getCursorAvailability
+
+template <class Pybind11T = pybind11::module_ &>
+struct Bind_clang_getCursorBinaryOperatorKind : public EntityBase {
+  using Pybind11Type = Pybind11T;
+
+  virtual const char *AddFunction() {
+    const char *_pb11_weaver_comment_str = R"_pb11_weaver(/**
+ * Retrieve the binary operator kind of this cursor.
+ *
+ * If this cursor is not a binary operator then returns Invalid.
+ */)_pb11_weaver";
+
+#ifndef PB11_WEAVER_DISABLE_clang_getCursorBinaryOperatorKind_AddFunction
+    handle.def("clang_getCursorBinaryOperatorKind",
+               static_cast<pybind11_weaver::FnPtrT<void, CXBinaryOperatorKind(
+                                                             CXCursor)>::type>(
+                   &clang_getCursorBinaryOperatorKind),
+               _pb11_weaver_comment_str);
+#endif
+    return _pb11_weaver_comment_str;
+  }
+
+  explicit Bind_clang_getCursorBinaryOperatorKind(EntityScope parent_h)
+      : handle{static_cast<pybind11::module_ &>(parent_h)} {}
+
+  template <class... HandleArgsT>
+  explicit Bind_clang_getCursorBinaryOperatorKind(EntityScope parent_h,
+                                                  HandleArgsT &&...args)
+      : handle{std::forward(args)...} {}
+
+  void Update() override { AddFunction(); }
+
+  EntityScope AsScope() override { return EntityScope(handle); }
+
+  static const char *Key() { return "clang_getCursorBinaryOperatorKind"; }
+
+  Pybind11Type handle;
+};
+#ifndef PB11_WEAVER_DISABLE_Entity_clang_getCursorBinaryOperatorKind
+
+using Entity_clang_getCursorBinaryOperatorKind =
+    Bind_clang_getCursorBinaryOperatorKind<>;
+
+#else
+
+struct Entity_clang_getCursorBinaryOperatorKind
+    : public pybind11_weaver::DisabledEntity {
+  explicit Entity_clang_getCursorBinaryOperatorKind(EntityScope) {}
+  static const char *Key() { return "clang_getCursorBinaryOperatorKind"; }
+};
+
+#endif // PB11_WEAVER_DISABLE_Entity_clang_getCursorBinaryOperatorKind
 
 template <class Pybind11T = pybind11::module_ &>
 struct Bind_clang_getCursorCompletionString : public EntityBase {
@@ -20689,7 +21452,7 @@ using Entity_clang_getCursorCompletionString =
 
 struct Entity_clang_getCursorCompletionString
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorCompletionString(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorCompletionString(EntityScope) {}
   static const char *Key() { return "clang_getCursorCompletionString"; }
 };
 
@@ -20763,7 +21526,7 @@ using Entity_clang_getCursorDefinition = Bind_clang_getCursorDefinition<>;
 
 struct Entity_clang_getCursorDefinition
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorDefinition(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorDefinition(EntityScope) {}
   static const char *Key() { return "clang_getCursorDefinition"; }
 };
 
@@ -20816,7 +21579,7 @@ using Entity_clang_getCursorDisplayName = Bind_clang_getCursorDisplayName<>;
 
 struct Entity_clang_getCursorDisplayName
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorDisplayName(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorDisplayName(EntityScope) {}
   static const char *Key() { return "clang_getCursorDisplayName"; }
 };
 
@@ -20871,8 +21634,7 @@ using Entity_clang_getCursorExceptionSpecificationType =
 
 struct Entity_clang_getCursorExceptionSpecificationType
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorExceptionSpecificationType(
-      EntityScope parent_h) {}
+  explicit Entity_clang_getCursorExceptionSpecificationType(EntityScope) {}
   static const char *Key() {
     return "clang_getCursorExceptionSpecificationType";
   }
@@ -20931,7 +21693,7 @@ using Entity_clang_getCursorExtent = Bind_clang_getCursorExtent<>;
 #else
 
 struct Entity_clang_getCursorExtent : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorExtent(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorExtent(EntityScope) {}
   static const char *Key() { return "clang_getCursorExtent"; }
 };
 
@@ -20978,7 +21740,7 @@ using Entity_clang_getCursorKind = Bind_clang_getCursorKind<>;
 #else
 
 struct Entity_clang_getCursorKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorKind(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorKind(EntityScope) {}
   static const char *Key() { return "clang_getCursorKind"; }
 };
 
@@ -21026,7 +21788,7 @@ using Entity_clang_getCursorKindSpelling = Bind_clang_getCursorKindSpelling<>;
 
 struct Entity_clang_getCursorKindSpelling
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorKindSpelling(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorKindSpelling(EntityScope) {}
   static const char *Key() { return "clang_getCursorKindSpelling"; }
 };
 
@@ -21075,7 +21837,7 @@ using Entity_clang_getCursorLanguage = Bind_clang_getCursorLanguage<>;
 #else
 
 struct Entity_clang_getCursorLanguage : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorLanguage(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorLanguage(EntityScope) {}
   static const char *Key() { return "clang_getCursorLanguage"; }
 };
 
@@ -21155,7 +21917,7 @@ using Entity_clang_getCursorLexicalParent = Bind_clang_getCursorLexicalParent<>;
 
 struct Entity_clang_getCursorLexicalParent
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorLexicalParent(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorLexicalParent(EntityScope) {}
   static const char *Key() { return "clang_getCursorLexicalParent"; }
 };
 
@@ -21204,7 +21966,7 @@ using Entity_clang_getCursorLinkage = Bind_clang_getCursorLinkage<>;
 #else
 
 struct Entity_clang_getCursorLinkage : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorLinkage(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorLinkage(EntityScope) {}
   static const char *Key() { return "clang_getCursorLinkage"; }
 };
 
@@ -21260,7 +22022,7 @@ using Entity_clang_getCursorLocation = Bind_clang_getCursorLocation<>;
 #else
 
 struct Entity_clang_getCursorLocation : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorLocation(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorLocation(EntityScope) {}
   static const char *Key() { return "clang_getCursorLocation"; }
 };
 
@@ -21344,7 +22106,7 @@ using Entity_clang_getCursorPlatformAvailability =
 
 struct Entity_clang_getCursorPlatformAvailability
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorPlatformAvailability(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorPlatformAvailability(EntityScope) {}
   static const char *Key() { return "clang_getCursorPlatformAvailability"; }
 };
 
@@ -21405,7 +22167,7 @@ using Entity_clang_getCursorPrettyPrinted = Bind_clang_getCursorPrettyPrinted<>;
 
 struct Entity_clang_getCursorPrettyPrinted
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorPrettyPrinted(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorPrettyPrinted(EntityScope) {}
   static const char *Key() { return "clang_getCursorPrettyPrinted"; }
 };
 
@@ -21464,7 +22226,7 @@ using Entity_clang_getCursorPrintingPolicy =
 
 struct Entity_clang_getCursorPrintingPolicy
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorPrintingPolicy(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorPrintingPolicy(EntityScope) {}
   static const char *Key() { return "clang_getCursorPrintingPolicy"; }
 };
 
@@ -21530,7 +22292,7 @@ using Entity_clang_getCursorReferenceNameRange =
 
 struct Entity_clang_getCursorReferenceNameRange
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorReferenceNameRange(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorReferenceNameRange(EntityScope) {}
   static const char *Key() { return "clang_getCursorReferenceNameRange"; }
 };
 
@@ -21587,7 +22349,7 @@ using Entity_clang_getCursorReferenced = Bind_clang_getCursorReferenced<>;
 
 struct Entity_clang_getCursorReferenced
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorReferenced(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorReferenced(EntityScope) {}
   static const char *Key() { return "clang_getCursorReferenced"; }
 };
 
@@ -21638,7 +22400,7 @@ using Entity_clang_getCursorResultType = Bind_clang_getCursorResultType<>;
 
 struct Entity_clang_getCursorResultType
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorResultType(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorResultType(EntityScope) {}
   static const char *Key() { return "clang_getCursorResultType"; }
 };
 
@@ -21718,7 +22480,7 @@ using Entity_clang_getCursorSemanticParent =
 
 struct Entity_clang_getCursorSemanticParent
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorSemanticParent(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorSemanticParent(EntityScope) {}
   static const char *Key() { return "clang_getCursorSemanticParent"; }
 };
 
@@ -21766,7 +22528,7 @@ using Entity_clang_getCursorSpelling = Bind_clang_getCursorSpelling<>;
 #else
 
 struct Entity_clang_getCursorSpelling : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorSpelling(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorSpelling(EntityScope) {}
   static const char *Key() { return "clang_getCursorSpelling"; }
 };
 
@@ -21815,7 +22577,7 @@ using Entity_clang_getCursorTLSKind = Bind_clang_getCursorTLSKind<>;
 #else
 
 struct Entity_clang_getCursorTLSKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorTLSKind(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorTLSKind(EntityScope) {}
   static const char *Key() { return "clang_getCursorTLSKind"; }
 };
 
@@ -21862,7 +22624,7 @@ using Entity_clang_getCursorType = Bind_clang_getCursorType<>;
 #else
 
 struct Entity_clang_getCursorType : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorType(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorType(EntityScope) {}
   static const char *Key() { return "clang_getCursorType"; }
 };
 
@@ -21915,11 +22677,64 @@ using Entity_clang_getCursorUSR = Bind_clang_getCursorUSR<>;
 #else
 
 struct Entity_clang_getCursorUSR : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorUSR(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorUSR(EntityScope) {}
   static const char *Key() { return "clang_getCursorUSR"; }
 };
 
 #endif // PB11_WEAVER_DISABLE_Entity_clang_getCursorUSR
+
+template <class Pybind11T = pybind11::module_ &>
+struct Bind_clang_getCursorUnaryOperatorKind : public EntityBase {
+  using Pybind11Type = Pybind11T;
+
+  virtual const char *AddFunction() {
+    const char *_pb11_weaver_comment_str = R"_pb11_weaver(/**
+ * Retrieve the unary operator kind of this cursor.
+ *
+ * If this cursor is not a unary operator then returns Invalid.
+ */)_pb11_weaver";
+
+#ifndef PB11_WEAVER_DISABLE_clang_getCursorUnaryOperatorKind_AddFunction
+    handle.def(
+        "clang_getCursorUnaryOperatorKind",
+        static_cast<
+            pybind11_weaver::FnPtrT<void, CXUnaryOperatorKind(CXCursor)>::type>(
+            &clang_getCursorUnaryOperatorKind),
+        _pb11_weaver_comment_str);
+#endif
+    return _pb11_weaver_comment_str;
+  }
+
+  explicit Bind_clang_getCursorUnaryOperatorKind(EntityScope parent_h)
+      : handle{static_cast<pybind11::module_ &>(parent_h)} {}
+
+  template <class... HandleArgsT>
+  explicit Bind_clang_getCursorUnaryOperatorKind(EntityScope parent_h,
+                                                 HandleArgsT &&...args)
+      : handle{std::forward(args)...} {}
+
+  void Update() override { AddFunction(); }
+
+  EntityScope AsScope() override { return EntityScope(handle); }
+
+  static const char *Key() { return "clang_getCursorUnaryOperatorKind"; }
+
+  Pybind11Type handle;
+};
+#ifndef PB11_WEAVER_DISABLE_Entity_clang_getCursorUnaryOperatorKind
+
+using Entity_clang_getCursorUnaryOperatorKind =
+    Bind_clang_getCursorUnaryOperatorKind<>;
+
+#else
+
+struct Entity_clang_getCursorUnaryOperatorKind
+    : public pybind11_weaver::DisabledEntity {
+  explicit Entity_clang_getCursorUnaryOperatorKind(EntityScope) {}
+  static const char *Key() { return "clang_getCursorUnaryOperatorKind"; }
+};
+
+#endif // PB11_WEAVER_DISABLE_Entity_clang_getCursorUnaryOperatorKind
 
 template <class Pybind11T = pybind11::module_ &>
 struct Bind_clang_getCursorVisibility : public EntityBase {
@@ -21973,7 +22788,7 @@ using Entity_clang_getCursorVisibility = Bind_clang_getCursorVisibility<>;
 
 struct Entity_clang_getCursorVisibility
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getCursorVisibility(EntityScope parent_h) {}
+  explicit Entity_clang_getCursorVisibility(EntityScope) {}
   static const char *Key() { return "clang_getCursorVisibility"; }
 };
 
@@ -22023,7 +22838,7 @@ using Entity_clang_getDeclObjCTypeEncoding =
 
 struct Entity_clang_getDeclObjCTypeEncoding
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getDeclObjCTypeEncoding(EntityScope parent_h) {}
+  explicit Entity_clang_getDeclObjCTypeEncoding(EntityScope) {}
   static const char *Key() { return "clang_getDeclObjCTypeEncoding"; }
 };
 
@@ -22081,7 +22896,7 @@ using Entity_clang_getDefinitionSpellingAndExtent =
 
 struct Entity_clang_getDefinitionSpellingAndExtent
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getDefinitionSpellingAndExtent(EntityScope parent_h) {}
+  explicit Entity_clang_getDefinitionSpellingAndExtent(EntityScope) {}
   static const char *Key() { return "clang_getDefinitionSpellingAndExtent"; }
 };
 
@@ -22141,7 +22956,7 @@ using Entity_clang_getDiagnostic = Bind_clang_getDiagnostic<>;
 #else
 
 struct Entity_clang_getDiagnostic : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getDiagnostic(EntityScope parent_h) {}
+  explicit Entity_clang_getDiagnostic(EntityScope) {}
   static const char *Key() { return "clang_getDiagnostic"; }
 };
 
@@ -22202,7 +23017,7 @@ using Entity_clang_getDiagnosticCategory = Bind_clang_getDiagnosticCategory<>;
 
 struct Entity_clang_getDiagnosticCategory
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getDiagnosticCategory(EntityScope parent_h) {}
+  explicit Entity_clang_getDiagnosticCategory(EntityScope) {}
   static const char *Key() { return "clang_getDiagnosticCategory"; }
 };
 
@@ -22259,7 +23074,7 @@ using Entity_clang_getDiagnosticCategoryName =
 
 struct Entity_clang_getDiagnosticCategoryName
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getDiagnosticCategoryName(EntityScope parent_h) {}
+  explicit Entity_clang_getDiagnosticCategoryName(EntityScope) {}
   static const char *Key() { return "clang_getDiagnosticCategoryName"; }
 };
 
@@ -22316,7 +23131,7 @@ using Entity_clang_getDiagnosticCategoryText =
 
 struct Entity_clang_getDiagnosticCategoryText
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getDiagnosticCategoryText(EntityScope parent_h) {}
+  explicit Entity_clang_getDiagnosticCategoryText(EntityScope) {}
   static const char *Key() { return "clang_getDiagnosticCategoryText"; }
 };
 
@@ -22393,7 +23208,7 @@ using Entity_clang_getDiagnosticFixIt = Bind_clang_getDiagnosticFixIt<>;
 
 struct Entity_clang_getDiagnosticFixIt
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getDiagnosticFixIt(EntityScope parent_h) {}
+  explicit Entity_clang_getDiagnosticFixIt(EntityScope) {}
   static const char *Key() { return "clang_getDiagnosticFixIt"; }
 };
 
@@ -22454,7 +23269,7 @@ using Entity_clang_getDiagnosticInSet = Bind_clang_getDiagnosticInSet<>;
 
 struct Entity_clang_getDiagnosticInSet
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getDiagnosticInSet(EntityScope parent_h) {}
+  explicit Entity_clang_getDiagnosticInSet(EntityScope) {}
   static const char *Key() { return "clang_getDiagnosticInSet"; }
 };
 
@@ -22510,7 +23325,7 @@ using Entity_clang_getDiagnosticLocation = Bind_clang_getDiagnosticLocation<>;
 
 struct Entity_clang_getDiagnosticLocation
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getDiagnosticLocation(EntityScope parent_h) {}
+  explicit Entity_clang_getDiagnosticLocation(EntityScope) {}
   static const char *Key() { return "clang_getDiagnosticLocation"; }
 };
 
@@ -22565,7 +23380,7 @@ using Entity_clang_getDiagnosticNumFixIts = Bind_clang_getDiagnosticNumFixIts<>;
 
 struct Entity_clang_getDiagnosticNumFixIts
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getDiagnosticNumFixIts(EntityScope parent_h) {}
+  explicit Entity_clang_getDiagnosticNumFixIts(EntityScope) {}
   static const char *Key() { return "clang_getDiagnosticNumFixIts"; }
 };
 
@@ -22620,7 +23435,7 @@ using Entity_clang_getDiagnosticNumRanges = Bind_clang_getDiagnosticNumRanges<>;
 
 struct Entity_clang_getDiagnosticNumRanges
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getDiagnosticNumRanges(EntityScope parent_h) {}
+  explicit Entity_clang_getDiagnosticNumRanges(EntityScope) {}
   static const char *Key() { return "clang_getDiagnosticNumRanges"; }
 };
 
@@ -22682,7 +23497,7 @@ using Entity_clang_getDiagnosticOption = Bind_clang_getDiagnosticOption<>;
 
 struct Entity_clang_getDiagnosticOption
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getDiagnosticOption(EntityScope parent_h) {}
+  explicit Entity_clang_getDiagnosticOption(EntityScope) {}
   static const char *Key() { return "clang_getDiagnosticOption"; }
 };
 
@@ -22747,7 +23562,7 @@ using Entity_clang_getDiagnosticRange = Bind_clang_getDiagnosticRange<>;
 
 struct Entity_clang_getDiagnosticRange
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getDiagnosticRange(EntityScope parent_h) {}
+  explicit Entity_clang_getDiagnosticRange(EntityScope) {}
   static const char *Key() { return "clang_getDiagnosticRange"; }
 };
 
@@ -22805,7 +23620,7 @@ using Entity_clang_getDiagnosticSetFromTU = Bind_clang_getDiagnosticSetFromTU<>;
 
 struct Entity_clang_getDiagnosticSetFromTU
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getDiagnosticSetFromTU(EntityScope parent_h) {}
+  explicit Entity_clang_getDiagnosticSetFromTU(EntityScope) {}
   static const char *Key() { return "clang_getDiagnosticSetFromTU"; }
 };
 
@@ -22858,7 +23673,7 @@ using Entity_clang_getDiagnosticSeverity = Bind_clang_getDiagnosticSeverity<>;
 
 struct Entity_clang_getDiagnosticSeverity
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getDiagnosticSeverity(EntityScope parent_h) {}
+  explicit Entity_clang_getDiagnosticSeverity(EntityScope) {}
   static const char *Key() { return "clang_getDiagnosticSeverity"; }
 };
 
@@ -22912,7 +23727,7 @@ using Entity_clang_getDiagnosticSpelling = Bind_clang_getDiagnosticSpelling<>;
 
 struct Entity_clang_getDiagnosticSpelling
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getDiagnosticSpelling(EntityScope parent_h) {}
+  explicit Entity_clang_getDiagnosticSpelling(EntityScope) {}
   static const char *Key() { return "clang_getDiagnosticSpelling"; }
 };
 
@@ -22962,7 +23777,7 @@ using Entity_clang_getElementType = Bind_clang_getElementType<>;
 #else
 
 struct Entity_clang_getElementType : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getElementType(EntityScope parent_h) {}
+  explicit Entity_clang_getElementType(EntityScope) {}
   static const char *Key() { return "clang_getElementType"; }
 };
 
@@ -23018,8 +23833,7 @@ using Entity_clang_getEnumConstantDeclUnsignedValue =
 
 struct Entity_clang_getEnumConstantDeclUnsignedValue
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getEnumConstantDeclUnsignedValue(EntityScope parent_h) {
-  }
+  explicit Entity_clang_getEnumConstantDeclUnsignedValue(EntityScope) {}
   static const char *Key() { return "clang_getEnumConstantDeclUnsignedValue"; }
 };
 
@@ -23074,7 +23888,7 @@ using Entity_clang_getEnumConstantDeclValue =
 
 struct Entity_clang_getEnumConstantDeclValue
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getEnumConstantDeclValue(EntityScope parent_h) {}
+  explicit Entity_clang_getEnumConstantDeclValue(EntityScope) {}
   static const char *Key() { return "clang_getEnumConstantDeclValue"; }
 };
 
@@ -23126,7 +23940,7 @@ using Entity_clang_getEnumDeclIntegerType = Bind_clang_getEnumDeclIntegerType<>;
 
 struct Entity_clang_getEnumDeclIntegerType
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getEnumDeclIntegerType(EntityScope parent_h) {}
+  explicit Entity_clang_getEnumDeclIntegerType(EntityScope) {}
   static const char *Key() { return "clang_getEnumDeclIntegerType"; }
 };
 
@@ -23178,7 +23992,7 @@ using Entity_clang_getExceptionSpecificationType =
 
 struct Entity_clang_getExceptionSpecificationType
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getExceptionSpecificationType(EntityScope parent_h) {}
+  explicit Entity_clang_getExceptionSpecificationType(EntityScope) {}
   static const char *Key() { return "clang_getExceptionSpecificationType"; }
 };
 
@@ -23254,7 +24068,7 @@ using Entity_clang_getExpansionLocation = Bind_clang_getExpansionLocation<>;
 
 struct Entity_clang_getExpansionLocation
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getExpansionLocation(EntityScope parent_h) {}
+  explicit Entity_clang_getExpansionLocation(EntityScope) {}
   static const char *Key() { return "clang_getExpansionLocation"; }
 };
 
@@ -23266,9 +24080,20 @@ struct Bind_clang_getFieldDeclBitWidth : public EntityBase {
 
   virtual const char *AddFunction() {
     const char *_pb11_weaver_comment_str = R"_pb11_weaver(/**
- * Retrieve the bit width of a bit field declaration as an integer.
+ * Retrieve the bit width of a bit-field declaration as an integer.
  *
- * If a cursor that is not a bit field declaration is passed in, -1 is returned.
+ * If the cursor does not reference a bit-field, or if the bit-field's width
+ * expression cannot be evaluated, -1 is returned.
+ *
+ * For example:
+ * \code
+ * if (clang_Cursor_isBitField(Cursor)) {
+ *   int Width = clang_getFieldDeclBitWidth(Cursor);
+ *   if (Width != -1) {
+ *     // The bit-field width is not value-dependent.
+ *   }
+ * }
+ * \endcode
  */)_pb11_weaver";
 
 #ifndef PB11_WEAVER_DISABLE_clang_getFieldDeclBitWidth_AddFunction
@@ -23304,7 +24129,7 @@ using Entity_clang_getFieldDeclBitWidth = Bind_clang_getFieldDeclBitWidth<>;
 
 struct Entity_clang_getFieldDeclBitWidth
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getFieldDeclBitWidth(EntityScope parent_h) {}
+  explicit Entity_clang_getFieldDeclBitWidth(EntityScope) {}
   static const char *Key() { return "clang_getFieldDeclBitWidth"; }
 };
 
@@ -23365,7 +24190,7 @@ using Entity_clang_getFile = Bind_clang_getFile<>;
 #else
 
 struct Entity_clang_getFile : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getFile(EntityScope parent_h) {}
+  explicit Entity_clang_getFile(EntityScope) {}
   static const char *Key() { return "clang_getFile"; }
 };
 
@@ -23429,7 +24254,7 @@ using Entity_clang_getFileContents = Bind_clang_getFileContents<>;
 #else
 
 struct Entity_clang_getFileContents : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getFileContents(EntityScope parent_h) {}
+  explicit Entity_clang_getFileContents(EntityScope) {}
   static const char *Key() { return "clang_getFileContents"; }
 };
 
@@ -23505,7 +24330,7 @@ using Entity_clang_getFileLocation = Bind_clang_getFileLocation<>;
 #else
 
 struct Entity_clang_getFileLocation : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getFileLocation(EntityScope parent_h) {}
+  explicit Entity_clang_getFileLocation(EntityScope) {}
   static const char *Key() { return "clang_getFileLocation"; }
 };
 
@@ -23557,7 +24382,7 @@ using Entity_clang_getFileName = Bind_clang_getFileName<>;
 #else
 
 struct Entity_clang_getFileName : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getFileName(EntityScope parent_h) {}
+  explicit Entity_clang_getFileName(EntityScope) {}
   static const char *Key() { return "clang_getFileName"; }
 };
 
@@ -23608,7 +24433,7 @@ using Entity_clang_getFileTime = Bind_clang_getFileTime<>;
 #else
 
 struct Entity_clang_getFileTime : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getFileTime(EntityScope parent_h) {}
+  explicit Entity_clang_getFileTime(EntityScope) {}
   static const char *Key() { return "clang_getFileTime"; }
 };
 
@@ -23665,7 +24490,7 @@ using Entity_clang_getFileUniqueID = Bind_clang_getFileUniqueID<>;
 #else
 
 struct Entity_clang_getFileUniqueID : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getFileUniqueID(EntityScope parent_h) {}
+  explicit Entity_clang_getFileUniqueID(EntityScope) {}
   static const char *Key() { return "clang_getFileUniqueID"; }
 };
 
@@ -23717,7 +24542,7 @@ using Entity_clang_getFunctionTypeCallingConv =
 
 struct Entity_clang_getFunctionTypeCallingConv
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getFunctionTypeCallingConv(EntityScope parent_h) {}
+  explicit Entity_clang_getFunctionTypeCallingConv(EntityScope) {}
   static const char *Key() { return "clang_getFunctionTypeCallingConv"; }
 };
 
@@ -23769,7 +24594,7 @@ using Entity_clang_getIBOutletCollectionType =
 
 struct Entity_clang_getIBOutletCollectionType
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getIBOutletCollectionType(EntityScope parent_h) {}
+  explicit Entity_clang_getIBOutletCollectionType(EntityScope) {}
   static const char *Key() { return "clang_getIBOutletCollectionType"; }
 };
 
@@ -23824,7 +24649,7 @@ using Entity_clang_getIncludedFile = Bind_clang_getIncludedFile<>;
 #else
 
 struct Entity_clang_getIncludedFile : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getIncludedFile(EntityScope parent_h) {}
+  explicit Entity_clang_getIncludedFile(EntityScope) {}
   static const char *Key() { return "clang_getIncludedFile"; }
 };
 
@@ -23911,7 +24736,7 @@ using Entity_clang_getInclusions = Bind_clang_getInclusions<>;
 #else
 
 struct Entity_clang_getInclusions : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getInclusions(EntityScope parent_h) {}
+  explicit Entity_clang_getInclusions(EntityScope) {}
   static const char *Key() { return "clang_getInclusions"; }
 };
 
@@ -23974,7 +24799,7 @@ using Entity_clang_getInstantiationLocation =
 
 struct Entity_clang_getInstantiationLocation
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getInstantiationLocation(EntityScope parent_h) {}
+  explicit Entity_clang_getInstantiationLocation(EntityScope) {}
   static const char *Key() { return "clang_getInstantiationLocation"; }
 };
 
@@ -24030,7 +24855,7 @@ using Entity_clang_getLocation = Bind_clang_getLocation<>;
 #else
 
 struct Entity_clang_getLocation : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getLocation(EntityScope parent_h) {}
+  explicit Entity_clang_getLocation(EntityScope) {}
   static const char *Key() { return "clang_getLocation"; }
 };
 
@@ -24087,7 +24912,7 @@ using Entity_clang_getLocationForOffset = Bind_clang_getLocationForOffset<>;
 
 struct Entity_clang_getLocationForOffset
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getLocationForOffset(EntityScope parent_h) {}
+  explicit Entity_clang_getLocationForOffset(EntityScope) {}
   static const char *Key() { return "clang_getLocationForOffset"; }
 };
 
@@ -24143,7 +24968,7 @@ using Entity_clang_getModuleForFile = Bind_clang_getModuleForFile<>;
 #else
 
 struct Entity_clang_getModuleForFile : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getModuleForFile(EntityScope parent_h) {}
+  explicit Entity_clang_getModuleForFile(EntityScope) {}
   static const char *Key() { return "clang_getModuleForFile"; }
 };
 
@@ -24197,7 +25022,7 @@ using Entity_clang_getNonReferenceType = Bind_clang_getNonReferenceType<>;
 
 struct Entity_clang_getNonReferenceType
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getNonReferenceType(EntityScope parent_h) {}
+  explicit Entity_clang_getNonReferenceType(EntityScope) {}
   static const char *Key() { return "clang_getNonReferenceType"; }
 };
 
@@ -24243,7 +25068,7 @@ using Entity_clang_getNullCursor = Bind_clang_getNullCursor<>;
 #else
 
 struct Entity_clang_getNullCursor : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getNullCursor(EntityScope parent_h) {}
+  explicit Entity_clang_getNullCursor(EntityScope) {}
   static const char *Key() { return "clang_getNullCursor"; }
 };
 
@@ -24291,7 +25116,7 @@ using Entity_clang_getNullLocation = Bind_clang_getNullLocation<>;
 #else
 
 struct Entity_clang_getNullLocation : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getNullLocation(EntityScope parent_h) {}
+  explicit Entity_clang_getNullLocation(EntityScope) {}
   static const char *Key() { return "clang_getNullLocation"; }
 };
 
@@ -24338,7 +25163,7 @@ using Entity_clang_getNullRange = Bind_clang_getNullRange<>;
 #else
 
 struct Entity_clang_getNullRange : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getNullRange(EntityScope parent_h) {}
+  explicit Entity_clang_getNullRange(EntityScope) {}
   static const char *Key() { return "clang_getNullRange"; }
 };
 
@@ -24388,7 +25213,7 @@ using Entity_clang_getNumArgTypes = Bind_clang_getNumArgTypes<>;
 #else
 
 struct Entity_clang_getNumArgTypes : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getNumArgTypes(EntityScope parent_h) {}
+  explicit Entity_clang_getNumArgTypes(EntityScope) {}
   static const char *Key() { return "clang_getNumArgTypes"; }
 };
 
@@ -24442,7 +25267,7 @@ using Entity_clang_getNumCompletionChunks = Bind_clang_getNumCompletionChunks<>;
 
 struct Entity_clang_getNumCompletionChunks
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getNumCompletionChunks(EntityScope parent_h) {}
+  explicit Entity_clang_getNumCompletionChunks(EntityScope) {}
   static const char *Key() { return "clang_getNumCompletionChunks"; }
 };
 
@@ -24496,7 +25321,7 @@ using Entity_clang_getNumDiagnostics = Bind_clang_getNumDiagnostics<>;
 #else
 
 struct Entity_clang_getNumDiagnostics : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getNumDiagnostics(EntityScope parent_h) {}
+  explicit Entity_clang_getNumDiagnostics(EntityScope) {}
   static const char *Key() { return "clang_getNumDiagnostics"; }
 };
 
@@ -24550,7 +25375,7 @@ using Entity_clang_getNumDiagnosticsInSet = Bind_clang_getNumDiagnosticsInSet<>;
 
 struct Entity_clang_getNumDiagnosticsInSet
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getNumDiagnosticsInSet(EntityScope parent_h) {}
+  explicit Entity_clang_getNumDiagnosticsInSet(EntityScope) {}
   static const char *Key() { return "clang_getNumDiagnosticsInSet"; }
 };
 
@@ -24601,7 +25426,7 @@ using Entity_clang_getNumElements = Bind_clang_getNumElements<>;
 #else
 
 struct Entity_clang_getNumElements : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getNumElements(EntityScope parent_h) {}
+  explicit Entity_clang_getNumElements(EntityScope) {}
   static const char *Key() { return "clang_getNumElements"; }
 };
 
@@ -24656,7 +25481,7 @@ using Entity_clang_getNumOverloadedDecls = Bind_clang_getNumOverloadedDecls<>;
 
 struct Entity_clang_getNumOverloadedDecls
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getNumOverloadedDecls(EntityScope parent_h) {}
+  explicit Entity_clang_getNumOverloadedDecls(EntityScope) {}
   static const char *Key() { return "clang_getNumOverloadedDecls"; }
 };
 
@@ -24715,7 +25540,7 @@ using Entity_clang_getOverloadedDecl = Bind_clang_getOverloadedDecl<>;
 #else
 
 struct Entity_clang_getOverloadedDecl : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getOverloadedDecl(EntityScope parent_h) {}
+  explicit Entity_clang_getOverloadedDecl(EntityScope) {}
   static const char *Key() { return "clang_getOverloadedDecl"; }
 };
 
@@ -24811,7 +25636,7 @@ using Entity_clang_getOverriddenCursors = Bind_clang_getOverriddenCursors<>;
 
 struct Entity_clang_getOverriddenCursors
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getOverriddenCursors(EntityScope parent_h) {}
+  explicit Entity_clang_getOverriddenCursors(EntityScope) {}
   static const char *Key() { return "clang_getOverriddenCursors"; }
 };
 
@@ -24858,7 +25683,7 @@ using Entity_clang_getPointeeType = Bind_clang_getPointeeType<>;
 #else
 
 struct Entity_clang_getPointeeType : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getPointeeType(EntityScope parent_h) {}
+  explicit Entity_clang_getPointeeType(EntityScope) {}
   static const char *Key() { return "clang_getPointeeType"; }
 };
 
@@ -24945,7 +25770,7 @@ using Entity_clang_getPresumedLocation = Bind_clang_getPresumedLocation<>;
 
 struct Entity_clang_getPresumedLocation
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getPresumedLocation(EntityScope parent_h) {}
+  explicit Entity_clang_getPresumedLocation(EntityScope) {}
   static const char *Key() { return "clang_getPresumedLocation"; }
 };
 
@@ -24994,7 +25819,7 @@ using Entity_clang_getRange = Bind_clang_getRange<>;
 #else
 
 struct Entity_clang_getRange : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getRange(EntityScope parent_h) {}
+  explicit Entity_clang_getRange(EntityScope) {}
   static const char *Key() { return "clang_getRange"; }
 };
 
@@ -25042,7 +25867,7 @@ using Entity_clang_getRangeEnd = Bind_clang_getRangeEnd<>;
 #else
 
 struct Entity_clang_getRangeEnd : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getRangeEnd(EntityScope parent_h) {}
+  explicit Entity_clang_getRangeEnd(EntityScope) {}
   static const char *Key() { return "clang_getRangeEnd"; }
 };
 
@@ -25090,7 +25915,7 @@ using Entity_clang_getRangeStart = Bind_clang_getRangeStart<>;
 #else
 
 struct Entity_clang_getRangeStart : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getRangeStart(EntityScope parent_h) {}
+  explicit Entity_clang_getRangeStart(EntityScope) {}
   static const char *Key() { return "clang_getRangeStart"; }
 };
 
@@ -25148,7 +25973,7 @@ using Entity_clang_getRemappings = Bind_clang_getRemappings<>;
 #else
 
 struct Entity_clang_getRemappings : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getRemappings(EntityScope parent_h) {}
+  explicit Entity_clang_getRemappings(EntityScope) {}
   static const char *Key() { return "clang_getRemappings"; }
 };
 
@@ -25212,7 +26037,7 @@ using Entity_clang_getRemappingsFromFileList =
 
 struct Entity_clang_getRemappingsFromFileList
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getRemappingsFromFileList(EntityScope parent_h) {}
+  explicit Entity_clang_getRemappingsFromFileList(EntityScope) {}
   static const char *Key() { return "clang_getRemappingsFromFileList"; }
 };
 
@@ -25260,7 +26085,7 @@ using Entity_clang_getResultType = Bind_clang_getResultType<>;
 #else
 
 struct Entity_clang_getResultType : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getResultType(EntityScope parent_h) {}
+  explicit Entity_clang_getResultType(EntityScope) {}
   static const char *Key() { return "clang_getResultType"; }
 };
 
@@ -25318,7 +26143,7 @@ using Entity_clang_getSkippedRanges = Bind_clang_getSkippedRanges<>;
 #else
 
 struct Entity_clang_getSkippedRanges : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getSkippedRanges(EntityScope parent_h) {}
+  explicit Entity_clang_getSkippedRanges(EntityScope) {}
   static const char *Key() { return "clang_getSkippedRanges"; }
 };
 
@@ -25393,7 +26218,7 @@ using Entity_clang_getSpecializedCursorTemplate =
 
 struct Entity_clang_getSpecializedCursorTemplate
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getSpecializedCursorTemplate(EntityScope parent_h) {}
+  explicit Entity_clang_getSpecializedCursorTemplate(EntityScope) {}
   static const char *Key() { return "clang_getSpecializedCursorTemplate"; }
 };
 
@@ -25469,7 +26294,7 @@ using Entity_clang_getSpellingLocation = Bind_clang_getSpellingLocation<>;
 
 struct Entity_clang_getSpellingLocation
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getSpellingLocation(EntityScope parent_h) {}
+  explicit Entity_clang_getSpellingLocation(EntityScope) {}
   static const char *Key() { return "clang_getSpellingLocation"; }
 };
 
@@ -25531,7 +26356,7 @@ using Entity_clang_getSymbolGraphForCursor =
 
 struct Entity_clang_getSymbolGraphForCursor
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getSymbolGraphForCursor(EntityScope parent_h) {}
+  explicit Entity_clang_getSymbolGraphForCursor(EntityScope) {}
   static const char *Key() { return "clang_getSymbolGraphForCursor"; }
 };
 
@@ -25598,7 +26423,7 @@ using Entity_clang_getSymbolGraphForUSR = Bind_clang_getSymbolGraphForUSR<>;
 
 struct Entity_clang_getSymbolGraphForUSR
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getSymbolGraphForUSR(EntityScope parent_h) {}
+  explicit Entity_clang_getSymbolGraphForUSR(EntityScope) {}
   static const char *Key() { return "clang_getSymbolGraphForUSR"; }
 };
 
@@ -25648,7 +26473,7 @@ using Entity_clang_getTUResourceUsageName = Bind_clang_getTUResourceUsageName<>;
 
 struct Entity_clang_getTUResourceUsageName
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getTUResourceUsageName(EntityScope parent_h) {}
+  explicit Entity_clang_getTUResourceUsageName(EntityScope) {}
   static const char *Key() { return "clang_getTUResourceUsageName"; }
 };
 
@@ -25711,7 +26536,7 @@ using Entity_clang_getTemplateCursorKind = Bind_clang_getTemplateCursorKind<>;
 
 struct Entity_clang_getTemplateCursorKind
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getTemplateCursorKind(EntityScope parent_h) {}
+  explicit Entity_clang_getTemplateCursorKind(EntityScope) {}
   static const char *Key() { return "clang_getTemplateCursorKind"; }
 };
 
@@ -25772,7 +26597,7 @@ using Entity_clang_getToken = Bind_clang_getToken<>;
 #else
 
 struct Entity_clang_getToken : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getToken(EntityScope parent_h) {}
+  explicit Entity_clang_getToken(EntityScope) {}
   static const char *Key() { return "clang_getToken"; }
 };
 
@@ -25826,7 +26651,7 @@ using Entity_clang_getTokenExtent = Bind_clang_getTokenExtent<>;
 #else
 
 struct Entity_clang_getTokenExtent : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getTokenExtent(EntityScope parent_h) {}
+  explicit Entity_clang_getTokenExtent(EntityScope) {}
   static const char *Key() { return "clang_getTokenExtent"; }
 };
 
@@ -25873,7 +26698,7 @@ using Entity_clang_getTokenKind = Bind_clang_getTokenKind<>;
 #else
 
 struct Entity_clang_getTokenKind : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getTokenKind(EntityScope parent_h) {}
+  explicit Entity_clang_getTokenKind(EntityScope) {}
   static const char *Key() { return "clang_getTokenKind"; }
 };
 
@@ -25927,7 +26752,7 @@ using Entity_clang_getTokenLocation = Bind_clang_getTokenLocation<>;
 #else
 
 struct Entity_clang_getTokenLocation : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getTokenLocation(EntityScope parent_h) {}
+  explicit Entity_clang_getTokenLocation(EntityScope) {}
   static const char *Key() { return "clang_getTokenLocation"; }
 };
 
@@ -25984,7 +26809,7 @@ using Entity_clang_getTokenSpelling = Bind_clang_getTokenSpelling<>;
 #else
 
 struct Entity_clang_getTokenSpelling : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getTokenSpelling(EntityScope parent_h) {}
+  explicit Entity_clang_getTokenSpelling(EntityScope) {}
   static const char *Key() { return "clang_getTokenSpelling"; }
 };
 
@@ -26042,7 +26867,7 @@ using Entity_clang_getTranslationUnitCursor =
 
 struct Entity_clang_getTranslationUnitCursor
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getTranslationUnitCursor(EntityScope parent_h) {}
+  explicit Entity_clang_getTranslationUnitCursor(EntityScope) {}
   static const char *Key() { return "clang_getTranslationUnitCursor"; }
 };
 
@@ -26097,7 +26922,7 @@ using Entity_clang_getTranslationUnitSpelling =
 
 struct Entity_clang_getTranslationUnitSpelling
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getTranslationUnitSpelling(EntityScope parent_h) {}
+  explicit Entity_clang_getTranslationUnitSpelling(EntityScope) {}
   static const char *Key() { return "clang_getTranslationUnitSpelling"; }
 };
 
@@ -26155,7 +26980,7 @@ using Entity_clang_getTranslationUnitTargetInfo =
 
 struct Entity_clang_getTranslationUnitTargetInfo
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getTranslationUnitTargetInfo(EntityScope parent_h) {}
+  explicit Entity_clang_getTranslationUnitTargetInfo(EntityScope) {}
   static const char *Key() { return "clang_getTranslationUnitTargetInfo"; }
 };
 
@@ -26204,7 +27029,7 @@ using Entity_clang_getTypeDeclaration = Bind_clang_getTypeDeclaration<>;
 
 struct Entity_clang_getTypeDeclaration
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getTypeDeclaration(EntityScope parent_h) {}
+  explicit Entity_clang_getTypeDeclaration(EntityScope) {}
   static const char *Key() { return "clang_getTypeDeclaration"; }
 };
 
@@ -26253,7 +27078,7 @@ using Entity_clang_getTypeKindSpelling = Bind_clang_getTypeKindSpelling<>;
 
 struct Entity_clang_getTypeKindSpelling
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getTypeKindSpelling(EntityScope parent_h) {}
+  explicit Entity_clang_getTypeKindSpelling(EntityScope) {}
   static const char *Key() { return "clang_getTypeKindSpelling"; }
 };
 
@@ -26304,7 +27129,7 @@ using Entity_clang_getTypeSpelling = Bind_clang_getTypeSpelling<>;
 #else
 
 struct Entity_clang_getTypeSpelling : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getTypeSpelling(EntityScope parent_h) {}
+  explicit Entity_clang_getTypeSpelling(EntityScope) {}
   static const char *Key() { return "clang_getTypeSpelling"; }
 };
 
@@ -26357,7 +27182,7 @@ using Entity_clang_getTypedefDeclUnderlyingType =
 
 struct Entity_clang_getTypedefDeclUnderlyingType
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getTypedefDeclUnderlyingType(EntityScope parent_h) {}
+  explicit Entity_clang_getTypedefDeclUnderlyingType(EntityScope) {}
   static const char *Key() { return "clang_getTypedefDeclUnderlyingType"; }
 };
 
@@ -26405,11 +27230,62 @@ using Entity_clang_getTypedefName = Bind_clang_getTypedefName<>;
 #else
 
 struct Entity_clang_getTypedefName : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getTypedefName(EntityScope parent_h) {}
+  explicit Entity_clang_getTypedefName(EntityScope) {}
   static const char *Key() { return "clang_getTypedefName"; }
 };
 
 #endif // PB11_WEAVER_DISABLE_Entity_clang_getTypedefName
+
+template <class Pybind11T = pybind11::module_ &>
+struct Bind_clang_getUnaryOperatorKindSpelling : public EntityBase {
+  using Pybind11Type = Pybind11T;
+
+  virtual const char *AddFunction() {
+    const char *_pb11_weaver_comment_str = R"_pb11_weaver(/**
+ * Retrieve the spelling of a given CXUnaryOperatorKind.
+ */)_pb11_weaver";
+
+#ifndef PB11_WEAVER_DISABLE_clang_getUnaryOperatorKindSpelling_AddFunction
+    handle.def(
+        "clang_getUnaryOperatorKindSpelling",
+        static_cast<
+            pybind11_weaver::FnPtrT<void, CXString(CXUnaryOperatorKind)>::type>(
+            &clang_getUnaryOperatorKindSpelling),
+        _pb11_weaver_comment_str);
+#endif
+    return _pb11_weaver_comment_str;
+  }
+
+  explicit Bind_clang_getUnaryOperatorKindSpelling(EntityScope parent_h)
+      : handle{static_cast<pybind11::module_ &>(parent_h)} {}
+
+  template <class... HandleArgsT>
+  explicit Bind_clang_getUnaryOperatorKindSpelling(EntityScope parent_h,
+                                                   HandleArgsT &&...args)
+      : handle{std::forward(args)...} {}
+
+  void Update() override { AddFunction(); }
+
+  EntityScope AsScope() override { return EntityScope(handle); }
+
+  static const char *Key() { return "clang_getUnaryOperatorKindSpelling"; }
+
+  Pybind11Type handle;
+};
+#ifndef PB11_WEAVER_DISABLE_Entity_clang_getUnaryOperatorKindSpelling
+
+using Entity_clang_getUnaryOperatorKindSpelling =
+    Bind_clang_getUnaryOperatorKindSpelling<>;
+
+#else
+
+struct Entity_clang_getUnaryOperatorKindSpelling
+    : public pybind11_weaver::DisabledEntity {
+  explicit Entity_clang_getUnaryOperatorKindSpelling(EntityScope) {}
+  static const char *Key() { return "clang_getUnaryOperatorKindSpelling"; }
+};
+
+#endif // PB11_WEAVER_DISABLE_Entity_clang_getUnaryOperatorKindSpelling
 
 template <class Pybind11T = pybind11::module_ &>
 struct Bind_clang_getUnqualifiedType : public EntityBase {
@@ -26485,7 +27361,7 @@ using Entity_clang_getUnqualifiedType = Bind_clang_getUnqualifiedType<>;
 
 struct Entity_clang_getUnqualifiedType
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_getUnqualifiedType(EntityScope parent_h) {}
+  explicit Entity_clang_getUnqualifiedType(EntityScope) {}
   static const char *Key() { return "clang_getUnqualifiedType"; }
 };
 
@@ -26532,7 +27408,7 @@ using Entity_clang_hashCursor = Bind_clang_hashCursor<>;
 #else
 
 struct Entity_clang_hashCursor : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_hashCursor(EntityScope parent_h) {}
+  explicit Entity_clang_hashCursor(EntityScope) {}
   static const char *Key() { return "clang_hashCursor"; }
 };
 
@@ -26583,7 +27459,7 @@ using Entity_clang_indexLoc_getCXSourceLocation =
 
 struct Entity_clang_indexLoc_getCXSourceLocation
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_indexLoc_getCXSourceLocation(EntityScope parent_h) {}
+  explicit Entity_clang_indexLoc_getCXSourceLocation(EntityScope) {}
   static const char *Key() { return "clang_indexLoc_getCXSourceLocation"; }
 };
 
@@ -26646,7 +27522,7 @@ using Entity_clang_indexLoc_getFileLocation =
 
 struct Entity_clang_indexLoc_getFileLocation
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_indexLoc_getFileLocation(EntityScope parent_h) {}
+  explicit Entity_clang_indexLoc_getFileLocation(EntityScope) {}
   static const char *Key() { return "clang_indexLoc_getFileLocation"; }
 };
 
@@ -26735,7 +27611,7 @@ using Entity_clang_indexSourceFile = Bind_clang_indexSourceFile<>;
 #else
 
 struct Entity_clang_indexSourceFile : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_indexSourceFile(EntityScope parent_h) {}
+  explicit Entity_clang_indexSourceFile(EntityScope) {}
   static const char *Key() { return "clang_indexSourceFile"; }
 };
 
@@ -26806,7 +27682,7 @@ using Entity_clang_indexSourceFileFullArgv =
 
 struct Entity_clang_indexSourceFileFullArgv
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_indexSourceFileFullArgv(EntityScope parent_h) {}
+  explicit Entity_clang_indexSourceFileFullArgv(EntityScope) {}
   static const char *Key() { return "clang_indexSourceFileFullArgv"; }
 };
 
@@ -26879,7 +27755,7 @@ using Entity_clang_indexTranslationUnit = Bind_clang_indexTranslationUnit<>;
 
 struct Entity_clang_indexTranslationUnit
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_indexTranslationUnit(EntityScope parent_h) {}
+  explicit Entity_clang_indexTranslationUnit(EntityScope) {}
   static const char *Key() { return "clang_indexTranslationUnit"; }
 };
 
@@ -26927,7 +27803,7 @@ using Entity_clang_index_getCXXClassDeclInfo =
 
 struct Entity_clang_index_getCXXClassDeclInfo
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_index_getCXXClassDeclInfo(EntityScope parent_h) {}
+  explicit Entity_clang_index_getCXXClassDeclInfo(EntityScope) {}
   static const char *Key() { return "clang_index_getCXXClassDeclInfo"; }
 };
 
@@ -26984,7 +27860,7 @@ using Entity_clang_index_getClientContainer =
 
 struct Entity_clang_index_getClientContainer
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_index_getClientContainer(EntityScope parent_h) {}
+  explicit Entity_clang_index_getClientContainer(EntityScope) {}
   static const char *Key() { return "clang_index_getClientContainer"; }
 };
 
@@ -27039,7 +27915,7 @@ using Entity_clang_index_getClientEntity = Bind_clang_index_getClientEntity<>;
 
 struct Entity_clang_index_getClientEntity
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_index_getClientEntity(EntityScope parent_h) {}
+  explicit Entity_clang_index_getClientEntity(EntityScope) {}
   static const char *Key() { return "clang_index_getClientEntity"; }
 };
 
@@ -27090,8 +27966,7 @@ using Entity_clang_index_getIBOutletCollectionAttrInfo =
 
 struct Entity_clang_index_getIBOutletCollectionAttrInfo
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_index_getIBOutletCollectionAttrInfo(
-      EntityScope parent_h) {}
+  explicit Entity_clang_index_getIBOutletCollectionAttrInfo(EntityScope) {}
   static const char *Key() {
     return "clang_index_getIBOutletCollectionAttrInfo";
   }
@@ -27142,7 +28017,7 @@ using Entity_clang_index_getObjCCategoryDeclInfo =
 
 struct Entity_clang_index_getObjCCategoryDeclInfo
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_index_getObjCCategoryDeclInfo(EntityScope parent_h) {}
+  explicit Entity_clang_index_getObjCCategoryDeclInfo(EntityScope) {}
   static const char *Key() { return "clang_index_getObjCCategoryDeclInfo"; }
 };
 
@@ -27191,7 +28066,7 @@ using Entity_clang_index_getObjCContainerDeclInfo =
 
 struct Entity_clang_index_getObjCContainerDeclInfo
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_index_getObjCContainerDeclInfo(EntityScope parent_h) {}
+  explicit Entity_clang_index_getObjCContainerDeclInfo(EntityScope) {}
   static const char *Key() { return "clang_index_getObjCContainerDeclInfo"; }
 };
 
@@ -27240,7 +28115,7 @@ using Entity_clang_index_getObjCInterfaceDeclInfo =
 
 struct Entity_clang_index_getObjCInterfaceDeclInfo
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_index_getObjCInterfaceDeclInfo(EntityScope parent_h) {}
+  explicit Entity_clang_index_getObjCInterfaceDeclInfo(EntityScope) {}
   static const char *Key() { return "clang_index_getObjCInterfaceDeclInfo"; }
 };
 
@@ -27289,7 +28164,7 @@ using Entity_clang_index_getObjCPropertyDeclInfo =
 
 struct Entity_clang_index_getObjCPropertyDeclInfo
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_index_getObjCPropertyDeclInfo(EntityScope parent_h) {}
+  explicit Entity_clang_index_getObjCPropertyDeclInfo(EntityScope) {}
   static const char *Key() { return "clang_index_getObjCPropertyDeclInfo"; }
 };
 
@@ -27338,8 +28213,7 @@ using Entity_clang_index_getObjCProtocolRefListInfo =
 
 struct Entity_clang_index_getObjCProtocolRefListInfo
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_index_getObjCProtocolRefListInfo(EntityScope parent_h) {
-  }
+  explicit Entity_clang_index_getObjCProtocolRefListInfo(EntityScope) {}
   static const char *Key() { return "clang_index_getObjCProtocolRefListInfo"; }
 };
 
@@ -27386,7 +28260,7 @@ using Entity_clang_index_isEntityObjCContainerKind =
 
 struct Entity_clang_index_isEntityObjCContainerKind
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_index_isEntityObjCContainerKind(EntityScope parent_h) {}
+  explicit Entity_clang_index_isEntityObjCContainerKind(EntityScope) {}
   static const char *Key() { return "clang_index_isEntityObjCContainerKind"; }
 };
 
@@ -27443,7 +28317,7 @@ using Entity_clang_index_setClientContainer =
 
 struct Entity_clang_index_setClientContainer
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_index_setClientContainer(EntityScope parent_h) {}
+  explicit Entity_clang_index_setClientContainer(EntityScope) {}
   static const char *Key() { return "clang_index_setClientContainer"; }
 };
 
@@ -27498,7 +28372,7 @@ using Entity_clang_index_setClientEntity = Bind_clang_index_setClientEntity<>;
 
 struct Entity_clang_index_setClientEntity
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_index_setClientEntity(EntityScope parent_h) {}
+  explicit Entity_clang_index_setClientEntity(EntityScope) {}
   static const char *Key() { return "clang_index_setClientEntity"; }
 };
 
@@ -27552,8 +28426,8 @@ using Entity_clang_install_aborting_llvm_fatal_error_handler =
 
 struct Entity_clang_install_aborting_llvm_fatal_error_handler
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_install_aborting_llvm_fatal_error_handler(
-      EntityScope parent_h) {}
+  explicit Entity_clang_install_aborting_llvm_fatal_error_handler(EntityScope) {
+  }
   static const char *Key() {
     return "clang_install_aborting_llvm_fatal_error_handler";
   }
@@ -27603,7 +28477,7 @@ using Entity_clang_isAttribute = Bind_clang_isAttribute<>;
 #else
 
 struct Entity_clang_isAttribute : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_isAttribute(EntityScope parent_h) {}
+  explicit Entity_clang_isAttribute(EntityScope) {}
   static const char *Key() { return "clang_isAttribute"; }
 };
 
@@ -27654,7 +28528,7 @@ using Entity_clang_isConstQualifiedType = Bind_clang_isConstQualifiedType<>;
 
 struct Entity_clang_isConstQualifiedType
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_isConstQualifiedType(EntityScope parent_h) {}
+  explicit Entity_clang_isConstQualifiedType(EntityScope) {}
   static const char *Key() { return "clang_isConstQualifiedType"; }
 };
 
@@ -27704,7 +28578,7 @@ using Entity_clang_isCursorDefinition = Bind_clang_isCursorDefinition<>;
 
 struct Entity_clang_isCursorDefinition
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_isCursorDefinition(EntityScope parent_h) {}
+  explicit Entity_clang_isCursorDefinition(EntityScope) {}
   static const char *Key() { return "clang_isCursorDefinition"; }
 };
 
@@ -27752,7 +28626,7 @@ using Entity_clang_isDeclaration = Bind_clang_isDeclaration<>;
 #else
 
 struct Entity_clang_isDeclaration : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_isDeclaration(EntityScope parent_h) {}
+  explicit Entity_clang_isDeclaration(EntityScope) {}
   static const char *Key() { return "clang_isDeclaration"; }
 };
 
@@ -27800,7 +28674,7 @@ using Entity_clang_isExpression = Bind_clang_isExpression<>;
 #else
 
 struct Entity_clang_isExpression : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_isExpression(EntityScope parent_h) {}
+  explicit Entity_clang_isExpression(EntityScope) {}
   static const char *Key() { return "clang_isExpression"; }
 };
 
@@ -27858,7 +28732,7 @@ using Entity_clang_isFileMultipleIncludeGuarded =
 
 struct Entity_clang_isFileMultipleIncludeGuarded
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_isFileMultipleIncludeGuarded(EntityScope parent_h) {}
+  explicit Entity_clang_isFileMultipleIncludeGuarded(EntityScope) {}
   static const char *Key() { return "clang_isFileMultipleIncludeGuarded"; }
 };
 
@@ -27907,7 +28781,7 @@ using Entity_clang_isFunctionTypeVariadic = Bind_clang_isFunctionTypeVariadic<>;
 
 struct Entity_clang_isFunctionTypeVariadic
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_isFunctionTypeVariadic(EntityScope parent_h) {}
+  explicit Entity_clang_isFunctionTypeVariadic(EntityScope) {}
   static const char *Key() { return "clang_isFunctionTypeVariadic"; }
 };
 
@@ -27956,7 +28830,7 @@ using Entity_clang_isInvalid = Bind_clang_isInvalid<>;
 #else
 
 struct Entity_clang_isInvalid : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_isInvalid(EntityScope parent_h) {}
+  explicit Entity_clang_isInvalid(EntityScope) {}
   static const char *Key() { return "clang_isInvalid"; }
 };
 
@@ -28010,7 +28884,7 @@ using Entity_clang_isInvalidDeclaration = Bind_clang_isInvalidDeclaration<>;
 
 struct Entity_clang_isInvalidDeclaration
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_isInvalidDeclaration(EntityScope parent_h) {}
+  explicit Entity_clang_isInvalidDeclaration(EntityScope) {}
   static const char *Key() { return "clang_isInvalidDeclaration"; }
 };
 
@@ -28058,7 +28932,7 @@ using Entity_clang_isPODType = Bind_clang_isPODType<>;
 #else
 
 struct Entity_clang_isPODType : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_isPODType(EntityScope parent_h) {}
+  explicit Entity_clang_isPODType(EntityScope) {}
   static const char *Key() { return "clang_isPODType"; }
 };
 
@@ -28108,7 +28982,7 @@ using Entity_clang_isPreprocessing = Bind_clang_isPreprocessing<>;
 #else
 
 struct Entity_clang_isPreprocessing : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_isPreprocessing(EntityScope parent_h) {}
+  explicit Entity_clang_isPreprocessing(EntityScope) {}
   static const char *Key() { return "clang_isPreprocessing"; }
 };
 
@@ -28161,7 +29035,7 @@ using Entity_clang_isReference = Bind_clang_isReference<>;
 #else
 
 struct Entity_clang_isReference : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_isReference(EntityScope parent_h) {}
+  explicit Entity_clang_isReference(EntityScope) {}
   static const char *Key() { return "clang_isReference"; }
 };
 
@@ -28213,7 +29087,7 @@ using Entity_clang_isRestrictQualifiedType =
 
 struct Entity_clang_isRestrictQualifiedType
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_isRestrictQualifiedType(EntityScope parent_h) {}
+  explicit Entity_clang_isRestrictQualifiedType(EntityScope) {}
   static const char *Key() { return "clang_isRestrictQualifiedType"; }
 };
 
@@ -28261,7 +29135,7 @@ using Entity_clang_isStatement = Bind_clang_isStatement<>;
 #else
 
 struct Entity_clang_isStatement : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_isStatement(EntityScope parent_h) {}
+  explicit Entity_clang_isStatement(EntityScope) {}
   static const char *Key() { return "clang_isStatement"; }
 };
 
@@ -28311,7 +29185,7 @@ using Entity_clang_isTranslationUnit = Bind_clang_isTranslationUnit<>;
 #else
 
 struct Entity_clang_isTranslationUnit : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_isTranslationUnit(EntityScope parent_h) {}
+  explicit Entity_clang_isTranslationUnit(EntityScope) {}
   static const char *Key() { return "clang_isTranslationUnit"; }
 };
 
@@ -28360,7 +29234,7 @@ using Entity_clang_isUnexposed = Bind_clang_isUnexposed<>;
 #else
 
 struct Entity_clang_isUnexposed : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_isUnexposed(EntityScope parent_h) {}
+  explicit Entity_clang_isUnexposed(EntityScope) {}
   static const char *Key() { return "clang_isUnexposed"; }
 };
 
@@ -28408,7 +29282,7 @@ using Entity_clang_isVirtualBase = Bind_clang_isVirtualBase<>;
 #else
 
 struct Entity_clang_isVirtualBase : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_isVirtualBase(EntityScope parent_h) {}
+  explicit Entity_clang_isVirtualBase(EntityScope) {}
   static const char *Key() { return "clang_isVirtualBase"; }
 };
 
@@ -28460,7 +29334,7 @@ using Entity_clang_isVolatileQualifiedType =
 
 struct Entity_clang_isVolatileQualifiedType
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_isVolatileQualifiedType(EntityScope parent_h) {}
+  explicit Entity_clang_isVolatileQualifiedType(EntityScope) {}
   static const char *Key() { return "clang_isVolatileQualifiedType"; }
 };
 
@@ -28524,7 +29398,7 @@ using Entity_clang_loadDiagnostics = Bind_clang_loadDiagnostics<>;
 #else
 
 struct Entity_clang_loadDiagnostics : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_loadDiagnostics(EntityScope parent_h) {}
+  explicit Entity_clang_loadDiagnostics(EntityScope) {}
   static const char *Key() { return "clang_loadDiagnostics"; }
 };
 
@@ -28589,7 +29463,7 @@ using Entity_clang_parseTranslationUnit = Bind_clang_parseTranslationUnit<>;
 
 struct Entity_clang_parseTranslationUnit
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_parseTranslationUnit(EntityScope parent_h) {}
+  explicit Entity_clang_parseTranslationUnit(EntityScope) {}
   static const char *Key() { return "clang_parseTranslationUnit"; }
 };
 
@@ -28694,7 +29568,7 @@ using Entity_clang_parseTranslationUnit2 = Bind_clang_parseTranslationUnit2<>;
 
 struct Entity_clang_parseTranslationUnit2
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_parseTranslationUnit2(EntityScope parent_h) {}
+  explicit Entity_clang_parseTranslationUnit2(EntityScope) {}
   static const char *Key() { return "clang_parseTranslationUnit2"; }
 };
 
@@ -28761,7 +29635,7 @@ using Entity_clang_parseTranslationUnit2FullArgv =
 
 struct Entity_clang_parseTranslationUnit2FullArgv
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_parseTranslationUnit2FullArgv(EntityScope parent_h) {}
+  explicit Entity_clang_parseTranslationUnit2FullArgv(EntityScope) {}
   static const char *Key() { return "clang_parseTranslationUnit2FullArgv"; }
 };
 
@@ -28812,7 +29686,7 @@ using Entity_clang_remap_dispose = Bind_clang_remap_dispose<>;
 #else
 
 struct Entity_clang_remap_dispose : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_remap_dispose(EntityScope parent_h) {}
+  explicit Entity_clang_remap_dispose(EntityScope) {}
   static const char *Key() { return "clang_remap_dispose"; }
 };
 
@@ -28872,7 +29746,7 @@ using Entity_clang_remap_getFilenames = Bind_clang_remap_getFilenames<>;
 
 struct Entity_clang_remap_getFilenames
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_remap_getFilenames(EntityScope parent_h) {}
+  explicit Entity_clang_remap_getFilenames(EntityScope) {}
   static const char *Key() { return "clang_remap_getFilenames"; }
 };
 
@@ -28925,7 +29799,7 @@ using Entity_clang_remap_getNumFiles = Bind_clang_remap_getNumFiles<>;
 #else
 
 struct Entity_clang_remap_getNumFiles : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_remap_getNumFiles(EntityScope parent_h) {}
+  explicit Entity_clang_remap_getNumFiles(EntityScope) {}
   static const char *Key() { return "clang_remap_getNumFiles"; }
 };
 
@@ -29018,7 +29892,7 @@ using Entity_clang_reparseTranslationUnit = Bind_clang_reparseTranslationUnit<>;
 
 struct Entity_clang_reparseTranslationUnit
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_reparseTranslationUnit(EntityScope parent_h) {}
+  explicit Entity_clang_reparseTranslationUnit(EntityScope) {}
   static const char *Key() { return "clang_reparseTranslationUnit"; }
 };
 
@@ -29093,7 +29967,7 @@ using Entity_clang_saveTranslationUnit = Bind_clang_saveTranslationUnit<>;
 
 struct Entity_clang_saveTranslationUnit
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_saveTranslationUnit(EntityScope parent_h) {}
+  explicit Entity_clang_saveTranslationUnit(EntityScope) {}
   static const char *Key() { return "clang_saveTranslationUnit"; }
 };
 
@@ -29148,7 +30022,7 @@ using Entity_clang_sortCodeCompletionResults =
 
 struct Entity_clang_sortCodeCompletionResults
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_sortCodeCompletionResults(EntityScope parent_h) {}
+  explicit Entity_clang_sortCodeCompletionResults(EntityScope) {}
   static const char *Key() { return "clang_sortCodeCompletionResults"; }
 };
 
@@ -29206,7 +30080,7 @@ using Entity_clang_suspendTranslationUnit = Bind_clang_suspendTranslationUnit<>;
 
 struct Entity_clang_suspendTranslationUnit
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_suspendTranslationUnit(EntityScope parent_h) {}
+  explicit Entity_clang_suspendTranslationUnit(EntityScope) {}
   static const char *Key() { return "clang_suspendTranslationUnit"; }
 };
 
@@ -29258,7 +30132,7 @@ using Entity_clang_toggleCrashRecovery = Bind_clang_toggleCrashRecovery<>;
 
 struct Entity_clang_toggleCrashRecovery
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_toggleCrashRecovery(EntityScope parent_h) {}
+  explicit Entity_clang_toggleCrashRecovery(EntityScope) {}
   static const char *Key() { return "clang_toggleCrashRecovery"; }
 };
 
@@ -29326,7 +30200,7 @@ using Entity_clang_tokenize = Bind_clang_tokenize<>;
 #else
 
 struct Entity_clang_tokenize : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_tokenize(EntityScope parent_h) {}
+  explicit Entity_clang_tokenize(EntityScope) {}
   static const char *Key() { return "clang_tokenize"; }
 };
 
@@ -29379,8 +30253,7 @@ using Entity_clang_uninstall_llvm_fatal_error_handler =
 
 struct Entity_clang_uninstall_llvm_fatal_error_handler
     : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_uninstall_llvm_fatal_error_handler(
-      EntityScope parent_h) {}
+  explicit Entity_clang_uninstall_llvm_fatal_error_handler(EntityScope) {}
   static const char *Key() {
     return "clang_uninstall_llvm_fatal_error_handler";
   }
@@ -29478,11 +30351,67 @@ using Entity_clang_visitChildren = Bind_clang_visitChildren<>;
 #else
 
 struct Entity_clang_visitChildren : public pybind11_weaver::DisabledEntity {
-  explicit Entity_clang_visitChildren(EntityScope parent_h) {}
+  explicit Entity_clang_visitChildren(EntityScope) {}
   static const char *Key() { return "clang_visitChildren"; }
 };
 
 #endif // PB11_WEAVER_DISABLE_Entity_clang_visitChildren
+
+template <class Pybind11T = pybind11::module_ &>
+struct Bind_clang_visitChildrenWithBlock : public EntityBase {
+  using Pybind11Type = Pybind11T;
+
+  virtual const char *AddFunction() {
+    const char *_pb11_weaver_comment_str = R"_pb11_weaver(/**
+ * Visits the children of a cursor using the specified block.  Behaves
+ * identically to clang_visitChildren() in all other respects.
+ */)_pb11_weaver";
+
+#ifndef PB11_WEAVER_DISABLE_clang_visitChildrenWithBlock_AddFunction
+    handle.def(
+        "clang_visitChildrenWithBlock",
+        [](CXCursor parent,
+           pybind11_weaver::WrappedPtrT<_CXChildVisitResult *> block) {
+          return std::invoke(
+              static_cast<pybind11_weaver::FnPtrT<
+                  void, unsigned int(CXCursor, _CXChildVisitResult *)>::type>(
+                  &clang_visitChildrenWithBlock),
+              parent, (block)->Cptr());
+        },
+        _pb11_weaver_comment_str);
+#endif
+    return _pb11_weaver_comment_str;
+  }
+
+  explicit Bind_clang_visitChildrenWithBlock(EntityScope parent_h)
+      : handle{static_cast<pybind11::module_ &>(parent_h)} {}
+
+  template <class... HandleArgsT>
+  explicit Bind_clang_visitChildrenWithBlock(EntityScope parent_h,
+                                             HandleArgsT &&...args)
+      : handle{std::forward(args)...} {}
+
+  void Update() override { AddFunction(); }
+
+  EntityScope AsScope() override { return EntityScope(handle); }
+
+  static const char *Key() { return "clang_visitChildrenWithBlock"; }
+
+  Pybind11Type handle;
+};
+#ifndef PB11_WEAVER_DISABLE_Entity_clang_visitChildrenWithBlock
+
+using Entity_clang_visitChildrenWithBlock = Bind_clang_visitChildrenWithBlock<>;
+
+#else
+
+struct Entity_clang_visitChildrenWithBlock
+    : public pybind11_weaver::DisabledEntity {
+  explicit Entity_clang_visitChildrenWithBlock(EntityScope) {}
+  static const char *Key() { return "clang_visitChildrenWithBlock"; }
+};
+
+#endif // PB11_WEAVER_DISABLE_Entity_clang_visitChildrenWithBlock
 
 /**
  * Create all entities, return a callable guard that can be called to update all
@@ -29510,6 +30439,10 @@ DeclFn(pybind11::module &m,
       m, "CXTranslationUnitImplpp");
   pybind11_weaver::PointerWrapper<CXVirtualFileOverlayImpl *>::FastBind(
       m, "CXVirtualFileOverlayImplp");
+  pybind11_weaver::PointerWrapper<_CXChildVisitResult *>::FastBind(
+      m, "_CXChildVisitResultp");
+  pybind11_weaver::PointerWrapper<_CXCursorAndRangeVisitorBlock *>::FastBind(
+      m, "_CXCursorAndRangeVisitorBlockp");
   pybind11_weaver::PointerWrapper<char **>::FastBind(m, "charpp");
   pybind11_weaver::PointerWrapper<const CXIdxAttrInfo *const *>::FastBind(
       m, "constCXIdxAttrInfopconstp");
@@ -29526,1146 +30459,1180 @@ DeclFn(pybind11::module &m,
 
   auto v0 = pybind11_weaver::CreateEntity<Entity_CXAvailabilityKind>(
       EntityScope(m), registry);
-  auto v1 = pybind11_weaver::CreateEntity<Entity_CXCallingConv>(EntityScope(m),
+  auto v1 = pybind11_weaver::CreateEntity<Entity_CXBinaryOperatorKind>(
+      EntityScope(m), registry);
+  auto v2 = pybind11_weaver::CreateEntity<Entity_CXCallingConv>(EntityScope(m),
                                                                 registry);
-  auto v2 = pybind11_weaver::CreateEntity<Entity_CXChildVisitResult>(
+  auto v3 = pybind11_weaver::CreateEntity<Entity_CXChildVisitResult>(
       EntityScope(m), registry);
-  auto v3 = pybind11_weaver::CreateEntity<Entity_CXCodeCompleteResults>(
+  auto v4 =
+      pybind11_weaver::CreateEntity<Entity_CXChoice>(EntityScope(m), registry);
+  auto v5 = pybind11_weaver::CreateEntity<Entity_CXCodeCompleteResults>(
       EntityScope(m), registry);
-  auto v4 = pybind11_weaver::CreateEntity<Entity_CXCodeComplete_Flags>(
+  auto v6 = pybind11_weaver::CreateEntity<Entity_CXCodeComplete_Flags>(
       EntityScope(m), registry);
-  auto v5 =
+  auto v7 =
       pybind11_weaver::CreateEntity<Entity_CXComment>(EntityScope(m), registry);
-  auto v6 =
+  auto v8 =
       pybind11_weaver::CreateEntity<Entity_CXCommentInlineCommandRenderKind>(
           EntityScope(m), registry);
-  auto v7 = pybind11_weaver::CreateEntity<Entity_CXCommentKind>(EntityScope(m),
+  auto v9 = pybind11_weaver::CreateEntity<Entity_CXCommentKind>(EntityScope(m),
                                                                 registry);
-  auto v8 = pybind11_weaver::CreateEntity<Entity_CXCommentParamPassDirection>(
+  auto v10 = pybind11_weaver::CreateEntity<Entity_CXCommentParamPassDirection>(
       EntityScope(m), registry);
-  auto v9 = pybind11_weaver::CreateEntity<Entity_CXCompilationDatabase_Error>(
+  auto v11 = pybind11_weaver::CreateEntity<Entity_CXCompilationDatabase_Error>(
       EntityScope(m), registry);
-  auto v10 = pybind11_weaver::CreateEntity<Entity_CXCompletionChunkKind>(
+  auto v12 = pybind11_weaver::CreateEntity<Entity_CXCompletionChunkKind>(
       EntityScope(m), registry);
-  auto v11 = pybind11_weaver::CreateEntity<Entity_CXCompletionContext>(
+  auto v13 = pybind11_weaver::CreateEntity<Entity_CXCompletionContext>(
       EntityScope(m), registry);
-  auto v12 = pybind11_weaver::CreateEntity<Entity_CXCompletionResult>(
+  auto v14 = pybind11_weaver::CreateEntity<Entity_CXCompletionResult>(
       EntityScope(m), registry);
-  auto v13 =
+  auto v15 =
       pybind11_weaver::CreateEntity<Entity_CXCursor>(EntityScope(m), registry);
-  auto v14 = pybind11_weaver::CreateEntity<Entity_CXCursorAndRangeVisitor>(
+  auto v16 = pybind11_weaver::CreateEntity<Entity_CXCursorAndRangeVisitor>(
       EntityScope(m), registry);
-  auto v15 = pybind11_weaver::CreateEntity<Entity_CXCursorKind>(EntityScope(m),
+  auto v17 = pybind11_weaver::CreateEntity<Entity_CXCursorKind>(EntityScope(m),
                                                                 registry);
-  auto v16 =
+  auto v18 =
       pybind11_weaver::CreateEntity<Entity_CXCursor_ExceptionSpecificationKind>(
           EntityScope(m), registry);
-  auto v17 = pybind11_weaver::CreateEntity<Entity_CXDiagnosticDisplayOptions>(
+  auto v19 = pybind11_weaver::CreateEntity<Entity_CXDiagnosticDisplayOptions>(
       EntityScope(m), registry);
-  auto v18 = pybind11_weaver::CreateEntity<Entity_CXDiagnosticSeverity>(
+  auto v20 = pybind11_weaver::CreateEntity<Entity_CXDiagnosticSeverity>(
       EntityScope(m), registry);
-  auto v19 = pybind11_weaver::CreateEntity<Entity_CXErrorCode>(EntityScope(m),
+  auto v21 = pybind11_weaver::CreateEntity<Entity_CXErrorCode>(EntityScope(m),
                                                                registry);
-  auto v20 = pybind11_weaver::CreateEntity<Entity_CXEvalResultKind>(
+  auto v22 = pybind11_weaver::CreateEntity<Entity_CXEvalResultKind>(
       EntityScope(m), registry);
-  auto v21 = pybind11_weaver::CreateEntity<Entity_CXFileUniqueID>(
+  auto v23 = pybind11_weaver::CreateEntity<Entity_CXFileUniqueID>(
       EntityScope(m), registry);
-  auto v22 = pybind11_weaver::CreateEntity<Entity_CXGlobalOptFlags>(
+  auto v24 = pybind11_weaver::CreateEntity<Entity_CXGlobalOptFlags>(
       EntityScope(m), registry);
-  auto v23 = pybind11_weaver::CreateEntity<Entity_CXIdxAttrInfo>(EntityScope(m),
+  auto v25 = pybind11_weaver::CreateEntity<Entity_CXIdxAttrInfo>(EntityScope(m),
                                                                  registry);
-  auto v24 = pybind11_weaver::CreateEntity<Entity_CXIdxAttrKind>(EntityScope(m),
+  auto v26 = pybind11_weaver::CreateEntity<Entity_CXIdxAttrKind>(EntityScope(m),
                                                                  registry);
-  auto v25 = pybind11_weaver::CreateEntity<Entity_CXIdxBaseClassInfo>(
+  auto v27 = pybind11_weaver::CreateEntity<Entity_CXIdxBaseClassInfo>(
       EntityScope(m), registry);
-  auto v26 = pybind11_weaver::CreateEntity<Entity_CXIdxCXXClassDeclInfo>(
+  auto v28 = pybind11_weaver::CreateEntity<Entity_CXIdxCXXClassDeclInfo>(
       EntityScope(m), registry);
-  auto v27 = pybind11_weaver::CreateEntity<Entity_CXIdxContainerInfo>(
+  auto v29 = pybind11_weaver::CreateEntity<Entity_CXIdxContainerInfo>(
       EntityScope(m), registry);
-  auto v28 = pybind11_weaver::CreateEntity<Entity_CXIdxDeclInfo>(EntityScope(m),
+  auto v30 = pybind11_weaver::CreateEntity<Entity_CXIdxDeclInfo>(EntityScope(m),
                                                                  registry);
-  auto v29 = pybind11_weaver::CreateEntity<Entity_CXIdxDeclInfoFlags>(
+  auto v31 = pybind11_weaver::CreateEntity<Entity_CXIdxDeclInfoFlags>(
       EntityScope(m), registry);
-  auto v30 = pybind11_weaver::CreateEntity<Entity_CXIdxEntityCXXTemplateKind>(
+  auto v32 = pybind11_weaver::CreateEntity<Entity_CXIdxEntityCXXTemplateKind>(
       EntityScope(m), registry);
-  auto v31 = pybind11_weaver::CreateEntity<Entity_CXIdxEntityInfo>(
+  auto v33 = pybind11_weaver::CreateEntity<Entity_CXIdxEntityInfo>(
       EntityScope(m), registry);
-  auto v32 = pybind11_weaver::CreateEntity<Entity_CXIdxEntityKind>(
+  auto v34 = pybind11_weaver::CreateEntity<Entity_CXIdxEntityKind>(
       EntityScope(m), registry);
-  auto v33 = pybind11_weaver::CreateEntity<Entity_CXIdxEntityLanguage>(
+  auto v35 = pybind11_weaver::CreateEntity<Entity_CXIdxEntityLanguage>(
       EntityScope(m), registry);
-  auto v34 = pybind11_weaver::CreateEntity<Entity_CXIdxEntityRefInfo>(
+  auto v36 = pybind11_weaver::CreateEntity<Entity_CXIdxEntityRefInfo>(
       EntityScope(m), registry);
-  auto v35 = pybind11_weaver::CreateEntity<Entity_CXIdxEntityRefKind>(
+  auto v37 = pybind11_weaver::CreateEntity<Entity_CXIdxEntityRefKind>(
       EntityScope(m), registry);
-  auto v36 =
+  auto v38 =
       pybind11_weaver::CreateEntity<Entity_CXIdxIBOutletCollectionAttrInfo>(
           EntityScope(m), registry);
-  auto v37 = pybind11_weaver::CreateEntity<Entity_CXIdxImportedASTFileInfo>(
+  auto v39 = pybind11_weaver::CreateEntity<Entity_CXIdxImportedASTFileInfo>(
       EntityScope(m), registry);
-  auto v38 = pybind11_weaver::CreateEntity<Entity_CXIdxIncludedFileInfo>(
+  auto v40 = pybind11_weaver::CreateEntity<Entity_CXIdxIncludedFileInfo>(
       EntityScope(m), registry);
-  auto v39 =
+  auto v41 =
       pybind11_weaver::CreateEntity<Entity_CXIdxLoc>(EntityScope(m), registry);
-  auto v40 = pybind11_weaver::CreateEntity<Entity_CXIdxObjCCategoryDeclInfo>(
+  auto v42 = pybind11_weaver::CreateEntity<Entity_CXIdxObjCCategoryDeclInfo>(
       EntityScope(m), registry);
-  auto v41 = pybind11_weaver::CreateEntity<Entity_CXIdxObjCContainerDeclInfo>(
+  auto v43 = pybind11_weaver::CreateEntity<Entity_CXIdxObjCContainerDeclInfo>(
       EntityScope(m), registry);
-  auto v42 = pybind11_weaver::CreateEntity<Entity_CXIdxObjCContainerKind>(
+  auto v44 = pybind11_weaver::CreateEntity<Entity_CXIdxObjCContainerKind>(
       EntityScope(m), registry);
-  auto v43 = pybind11_weaver::CreateEntity<Entity_CXIdxObjCInterfaceDeclInfo>(
+  auto v45 = pybind11_weaver::CreateEntity<Entity_CXIdxObjCInterfaceDeclInfo>(
       EntityScope(m), registry);
-  auto v44 = pybind11_weaver::CreateEntity<Entity_CXIdxObjCPropertyDeclInfo>(
+  auto v46 = pybind11_weaver::CreateEntity<Entity_CXIdxObjCPropertyDeclInfo>(
       EntityScope(m), registry);
-  auto v45 = pybind11_weaver::CreateEntity<Entity_CXIdxObjCProtocolRefInfo>(
+  auto v47 = pybind11_weaver::CreateEntity<Entity_CXIdxObjCProtocolRefInfo>(
       EntityScope(m), registry);
-  auto v46 = pybind11_weaver::CreateEntity<Entity_CXIdxObjCProtocolRefListInfo>(
+  auto v48 = pybind11_weaver::CreateEntity<Entity_CXIdxObjCProtocolRefListInfo>(
       EntityScope(m), registry);
-  auto v47 = pybind11_weaver::CreateEntity<Entity_CXIndexOptFlags>(
+  auto v49 = pybind11_weaver::CreateEntity<Entity_CXIndexOptFlags>(
       EntityScope(m), registry);
-  auto v48 = pybind11_weaver::CreateEntity<Entity_CXLanguageKind>(
+  auto v50 = pybind11_weaver::CreateEntity<Entity_CXIndexOptions>(
       EntityScope(m), registry);
-  auto v49 = pybind11_weaver::CreateEntity<Entity_CXLinkageKind>(EntityScope(m),
+  auto v51 = pybind11_weaver::CreateEntity<Entity_CXLanguageKind>(
+      EntityScope(m), registry);
+  auto v52 = pybind11_weaver::CreateEntity<Entity_CXLinkageKind>(EntityScope(m),
                                                                  registry);
-  auto v50 = pybind11_weaver::CreateEntity<Entity_CXLoadDiag_Error>(
+  auto v53 = pybind11_weaver::CreateEntity<Entity_CXLoadDiag_Error>(
       EntityScope(m), registry);
-  auto v51 = pybind11_weaver::CreateEntity<Entity_CXNameRefFlags>(
+  auto v54 = pybind11_weaver::CreateEntity<Entity_CXNameRefFlags>(
       EntityScope(m), registry);
-  auto v52 = pybind11_weaver::CreateEntity<Entity_CXObjCDeclQualifierKind>(
+  auto v55 = pybind11_weaver::CreateEntity<Entity_CXObjCDeclQualifierKind>(
       EntityScope(m), registry);
-  auto v53 = pybind11_weaver::CreateEntity<Entity_CXObjCPropertyAttrKind>(
+  auto v56 = pybind11_weaver::CreateEntity<Entity_CXObjCPropertyAttrKind>(
       EntityScope(m), registry);
-  auto v54 = pybind11_weaver::CreateEntity<Entity_CXPlatformAvailability>(
+  auto v57 = pybind11_weaver::CreateEntity<Entity_CXPlatformAvailability>(
       EntityScope(m), registry);
-  auto v55 = pybind11_weaver::CreateEntity<Entity_CXPrintingPolicyProperty>(
+  auto v58 = pybind11_weaver::CreateEntity<Entity_CXPrintingPolicyProperty>(
       EntityScope(m), registry);
-  auto v56 = pybind11_weaver::CreateEntity<Entity_CXRefQualifierKind>(
+  auto v59 = pybind11_weaver::CreateEntity<Entity_CXRefQualifierKind>(
       EntityScope(m), registry);
-  auto v57 = pybind11_weaver::CreateEntity<Entity_CXReparse_Flags>(
+  auto v60 = pybind11_weaver::CreateEntity<Entity_CXReparse_Flags>(
       EntityScope(m), registry);
-  auto v58 =
+  auto v61 =
       pybind11_weaver::CreateEntity<Entity_CXResult>(EntityScope(m), registry);
-  auto v59 = pybind11_weaver::CreateEntity<Entity_CXSaveError>(EntityScope(m),
+  auto v62 = pybind11_weaver::CreateEntity<Entity_CXSaveError>(EntityScope(m),
                                                                registry);
-  auto v60 = pybind11_weaver::CreateEntity<Entity_CXSaveTranslationUnit_Flags>(
+  auto v63 = pybind11_weaver::CreateEntity<Entity_CXSaveTranslationUnit_Flags>(
       EntityScope(m), registry);
-  auto v61 = pybind11_weaver::CreateEntity<Entity_CXSourceLocation>(
+  auto v64 = pybind11_weaver::CreateEntity<Entity_CXSourceLocation>(
       EntityScope(m), registry);
-  auto v62 = pybind11_weaver::CreateEntity<Entity_CXSourceRange>(EntityScope(m),
+  auto v65 = pybind11_weaver::CreateEntity<Entity_CXSourceRange>(EntityScope(m),
                                                                  registry);
-  auto v63 = pybind11_weaver::CreateEntity<Entity_CXSourceRangeList>(
+  auto v66 = pybind11_weaver::CreateEntity<Entity_CXSourceRangeList>(
       EntityScope(m), registry);
-  auto v64 =
-      pybind11_weaver::CreateEntity<Entity_CXString>(EntityScope(m), registry);
-  auto v65 = pybind11_weaver::CreateEntity<Entity_CXStringSet>(EntityScope(m),
-                                                               registry);
-  auto v66 = pybind11_weaver::CreateEntity<Entity_CXSymbolRole>(EntityScope(m),
-                                                                registry);
   auto v67 =
-      pybind11_weaver::CreateEntity<Entity_CXTLSKind>(EntityScope(m), registry);
-  auto v68 = pybind11_weaver::CreateEntity<Entity_CXTUResourceUsage>(
-      EntityScope(m), registry);
-  auto v69 = pybind11_weaver::CreateEntity<Entity_CXTUResourceUsageEntry>(
-      EntityScope(m), registry);
-  auto v70 = pybind11_weaver::CreateEntity<Entity_CXTUResourceUsageKind>(
-      EntityScope(m), registry);
-  auto v71 = pybind11_weaver::CreateEntity<Entity_CXTemplateArgumentKind>(
-      EntityScope(m), registry);
-  auto v72 =
-      pybind11_weaver::CreateEntity<Entity_CXToken>(EntityScope(m), registry);
-  auto v73 = pybind11_weaver::CreateEntity<Entity_CXTokenKind>(EntityScope(m),
+      pybind11_weaver::CreateEntity<Entity_CXString>(EntityScope(m), registry);
+  auto v68 = pybind11_weaver::CreateEntity<Entity_CXStringSet>(EntityScope(m),
                                                                registry);
-  auto v74 = pybind11_weaver::CreateEntity<Entity_CXTranslationUnit_Flags>(
+  auto v69 = pybind11_weaver::CreateEntity<Entity_CXSymbolRole>(EntityScope(m),
+                                                                registry);
+  auto v70 =
+      pybind11_weaver::CreateEntity<Entity_CXTLSKind>(EntityScope(m), registry);
+  auto v71 = pybind11_weaver::CreateEntity<Entity_CXTUResourceUsage>(
+      EntityScope(m), registry);
+  auto v72 = pybind11_weaver::CreateEntity<Entity_CXTUResourceUsageEntry>(
+      EntityScope(m), registry);
+  auto v73 = pybind11_weaver::CreateEntity<Entity_CXTUResourceUsageKind>(
+      EntityScope(m), registry);
+  auto v74 = pybind11_weaver::CreateEntity<Entity_CXTemplateArgumentKind>(
       EntityScope(m), registry);
   auto v75 =
+      pybind11_weaver::CreateEntity<Entity_CXToken>(EntityScope(m), registry);
+  auto v76 = pybind11_weaver::CreateEntity<Entity_CXTokenKind>(EntityScope(m),
+                                                               registry);
+  auto v77 = pybind11_weaver::CreateEntity<Entity_CXTranslationUnit_Flags>(
+      EntityScope(m), registry);
+  auto v78 =
       pybind11_weaver::CreateEntity<Entity_CXType>(EntityScope(m), registry);
-  auto v76 = pybind11_weaver::CreateEntity<Entity_CXTypeKind>(EntityScope(m),
+  auto v79 = pybind11_weaver::CreateEntity<Entity_CXTypeKind>(EntityScope(m),
                                                               registry);
-  auto v77 = pybind11_weaver::CreateEntity<Entity_CXTypeLayoutError>(
+  auto v80 = pybind11_weaver::CreateEntity<Entity_CXTypeLayoutError>(
       EntityScope(m), registry);
-  auto v78 = pybind11_weaver::CreateEntity<Entity_CXTypeNullabilityKind>(
+  auto v81 = pybind11_weaver::CreateEntity<Entity_CXTypeNullabilityKind>(
       EntityScope(m), registry);
-  auto v79 = pybind11_weaver::CreateEntity<Entity_CXUnsavedFile>(EntityScope(m),
+  auto v82 = pybind11_weaver::CreateEntity<Entity_CXUnaryOperatorKind>(
+      EntityScope(m), registry);
+  auto v83 = pybind11_weaver::CreateEntity<Entity_CXUnsavedFile>(EntityScope(m),
                                                                  registry);
-  auto v80 =
+  auto v84 =
       pybind11_weaver::CreateEntity<Entity_CXVersion>(EntityScope(m), registry);
-  auto v81 = pybind11_weaver::CreateEntity<Entity_CXVisibilityKind>(
+  auto v85 = pybind11_weaver::CreateEntity<Entity_CXVisibilityKind>(
       EntityScope(m), registry);
-  auto v82 = pybind11_weaver::CreateEntity<Entity_CXVisitorResult>(
+  auto v86 = pybind11_weaver::CreateEntity<Entity_CXVisitorResult>(
       EntityScope(m), registry);
-  auto v83 = pybind11_weaver::CreateEntity<Entity_CX_CXXAccessSpecifier>(
+  auto v87 = pybind11_weaver::CreateEntity<Entity_CX_CXXAccessSpecifier>(
       EntityScope(m), registry);
-  auto v84 = pybind11_weaver::CreateEntity<Entity_CX_StorageClass>(
+  auto v88 = pybind11_weaver::CreateEntity<Entity_CX_StorageClass>(
       EntityScope(m), registry);
-  auto v85 = pybind11_weaver::CreateEntity<Entity_IndexerCallbacks>(
+  auto v89 = pybind11_weaver::CreateEntity<Entity_IndexerCallbacks>(
       EntityScope(m), registry);
-  auto v86 = pybind11_weaver::CreateEntity<
+  auto v90 = pybind11_weaver::CreateEntity<
       Entity_clang_BlockCommandComment_getArgText>(EntityScope(m), registry);
-  auto v87 = pybind11_weaver::CreateEntity<
+  auto v91 = pybind11_weaver::CreateEntity<
       Entity_clang_BlockCommandComment_getCommandName>(EntityScope(m),
                                                        registry);
-  auto v88 = pybind11_weaver::CreateEntity<
+  auto v92 = pybind11_weaver::CreateEntity<
       Entity_clang_BlockCommandComment_getNumArgs>(EntityScope(m), registry);
-  auto v89 = pybind11_weaver::CreateEntity<
+  auto v93 = pybind11_weaver::CreateEntity<
       Entity_clang_BlockCommandComment_getParagraph>(EntityScope(m), registry);
-  auto v90 = pybind11_weaver::CreateEntity<Entity_clang_CXCursorSet_contains>(
+  auto v94 = pybind11_weaver::CreateEntity<Entity_clang_CXCursorSet_contains>(
       EntityScope(m), registry);
-  auto v91 = pybind11_weaver::CreateEntity<Entity_clang_CXCursorSet_insert>(
+  auto v95 = pybind11_weaver::CreateEntity<Entity_clang_CXCursorSet_insert>(
       EntityScope(m), registry);
-  auto v92 =
+  auto v96 =
       pybind11_weaver::CreateEntity<Entity_clang_CXIndex_getGlobalOptions>(
           EntityScope(m), registry);
-  auto v93 =
+  auto v97 =
       pybind11_weaver::CreateEntity<Entity_clang_CXIndex_setGlobalOptions>(
           EntityScope(m), registry);
-  auto v94 = pybind11_weaver::CreateEntity<
+  auto v98 = pybind11_weaver::CreateEntity<
       Entity_clang_CXIndex_setInvocationEmissionPathOption>(EntityScope(m),
                                                             registry);
-  auto v95 = pybind11_weaver::CreateEntity<Entity_clang_CXRewriter_create>(
+  auto v99 = pybind11_weaver::CreateEntity<Entity_clang_CXRewriter_create>(
       EntityScope(m), registry);
-  auto v96 = pybind11_weaver::CreateEntity<Entity_clang_CXRewriter_dispose>(
+  auto v100 = pybind11_weaver::CreateEntity<Entity_clang_CXRewriter_dispose>(
       EntityScope(m), registry);
-  auto v97 =
+  auto v101 =
       pybind11_weaver::CreateEntity<Entity_clang_CXRewriter_insertTextBefore>(
           EntityScope(m), registry);
-  auto v98 = pybind11_weaver::CreateEntity<
+  auto v102 = pybind11_weaver::CreateEntity<
       Entity_clang_CXRewriter_overwriteChangedFiles>(EntityScope(m), registry);
-  auto v99 = pybind11_weaver::CreateEntity<Entity_clang_CXRewriter_removeText>(
+  auto v103 = pybind11_weaver::CreateEntity<Entity_clang_CXRewriter_removeText>(
       EntityScope(m), registry);
-  auto v100 =
+  auto v104 =
       pybind11_weaver::CreateEntity<Entity_clang_CXRewriter_replaceText>(
           EntityScope(m), registry);
-  auto v101 = pybind11_weaver::CreateEntity<
+  auto v105 = pybind11_weaver::CreateEntity<
       Entity_clang_CXRewriter_writeMainFileToStdOut>(EntityScope(m), registry);
-  auto v102 = pybind11_weaver::CreateEntity<
+  auto v106 = pybind11_weaver::CreateEntity<
       Entity_clang_CXXConstructor_isConvertingConstructor>(EntityScope(m),
                                                            registry);
-  auto v103 = pybind11_weaver::CreateEntity<
+  auto v107 = pybind11_weaver::CreateEntity<
       Entity_clang_CXXConstructor_isCopyConstructor>(EntityScope(m), registry);
-  auto v104 = pybind11_weaver::CreateEntity<
+  auto v108 = pybind11_weaver::CreateEntity<
       Entity_clang_CXXConstructor_isDefaultConstructor>(EntityScope(m),
                                                         registry);
-  auto v105 = pybind11_weaver::CreateEntity<
+  auto v109 = pybind11_weaver::CreateEntity<
       Entity_clang_CXXConstructor_isMoveConstructor>(EntityScope(m), registry);
-  auto v106 = pybind11_weaver::CreateEntity<Entity_clang_CXXField_isMutable>(
+  auto v110 = pybind11_weaver::CreateEntity<Entity_clang_CXXField_isMutable>(
       EntityScope(m), registry);
-  auto v107 = pybind11_weaver::CreateEntity<Entity_clang_CXXMethod_isConst>(
+  auto v111 = pybind11_weaver::CreateEntity<Entity_clang_CXXMethod_isConst>(
       EntityScope(m), registry);
-  auto v108 = pybind11_weaver::CreateEntity<
+  auto v112 = pybind11_weaver::CreateEntity<
       Entity_clang_CXXMethod_isCopyAssignmentOperator>(EntityScope(m),
                                                        registry);
-  auto v109 = pybind11_weaver::CreateEntity<Entity_clang_CXXMethod_isDefaulted>(
+  auto v113 = pybind11_weaver::CreateEntity<Entity_clang_CXXMethod_isDefaulted>(
       EntityScope(m), registry);
-  auto v110 = pybind11_weaver::CreateEntity<Entity_clang_CXXMethod_isDeleted>(
+  auto v114 = pybind11_weaver::CreateEntity<Entity_clang_CXXMethod_isDeleted>(
       EntityScope(m), registry);
-  auto v111 = pybind11_weaver::CreateEntity<
+  auto v115 = pybind11_weaver::CreateEntity<Entity_clang_CXXMethod_isExplicit>(
+      EntityScope(m), registry);
+  auto v116 = pybind11_weaver::CreateEntity<
       Entity_clang_CXXMethod_isMoveAssignmentOperator>(EntityScope(m),
                                                        registry);
-  auto v112 =
+  auto v117 =
       pybind11_weaver::CreateEntity<Entity_clang_CXXMethod_isPureVirtual>(
           EntityScope(m), registry);
-  auto v113 = pybind11_weaver::CreateEntity<Entity_clang_CXXMethod_isStatic>(
+  auto v118 = pybind11_weaver::CreateEntity<Entity_clang_CXXMethod_isStatic>(
       EntityScope(m), registry);
-  auto v114 = pybind11_weaver::CreateEntity<Entity_clang_CXXMethod_isVirtual>(
+  auto v119 = pybind11_weaver::CreateEntity<Entity_clang_CXXMethod_isVirtual>(
       EntityScope(m), registry);
-  auto v115 = pybind11_weaver::CreateEntity<Entity_clang_CXXRecord_isAbstract>(
+  auto v120 = pybind11_weaver::CreateEntity<Entity_clang_CXXRecord_isAbstract>(
       EntityScope(m), registry);
-  auto v116 = pybind11_weaver::CreateEntity<Entity_clang_Comment_getChild>(
+  auto v121 = pybind11_weaver::CreateEntity<Entity_clang_Comment_getChild>(
       EntityScope(m), registry);
-  auto v117 = pybind11_weaver::CreateEntity<Entity_clang_Comment_getKind>(
+  auto v122 = pybind11_weaver::CreateEntity<Entity_clang_Comment_getKind>(
       EntityScope(m), registry);
-  auto v118 =
+  auto v123 =
       pybind11_weaver::CreateEntity<Entity_clang_Comment_getNumChildren>(
           EntityScope(m), registry);
-  auto v119 = pybind11_weaver::CreateEntity<Entity_clang_Comment_isWhitespace>(
-      EntityScope(m), registry);
-  auto v120 =
-      pybind11_weaver::CreateEntity<Entity_clang_CompilationDatabase_dispose>(
-          EntityScope(m), registry);
-  auto v121 = pybind11_weaver::CreateEntity<
-      Entity_clang_CompilationDatabase_fromDirectory>(EntityScope(m), registry);
-  auto v122 = pybind11_weaver::CreateEntity<
-      Entity_clang_CompilationDatabase_getAllCompileCommands>(EntityScope(m),
-                                                              registry);
-  auto v123 = pybind11_weaver::CreateEntity<
-      Entity_clang_CompilationDatabase_getCompileCommands>(EntityScope(m),
-                                                           registry);
-  auto v124 = pybind11_weaver::CreateEntity<Entity_clang_CompileCommand_getArg>(
+  auto v124 = pybind11_weaver::CreateEntity<Entity_clang_Comment_isWhitespace>(
       EntityScope(m), registry);
   auto v125 =
+      pybind11_weaver::CreateEntity<Entity_clang_CompilationDatabase_dispose>(
+          EntityScope(m), registry);
+  auto v126 = pybind11_weaver::CreateEntity<
+      Entity_clang_CompilationDatabase_fromDirectory>(EntityScope(m), registry);
+  auto v127 = pybind11_weaver::CreateEntity<
+      Entity_clang_CompilationDatabase_getAllCompileCommands>(EntityScope(m),
+                                                              registry);
+  auto v128 = pybind11_weaver::CreateEntity<
+      Entity_clang_CompilationDatabase_getCompileCommands>(EntityScope(m),
+                                                           registry);
+  auto v129 = pybind11_weaver::CreateEntity<Entity_clang_CompileCommand_getArg>(
+      EntityScope(m), registry);
+  auto v130 =
       pybind11_weaver::CreateEntity<Entity_clang_CompileCommand_getDirectory>(
           EntityScope(m), registry);
-  auto v126 =
+  auto v131 =
       pybind11_weaver::CreateEntity<Entity_clang_CompileCommand_getFilename>(
           EntityScope(m), registry);
-  auto v127 = pybind11_weaver::CreateEntity<
+  auto v132 = pybind11_weaver::CreateEntity<
       Entity_clang_CompileCommand_getMappedSourceContent>(EntityScope(m),
                                                           registry);
-  auto v128 = pybind11_weaver::CreateEntity<
+  auto v133 = pybind11_weaver::CreateEntity<
       Entity_clang_CompileCommand_getMappedSourcePath>(EntityScope(m),
                                                        registry);
-  auto v129 =
+  auto v134 =
       pybind11_weaver::CreateEntity<Entity_clang_CompileCommand_getNumArgs>(
           EntityScope(m), registry);
-  auto v130 = pybind11_weaver::CreateEntity<
+  auto v135 = pybind11_weaver::CreateEntity<
       Entity_clang_CompileCommand_getNumMappedSources>(EntityScope(m),
                                                        registry);
-  auto v131 =
+  auto v136 =
       pybind11_weaver::CreateEntity<Entity_clang_CompileCommands_dispose>(
           EntityScope(m), registry);
-  auto v132 =
+  auto v137 =
       pybind11_weaver::CreateEntity<Entity_clang_CompileCommands_getCommand>(
           EntityScope(m), registry);
-  auto v133 =
+  auto v138 =
       pybind11_weaver::CreateEntity<Entity_clang_CompileCommands_getSize>(
           EntityScope(m), registry);
-  auto v134 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_Evaluate>(
+  auto v139 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_Evaluate>(
       EntityScope(m), registry);
-  auto v135 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_getArgument>(
-      EntityScope(m), registry);
-  auto v136 =
-      pybind11_weaver::CreateEntity<Entity_clang_Cursor_getBriefCommentText>(
-          EntityScope(m), registry);
-  auto v137 =
-      pybind11_weaver::CreateEntity<Entity_clang_Cursor_getCXXManglings>(
-          EntityScope(m), registry);
-  auto v138 =
-      pybind11_weaver::CreateEntity<Entity_clang_Cursor_getCommentRange>(
-          EntityScope(m), registry);
-  auto v139 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_getMangling>(
-      EntityScope(m), registry);
-  auto v140 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_getModule>(
+  auto v140 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_getArgument>(
       EntityScope(m), registry);
   auto v141 =
+      pybind11_weaver::CreateEntity<Entity_clang_Cursor_getBriefCommentText>(
+          EntityScope(m), registry);
+  auto v142 =
+      pybind11_weaver::CreateEntity<Entity_clang_Cursor_getCXXManglings>(
+          EntityScope(m), registry);
+  auto v143 =
+      pybind11_weaver::CreateEntity<Entity_clang_Cursor_getCommentRange>(
+          EntityScope(m), registry);
+  auto v144 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_getMangling>(
+      EntityScope(m), registry);
+  auto v145 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_getModule>(
+      EntityScope(m), registry);
+  auto v146 =
       pybind11_weaver::CreateEntity<Entity_clang_Cursor_getNumArguments>(
           EntityScope(m), registry);
-  auto v142 = pybind11_weaver::CreateEntity<
+  auto v147 = pybind11_weaver::CreateEntity<
       Entity_clang_Cursor_getNumTemplateArguments>(EntityScope(m), registry);
-  auto v143 =
+  auto v148 =
       pybind11_weaver::CreateEntity<Entity_clang_Cursor_getObjCDeclQualifiers>(
           EntityScope(m), registry);
-  auto v144 =
+  auto v149 =
       pybind11_weaver::CreateEntity<Entity_clang_Cursor_getObjCManglings>(
           EntityScope(m), registry);
-  auto v145 = pybind11_weaver::CreateEntity<
+  auto v150 = pybind11_weaver::CreateEntity<
       Entity_clang_Cursor_getObjCPropertyAttributes>(EntityScope(m), registry);
-  auto v146 = pybind11_weaver::CreateEntity<
+  auto v151 = pybind11_weaver::CreateEntity<
       Entity_clang_Cursor_getObjCPropertyGetterName>(EntityScope(m), registry);
-  auto v147 = pybind11_weaver::CreateEntity<
+  auto v152 = pybind11_weaver::CreateEntity<
       Entity_clang_Cursor_getObjCPropertySetterName>(EntityScope(m), registry);
-  auto v148 =
+  auto v153 =
       pybind11_weaver::CreateEntity<Entity_clang_Cursor_getObjCSelectorIndex>(
           EntityScope(m), registry);
-  auto v149 =
+  auto v154 =
       pybind11_weaver::CreateEntity<Entity_clang_Cursor_getOffsetOfField>(
           EntityScope(m), registry);
-  auto v150 =
+  auto v155 =
       pybind11_weaver::CreateEntity<Entity_clang_Cursor_getParsedComment>(
           EntityScope(m), registry);
-  auto v151 =
+  auto v156 =
       pybind11_weaver::CreateEntity<Entity_clang_Cursor_getRawCommentText>(
           EntityScope(m), registry);
-  auto v152 =
+  auto v157 =
       pybind11_weaver::CreateEntity<Entity_clang_Cursor_getReceiverType>(
           EntityScope(m), registry);
-  auto v153 =
+  auto v158 =
       pybind11_weaver::CreateEntity<Entity_clang_Cursor_getSpellingNameRange>(
           EntityScope(m), registry);
-  auto v154 =
+  auto v159 =
       pybind11_weaver::CreateEntity<Entity_clang_Cursor_getStorageClass>(
           EntityScope(m), registry);
-  auto v155 = pybind11_weaver::CreateEntity<
+  auto v160 = pybind11_weaver::CreateEntity<
       Entity_clang_Cursor_getTemplateArgumentKind>(EntityScope(m), registry);
-  auto v156 = pybind11_weaver::CreateEntity<
+  auto v161 = pybind11_weaver::CreateEntity<
       Entity_clang_Cursor_getTemplateArgumentType>(EntityScope(m), registry);
-  auto v157 = pybind11_weaver::CreateEntity<
+  auto v162 = pybind11_weaver::CreateEntity<
       Entity_clang_Cursor_getTemplateArgumentUnsignedValue>(EntityScope(m),
                                                             registry);
-  auto v158 = pybind11_weaver::CreateEntity<
+  auto v163 = pybind11_weaver::CreateEntity<
       Entity_clang_Cursor_getTemplateArgumentValue>(EntityScope(m), registry);
-  auto v159 =
+  auto v164 =
       pybind11_weaver::CreateEntity<Entity_clang_Cursor_getTranslationUnit>(
           EntityScope(m), registry);
-  auto v160 =
+  auto v165 =
       pybind11_weaver::CreateEntity<Entity_clang_Cursor_getVarDeclInitializer>(
           EntityScope(m), registry);
-  auto v161 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_hasAttrs>(
+  auto v166 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_hasAttrs>(
       EntityScope(m), registry);
-  auto v162 = pybind11_weaver::CreateEntity<
+  auto v167 = pybind11_weaver::CreateEntity<
       Entity_clang_Cursor_hasVarDeclExternalStorage>(EntityScope(m), registry);
-  auto v163 = pybind11_weaver::CreateEntity<
+  auto v168 = pybind11_weaver::CreateEntity<
       Entity_clang_Cursor_hasVarDeclGlobalStorage>(EntityScope(m), registry);
-  auto v164 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_isAnonymous>(
+  auto v169 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_isAnonymous>(
       EntityScope(m), registry);
-  auto v165 =
+  auto v170 =
       pybind11_weaver::CreateEntity<Entity_clang_Cursor_isAnonymousRecordDecl>(
           EntityScope(m), registry);
-  auto v166 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_isBitField>(
+  auto v171 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_isBitField>(
       EntityScope(m), registry);
-  auto v167 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_isDynamicCall>(
+  auto v172 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_isDynamicCall>(
       EntityScope(m), registry);
-  auto v168 =
+  auto v173 =
       pybind11_weaver::CreateEntity<Entity_clang_Cursor_isExternalSymbol>(
           EntityScope(m), registry);
-  auto v169 =
+  auto v174 =
       pybind11_weaver::CreateEntity<Entity_clang_Cursor_isFunctionInlined>(
           EntityScope(m), registry);
-  auto v170 =
+  auto v175 =
       pybind11_weaver::CreateEntity<Entity_clang_Cursor_isInlineNamespace>(
           EntityScope(m), registry);
-  auto v171 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_isMacroBuiltin>(
+  auto v176 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_isMacroBuiltin>(
       EntityScope(m), registry);
-  auto v172 =
+  auto v177 =
       pybind11_weaver::CreateEntity<Entity_clang_Cursor_isMacroFunctionLike>(
           EntityScope(m), registry);
-  auto v173 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_isNull>(
+  auto v178 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_isNull>(
       EntityScope(m), registry);
-  auto v174 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_isObjCOptional>(
+  auto v179 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_isObjCOptional>(
       EntityScope(m), registry);
-  auto v175 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_isVariadic>(
+  auto v180 = pybind11_weaver::CreateEntity<Entity_clang_Cursor_isVariadic>(
       EntityScope(m), registry);
-  auto v176 = pybind11_weaver::CreateEntity<Entity_clang_EnumDecl_isScoped>(
+  auto v181 = pybind11_weaver::CreateEntity<Entity_clang_EnumDecl_isScoped>(
       EntityScope(m), registry);
-  auto v177 = pybind11_weaver::CreateEntity<Entity_clang_EvalResult_dispose>(
+  auto v182 = pybind11_weaver::CreateEntity<Entity_clang_EvalResult_dispose>(
       EntityScope(m), registry);
-  auto v178 =
+  auto v183 =
       pybind11_weaver::CreateEntity<Entity_clang_EvalResult_getAsDouble>(
           EntityScope(m), registry);
-  auto v179 = pybind11_weaver::CreateEntity<Entity_clang_EvalResult_getAsInt>(
+  auto v184 = pybind11_weaver::CreateEntity<Entity_clang_EvalResult_getAsInt>(
       EntityScope(m), registry);
-  auto v180 =
+  auto v185 =
       pybind11_weaver::CreateEntity<Entity_clang_EvalResult_getAsLongLong>(
           EntityScope(m), registry);
-  auto v181 = pybind11_weaver::CreateEntity<Entity_clang_EvalResult_getAsStr>(
+  auto v186 = pybind11_weaver::CreateEntity<Entity_clang_EvalResult_getAsStr>(
       EntityScope(m), registry);
-  auto v182 =
+  auto v187 =
       pybind11_weaver::CreateEntity<Entity_clang_EvalResult_getAsUnsigned>(
           EntityScope(m), registry);
-  auto v183 = pybind11_weaver::CreateEntity<Entity_clang_EvalResult_getKind>(
+  auto v188 = pybind11_weaver::CreateEntity<Entity_clang_EvalResult_getKind>(
       EntityScope(m), registry);
-  auto v184 =
+  auto v189 =
       pybind11_weaver::CreateEntity<Entity_clang_EvalResult_isUnsignedInt>(
           EntityScope(m), registry);
-  auto v185 = pybind11_weaver::CreateEntity<Entity_clang_File_isEqual>(
+  auto v190 = pybind11_weaver::CreateEntity<Entity_clang_File_isEqual>(
       EntityScope(m), registry);
-  auto v186 =
+  auto v191 =
       pybind11_weaver::CreateEntity<Entity_clang_File_tryGetRealPathName>(
           EntityScope(m), registry);
-  auto v187 = pybind11_weaver::CreateEntity<Entity_clang_FullComment_getAsHTML>(
+  auto v192 = pybind11_weaver::CreateEntity<Entity_clang_FullComment_getAsHTML>(
       EntityScope(m), registry);
-  auto v188 = pybind11_weaver::CreateEntity<Entity_clang_FullComment_getAsXML>(
+  auto v193 = pybind11_weaver::CreateEntity<Entity_clang_FullComment_getAsXML>(
       EntityScope(m), registry);
-  auto v189 = pybind11_weaver::CreateEntity<
+  auto v194 = pybind11_weaver::CreateEntity<
       Entity_clang_HTMLStartTagComment_isSelfClosing>(EntityScope(m), registry);
-  auto v190 =
+  auto v195 =
       pybind11_weaver::CreateEntity<Entity_clang_HTMLStartTag_getAttrName>(
           EntityScope(m), registry);
-  auto v191 =
+  auto v196 =
       pybind11_weaver::CreateEntity<Entity_clang_HTMLStartTag_getAttrValue>(
           EntityScope(m), registry);
-  auto v192 =
+  auto v197 =
       pybind11_weaver::CreateEntity<Entity_clang_HTMLStartTag_getNumAttrs>(
           EntityScope(m), registry);
-  auto v193 =
+  auto v198 =
       pybind11_weaver::CreateEntity<Entity_clang_HTMLTagComment_getAsString>(
           EntityScope(m), registry);
-  auto v194 =
+  auto v199 =
       pybind11_weaver::CreateEntity<Entity_clang_HTMLTagComment_getTagName>(
           EntityScope(m), registry);
-  auto v195 = pybind11_weaver::CreateEntity<Entity_clang_IndexAction_create>(
+  auto v200 = pybind11_weaver::CreateEntity<Entity_clang_IndexAction_create>(
       EntityScope(m), registry);
-  auto v196 = pybind11_weaver::CreateEntity<Entity_clang_IndexAction_dispose>(
+  auto v201 = pybind11_weaver::CreateEntity<Entity_clang_IndexAction_dispose>(
       EntityScope(m), registry);
-  auto v197 = pybind11_weaver::CreateEntity<
+  auto v202 = pybind11_weaver::CreateEntity<
       Entity_clang_InlineCommandComment_getArgText>(EntityScope(m), registry);
-  auto v198 = pybind11_weaver::CreateEntity<
+  auto v203 = pybind11_weaver::CreateEntity<
       Entity_clang_InlineCommandComment_getCommandName>(EntityScope(m),
                                                         registry);
-  auto v199 = pybind11_weaver::CreateEntity<
+  auto v204 = pybind11_weaver::CreateEntity<
       Entity_clang_InlineCommandComment_getNumArgs>(EntityScope(m), registry);
-  auto v200 = pybind11_weaver::CreateEntity<
+  auto v205 = pybind11_weaver::CreateEntity<
       Entity_clang_InlineCommandComment_getRenderKind>(EntityScope(m),
                                                        registry);
-  auto v201 = pybind11_weaver::CreateEntity<
+  auto v206 = pybind11_weaver::CreateEntity<
       Entity_clang_InlineContentComment_hasTrailingNewline>(EntityScope(m),
                                                             registry);
-  auto v202 =
+  auto v207 =
       pybind11_weaver::CreateEntity<Entity_clang_Location_isFromMainFile>(
           EntityScope(m), registry);
-  auto v203 =
+  auto v208 =
       pybind11_weaver::CreateEntity<Entity_clang_Location_isInSystemHeader>(
           EntityScope(m), registry);
-  auto v204 =
+  auto v209 =
       pybind11_weaver::CreateEntity<Entity_clang_ModuleMapDescriptor_create>(
           EntityScope(m), registry);
-  auto v205 =
+  auto v210 =
       pybind11_weaver::CreateEntity<Entity_clang_ModuleMapDescriptor_dispose>(
           EntityScope(m), registry);
-  auto v206 = pybind11_weaver::CreateEntity<
+  auto v211 = pybind11_weaver::CreateEntity<
       Entity_clang_ModuleMapDescriptor_setFrameworkModuleName>(EntityScope(m),
                                                                registry);
-  auto v207 = pybind11_weaver::CreateEntity<
+  auto v212 = pybind11_weaver::CreateEntity<
       Entity_clang_ModuleMapDescriptor_setUmbrellaHeader>(EntityScope(m),
                                                           registry);
-  auto v208 = pybind11_weaver::CreateEntity<
+  auto v213 = pybind11_weaver::CreateEntity<
       Entity_clang_ModuleMapDescriptor_writeToBuffer>(EntityScope(m), registry);
-  auto v209 = pybind11_weaver::CreateEntity<Entity_clang_Module_getASTFile>(
+  auto v214 = pybind11_weaver::CreateEntity<Entity_clang_Module_getASTFile>(
       EntityScope(m), registry);
-  auto v210 = pybind11_weaver::CreateEntity<Entity_clang_Module_getFullName>(
+  auto v215 = pybind11_weaver::CreateEntity<Entity_clang_Module_getFullName>(
       EntityScope(m), registry);
-  auto v211 = pybind11_weaver::CreateEntity<Entity_clang_Module_getName>(
+  auto v216 = pybind11_weaver::CreateEntity<Entity_clang_Module_getName>(
       EntityScope(m), registry);
-  auto v212 =
+  auto v217 =
       pybind11_weaver::CreateEntity<Entity_clang_Module_getNumTopLevelHeaders>(
           EntityScope(m), registry);
-  auto v213 = pybind11_weaver::CreateEntity<Entity_clang_Module_getParent>(
+  auto v218 = pybind11_weaver::CreateEntity<Entity_clang_Module_getParent>(
       EntityScope(m), registry);
-  auto v214 =
+  auto v219 =
       pybind11_weaver::CreateEntity<Entity_clang_Module_getTopLevelHeader>(
           EntityScope(m), registry);
-  auto v215 = pybind11_weaver::CreateEntity<Entity_clang_Module_isSystem>(
+  auto v220 = pybind11_weaver::CreateEntity<Entity_clang_Module_isSystem>(
       EntityScope(m), registry);
-  auto v216 = pybind11_weaver::CreateEntity<
+  auto v221 = pybind11_weaver::CreateEntity<
       Entity_clang_ParamCommandComment_getDirection>(EntityScope(m), registry);
-  auto v217 = pybind11_weaver::CreateEntity<
+  auto v222 = pybind11_weaver::CreateEntity<
       Entity_clang_ParamCommandComment_getParamIndex>(EntityScope(m), registry);
-  auto v218 = pybind11_weaver::CreateEntity<
+  auto v223 = pybind11_weaver::CreateEntity<
       Entity_clang_ParamCommandComment_getParamName>(EntityScope(m), registry);
-  auto v219 = pybind11_weaver::CreateEntity<
+  auto v224 = pybind11_weaver::CreateEntity<
       Entity_clang_ParamCommandComment_isDirectionExplicit>(EntityScope(m),
                                                             registry);
-  auto v220 = pybind11_weaver::CreateEntity<
+  auto v225 = pybind11_weaver::CreateEntity<
       Entity_clang_ParamCommandComment_isParamIndexValid>(EntityScope(m),
                                                           registry);
-  auto v221 =
+  auto v226 =
       pybind11_weaver::CreateEntity<Entity_clang_PrintingPolicy_dispose>(
           EntityScope(m), registry);
-  auto v222 =
+  auto v227 =
       pybind11_weaver::CreateEntity<Entity_clang_PrintingPolicy_getProperty>(
           EntityScope(m), registry);
-  auto v223 =
+  auto v228 =
       pybind11_weaver::CreateEntity<Entity_clang_PrintingPolicy_setProperty>(
           EntityScope(m), registry);
-  auto v224 = pybind11_weaver::CreateEntity<Entity_clang_Range_isNull>(
-      EntityScope(m), registry);
-  auto v225 =
-      pybind11_weaver::CreateEntity<Entity_clang_TParamCommandComment_getDepth>(
-          EntityScope(m), registry);
-  auto v226 =
-      pybind11_weaver::CreateEntity<Entity_clang_TParamCommandComment_getIndex>(
-          EntityScope(m), registry);
-  auto v227 = pybind11_weaver::CreateEntity<
-      Entity_clang_TParamCommandComment_getParamName>(EntityScope(m), registry);
-  auto v228 = pybind11_weaver::CreateEntity<
-      Entity_clang_TParamCommandComment_isParamPositionValid>(EntityScope(m),
-                                                              registry);
-  auto v229 = pybind11_weaver::CreateEntity<Entity_clang_TargetInfo_dispose>(
+  auto v229 = pybind11_weaver::CreateEntity<Entity_clang_Range_isNull>(
       EntityScope(m), registry);
   auto v230 =
+      pybind11_weaver::CreateEntity<Entity_clang_TParamCommandComment_getDepth>(
+          EntityScope(m), registry);
+  auto v231 =
+      pybind11_weaver::CreateEntity<Entity_clang_TParamCommandComment_getIndex>(
+          EntityScope(m), registry);
+  auto v232 = pybind11_weaver::CreateEntity<
+      Entity_clang_TParamCommandComment_getParamName>(EntityScope(m), registry);
+  auto v233 = pybind11_weaver::CreateEntity<
+      Entity_clang_TParamCommandComment_isParamPositionValid>(EntityScope(m),
+                                                              registry);
+  auto v234 = pybind11_weaver::CreateEntity<Entity_clang_TargetInfo_dispose>(
+      EntityScope(m), registry);
+  auto v235 =
       pybind11_weaver::CreateEntity<Entity_clang_TargetInfo_getPointerWidth>(
           EntityScope(m), registry);
-  auto v231 = pybind11_weaver::CreateEntity<Entity_clang_TargetInfo_getTriple>(
+  auto v236 = pybind11_weaver::CreateEntity<Entity_clang_TargetInfo_getTriple>(
       EntityScope(m), registry);
-  auto v232 = pybind11_weaver::CreateEntity<Entity_clang_TextComment_getText>(
+  auto v237 = pybind11_weaver::CreateEntity<Entity_clang_TextComment_getText>(
       EntityScope(m), registry);
-  auto v233 = pybind11_weaver::CreateEntity<Entity_clang_Type_getAlignOf>(
-      EntityScope(m), registry);
-  auto v234 =
-      pybind11_weaver::CreateEntity<Entity_clang_Type_getCXXRefQualifier>(
-          EntityScope(m), registry);
-  auto v235 = pybind11_weaver::CreateEntity<Entity_clang_Type_getClassType>(
-      EntityScope(m), registry);
-  auto v236 = pybind11_weaver::CreateEntity<Entity_clang_Type_getModifiedType>(
-      EntityScope(m), registry);
-  auto v237 = pybind11_weaver::CreateEntity<Entity_clang_Type_getNamedType>(
-      EntityScope(m), registry);
-  auto v238 = pybind11_weaver::CreateEntity<Entity_clang_Type_getNullability>(
+  auto v238 = pybind11_weaver::CreateEntity<Entity_clang_Type_getAlignOf>(
       EntityScope(m), registry);
   auto v239 =
+      pybind11_weaver::CreateEntity<Entity_clang_Type_getCXXRefQualifier>(
+          EntityScope(m), registry);
+  auto v240 = pybind11_weaver::CreateEntity<Entity_clang_Type_getClassType>(
+      EntityScope(m), registry);
+  auto v241 = pybind11_weaver::CreateEntity<Entity_clang_Type_getModifiedType>(
+      EntityScope(m), registry);
+  auto v242 = pybind11_weaver::CreateEntity<Entity_clang_Type_getNamedType>(
+      EntityScope(m), registry);
+  auto v243 = pybind11_weaver::CreateEntity<Entity_clang_Type_getNullability>(
+      EntityScope(m), registry);
+  auto v244 =
       pybind11_weaver::CreateEntity<Entity_clang_Type_getNumObjCProtocolRefs>(
           EntityScope(m), registry);
-  auto v240 =
+  auto v245 =
       pybind11_weaver::CreateEntity<Entity_clang_Type_getNumObjCTypeArgs>(
           EntityScope(m), registry);
-  auto v241 =
+  auto v246 =
       pybind11_weaver::CreateEntity<Entity_clang_Type_getNumTemplateArguments>(
           EntityScope(m), registry);
-  auto v242 = pybind11_weaver::CreateEntity<Entity_clang_Type_getObjCEncoding>(
+  auto v247 = pybind11_weaver::CreateEntity<Entity_clang_Type_getObjCEncoding>(
       EntityScope(m), registry);
-  auto v243 =
+  auto v248 =
       pybind11_weaver::CreateEntity<Entity_clang_Type_getObjCObjectBaseType>(
           EntityScope(m), registry);
-  auto v244 =
+  auto v249 =
       pybind11_weaver::CreateEntity<Entity_clang_Type_getObjCProtocolDecl>(
           EntityScope(m), registry);
-  auto v245 = pybind11_weaver::CreateEntity<Entity_clang_Type_getObjCTypeArg>(
+  auto v250 = pybind11_weaver::CreateEntity<Entity_clang_Type_getObjCTypeArg>(
       EntityScope(m), registry);
-  auto v246 = pybind11_weaver::CreateEntity<Entity_clang_Type_getOffsetOf>(
+  auto v251 = pybind11_weaver::CreateEntity<Entity_clang_Type_getOffsetOf>(
       EntityScope(m), registry);
-  auto v247 = pybind11_weaver::CreateEntity<Entity_clang_Type_getSizeOf>(
+  auto v252 = pybind11_weaver::CreateEntity<Entity_clang_Type_getSizeOf>(
       EntityScope(m), registry);
-  auto v248 = pybind11_weaver::CreateEntity<
+  auto v253 = pybind11_weaver::CreateEntity<
       Entity_clang_Type_getTemplateArgumentAsType>(EntityScope(m), registry);
-  auto v249 = pybind11_weaver::CreateEntity<Entity_clang_Type_getValueType>(
+  auto v254 = pybind11_weaver::CreateEntity<Entity_clang_Type_getValueType>(
       EntityScope(m), registry);
-  auto v250 =
+  auto v255 =
       pybind11_weaver::CreateEntity<Entity_clang_Type_isTransparentTagTypedef>(
           EntityScope(m), registry);
-  auto v251 = pybind11_weaver::CreateEntity<Entity_clang_Type_visitFields>(
+  auto v256 = pybind11_weaver::CreateEntity<Entity_clang_Type_visitFields>(
       EntityScope(m), registry);
-  auto v252 = pybind11_weaver::CreateEntity<
+  auto v257 = pybind11_weaver::CreateEntity<
       Entity_clang_VerbatimBlockLineComment_getText>(EntityScope(m), registry);
-  auto v253 =
+  auto v258 =
       pybind11_weaver::CreateEntity<Entity_clang_VerbatimLineComment_getText>(
           EntityScope(m), registry);
-  auto v254 = pybind11_weaver::CreateEntity<
+  auto v259 = pybind11_weaver::CreateEntity<
       Entity_clang_VirtualFileOverlay_addFileMapping>(EntityScope(m), registry);
-  auto v255 =
+  auto v260 =
       pybind11_weaver::CreateEntity<Entity_clang_VirtualFileOverlay_create>(
           EntityScope(m), registry);
-  auto v256 =
+  auto v261 =
       pybind11_weaver::CreateEntity<Entity_clang_VirtualFileOverlay_dispose>(
           EntityScope(m), registry);
-  auto v257 = pybind11_weaver::CreateEntity<
+  auto v262 = pybind11_weaver::CreateEntity<
       Entity_clang_VirtualFileOverlay_setCaseSensitivity>(EntityScope(m),
                                                           registry);
-  auto v258 = pybind11_weaver::CreateEntity<
+  auto v263 = pybind11_weaver::CreateEntity<
       Entity_clang_VirtualFileOverlay_writeToBuffer>(EntityScope(m), registry);
-  auto v259 = pybind11_weaver::CreateEntity<Entity_clang_annotateTokens>(
+  auto v264 = pybind11_weaver::CreateEntity<Entity_clang_annotateTokens>(
       EntityScope(m), registry);
-  auto v260 = pybind11_weaver::CreateEntity<Entity_clang_codeCompleteAt>(
+  auto v265 = pybind11_weaver::CreateEntity<Entity_clang_codeCompleteAt>(
       EntityScope(m), registry);
-  auto v261 =
+  auto v266 =
       pybind11_weaver::CreateEntity<Entity_clang_codeCompleteGetContainerKind>(
           EntityScope(m), registry);
-  auto v262 =
+  auto v267 =
       pybind11_weaver::CreateEntity<Entity_clang_codeCompleteGetContainerUSR>(
           EntityScope(m), registry);
-  auto v263 =
+  auto v268 =
       pybind11_weaver::CreateEntity<Entity_clang_codeCompleteGetContexts>(
           EntityScope(m), registry);
-  auto v264 =
+  auto v269 =
       pybind11_weaver::CreateEntity<Entity_clang_codeCompleteGetDiagnostic>(
           EntityScope(m), registry);
-  auto v265 =
+  auto v270 =
       pybind11_weaver::CreateEntity<Entity_clang_codeCompleteGetNumDiagnostics>(
           EntityScope(m), registry);
-  auto v266 =
+  auto v271 =
       pybind11_weaver::CreateEntity<Entity_clang_codeCompleteGetObjCSelector>(
           EntityScope(m), registry);
-  auto v267 =
+  auto v272 =
       pybind11_weaver::CreateEntity<Entity_clang_constructUSR_ObjCCategory>(
           EntityScope(m), registry);
-  auto v268 =
+  auto v273 =
       pybind11_weaver::CreateEntity<Entity_clang_constructUSR_ObjCClass>(
           EntityScope(m), registry);
-  auto v269 = pybind11_weaver::CreateEntity<Entity_clang_constructUSR_ObjCIvar>(
+  auto v274 = pybind11_weaver::CreateEntity<Entity_clang_constructUSR_ObjCIvar>(
       EntityScope(m), registry);
-  auto v270 =
+  auto v275 =
       pybind11_weaver::CreateEntity<Entity_clang_constructUSR_ObjCMethod>(
           EntityScope(m), registry);
-  auto v271 =
+  auto v276 =
       pybind11_weaver::CreateEntity<Entity_clang_constructUSR_ObjCProperty>(
           EntityScope(m), registry);
-  auto v272 =
+  auto v277 =
       pybind11_weaver::CreateEntity<Entity_clang_constructUSR_ObjCProtocol>(
           EntityScope(m), registry);
-  auto v273 = pybind11_weaver::CreateEntity<Entity_clang_createAPISet>(
+  auto v278 = pybind11_weaver::CreateEntity<Entity_clang_createAPISet>(
       EntityScope(m), registry);
-  auto v274 = pybind11_weaver::CreateEntity<Entity_clang_createCXCursorSet>(
+  auto v279 = pybind11_weaver::CreateEntity<Entity_clang_createCXCursorSet>(
       EntityScope(m), registry);
-  auto v275 = pybind11_weaver::CreateEntity<Entity_clang_createIndex>(
+  auto v280 = pybind11_weaver::CreateEntity<Entity_clang_createIndex>(
       EntityScope(m), registry);
-  auto v276 = pybind11_weaver::CreateEntity<Entity_clang_createTranslationUnit>(
+  auto v281 =
+      pybind11_weaver::CreateEntity<Entity_clang_createIndexWithOptions>(
+          EntityScope(m), registry);
+  auto v282 = pybind11_weaver::CreateEntity<Entity_clang_createTranslationUnit>(
       EntityScope(m), registry);
-  auto v277 =
+  auto v283 =
       pybind11_weaver::CreateEntity<Entity_clang_createTranslationUnit2>(
           EntityScope(m), registry);
-  auto v278 = pybind11_weaver::CreateEntity<
+  auto v284 = pybind11_weaver::CreateEntity<
       Entity_clang_createTranslationUnitFromSourceFile>(EntityScope(m),
                                                         registry);
-  auto v279 =
+  auto v285 =
       pybind11_weaver::CreateEntity<Entity_clang_defaultCodeCompleteOptions>(
           EntityScope(m), registry);
-  auto v280 = pybind11_weaver::CreateEntity<
+  auto v286 = pybind11_weaver::CreateEntity<
       Entity_clang_defaultDiagnosticDisplayOptions>(EntityScope(m), registry);
-  auto v281 = pybind11_weaver::CreateEntity<
+  auto v287 = pybind11_weaver::CreateEntity<
       Entity_clang_defaultEditingTranslationUnitOptions>(EntityScope(m),
                                                          registry);
-  auto v282 = pybind11_weaver::CreateEntity<Entity_clang_defaultReparseOptions>(
+  auto v288 = pybind11_weaver::CreateEntity<Entity_clang_defaultReparseOptions>(
       EntityScope(m), registry);
-  auto v283 = pybind11_weaver::CreateEntity<Entity_clang_defaultSaveOptions>(
+  auto v289 = pybind11_weaver::CreateEntity<Entity_clang_defaultSaveOptions>(
       EntityScope(m), registry);
-  auto v284 = pybind11_weaver::CreateEntity<Entity_clang_disposeAPISet>(
+  auto v290 = pybind11_weaver::CreateEntity<Entity_clang_disposeAPISet>(
       EntityScope(m), registry);
-  auto v285 = pybind11_weaver::CreateEntity<Entity_clang_disposeCXCursorSet>(
-      EntityScope(m), registry);
-  auto v286 =
-      pybind11_weaver::CreateEntity<Entity_clang_disposeCXPlatformAvailability>(
-          EntityScope(m), registry);
-  auto v287 =
-      pybind11_weaver::CreateEntity<Entity_clang_disposeCXTUResourceUsage>(
-          EntityScope(m), registry);
-  auto v288 =
-      pybind11_weaver::CreateEntity<Entity_clang_disposeCodeCompleteResults>(
-          EntityScope(m), registry);
-  auto v289 = pybind11_weaver::CreateEntity<Entity_clang_disposeDiagnostic>(
-      EntityScope(m), registry);
-  auto v290 = pybind11_weaver::CreateEntity<Entity_clang_disposeDiagnosticSet>(
-      EntityScope(m), registry);
-  auto v291 = pybind11_weaver::CreateEntity<Entity_clang_disposeIndex>(
+  auto v291 = pybind11_weaver::CreateEntity<Entity_clang_disposeCXCursorSet>(
       EntityScope(m), registry);
   auto v292 =
-      pybind11_weaver::CreateEntity<Entity_clang_disposeOverriddenCursors>(
+      pybind11_weaver::CreateEntity<Entity_clang_disposeCXPlatformAvailability>(
           EntityScope(m), registry);
   auto v293 =
+      pybind11_weaver::CreateEntity<Entity_clang_disposeCXTUResourceUsage>(
+          EntityScope(m), registry);
+  auto v294 =
+      pybind11_weaver::CreateEntity<Entity_clang_disposeCodeCompleteResults>(
+          EntityScope(m), registry);
+  auto v295 = pybind11_weaver::CreateEntity<Entity_clang_disposeDiagnostic>(
+      EntityScope(m), registry);
+  auto v296 = pybind11_weaver::CreateEntity<Entity_clang_disposeDiagnosticSet>(
+      EntityScope(m), registry);
+  auto v297 = pybind11_weaver::CreateEntity<Entity_clang_disposeIndex>(
+      EntityScope(m), registry);
+  auto v298 =
+      pybind11_weaver::CreateEntity<Entity_clang_disposeOverriddenCursors>(
+          EntityScope(m), registry);
+  auto v299 =
       pybind11_weaver::CreateEntity<Entity_clang_disposeSourceRangeList>(
           EntityScope(m), registry);
-  auto v294 = pybind11_weaver::CreateEntity<Entity_clang_disposeString>(
+  auto v300 = pybind11_weaver::CreateEntity<Entity_clang_disposeString>(
       EntityScope(m), registry);
-  auto v295 = pybind11_weaver::CreateEntity<Entity_clang_disposeStringSet>(
+  auto v301 = pybind11_weaver::CreateEntity<Entity_clang_disposeStringSet>(
       EntityScope(m), registry);
-  auto v296 = pybind11_weaver::CreateEntity<Entity_clang_disposeTokens>(
+  auto v302 = pybind11_weaver::CreateEntity<Entity_clang_disposeTokens>(
       EntityScope(m), registry);
-  auto v297 =
+  auto v303 =
       pybind11_weaver::CreateEntity<Entity_clang_disposeTranslationUnit>(
           EntityScope(m), registry);
-  auto v298 = pybind11_weaver::CreateEntity<Entity_clang_enableStackTraces>(
+  auto v304 = pybind11_weaver::CreateEntity<Entity_clang_enableStackTraces>(
       EntityScope(m), registry);
-  auto v299 = pybind11_weaver::CreateEntity<Entity_clang_equalCursors>(
+  auto v305 = pybind11_weaver::CreateEntity<Entity_clang_equalCursors>(
       EntityScope(m), registry);
-  auto v300 = pybind11_weaver::CreateEntity<Entity_clang_equalLocations>(
+  auto v306 = pybind11_weaver::CreateEntity<Entity_clang_equalLocations>(
       EntityScope(m), registry);
-  auto v301 = pybind11_weaver::CreateEntity<Entity_clang_equalRanges>(
+  auto v307 = pybind11_weaver::CreateEntity<Entity_clang_equalRanges>(
       EntityScope(m), registry);
-  auto v302 = pybind11_weaver::CreateEntity<Entity_clang_equalTypes>(
+  auto v308 = pybind11_weaver::CreateEntity<Entity_clang_equalTypes>(
       EntityScope(m), registry);
-  auto v303 = pybind11_weaver::CreateEntity<Entity_clang_executeOnThread>(
+  auto v309 = pybind11_weaver::CreateEntity<Entity_clang_executeOnThread>(
       EntityScope(m), registry);
-  auto v304 = pybind11_weaver::CreateEntity<Entity_clang_findIncludesInFile>(
+  auto v310 = pybind11_weaver::CreateEntity<Entity_clang_findIncludesInFile>(
       EntityScope(m), registry);
-  auto v305 = pybind11_weaver::CreateEntity<Entity_clang_findReferencesInFile>(
-      EntityScope(m), registry);
-  auto v306 = pybind11_weaver::CreateEntity<Entity_clang_formatDiagnostic>(
-      EntityScope(m), registry);
-  auto v307 = pybind11_weaver::CreateEntity<Entity_clang_free>(EntityScope(m),
-                                                               registry);
-  auto v308 = pybind11_weaver::CreateEntity<Entity_clang_getAddressSpace>(
-      EntityScope(m), registry);
-  auto v309 = pybind11_weaver::CreateEntity<Entity_clang_getAllSkippedRanges>(
-      EntityScope(m), registry);
-  auto v310 = pybind11_weaver::CreateEntity<Entity_clang_getArgType>(
-      EntityScope(m), registry);
-  auto v311 = pybind11_weaver::CreateEntity<Entity_clang_getArrayElementType>(
-      EntityScope(m), registry);
-  auto v312 = pybind11_weaver::CreateEntity<Entity_clang_getArraySize>(
+  auto v311 =
+      pybind11_weaver::CreateEntity<Entity_clang_findIncludesInFileWithBlock>(
+          EntityScope(m), registry);
+  auto v312 = pybind11_weaver::CreateEntity<Entity_clang_findReferencesInFile>(
       EntityScope(m), registry);
   auto v313 =
-      pybind11_weaver::CreateEntity<Entity_clang_getBuildSessionTimestamp>(
+      pybind11_weaver::CreateEntity<Entity_clang_findReferencesInFileWithBlock>(
           EntityScope(m), registry);
-  auto v314 = pybind11_weaver::CreateEntity<Entity_clang_getCString>(
+  auto v314 = pybind11_weaver::CreateEntity<Entity_clang_formatDiagnostic>(
       EntityScope(m), registry);
-  auto v315 = pybind11_weaver::CreateEntity<Entity_clang_getCXTUResourceUsage>(
+  auto v315 = pybind11_weaver::CreateEntity<Entity_clang_free>(EntityScope(m),
+                                                               registry);
+  auto v316 = pybind11_weaver::CreateEntity<Entity_clang_getAddressSpace>(
       EntityScope(m), registry);
-  auto v316 = pybind11_weaver::CreateEntity<Entity_clang_getCXXAccessSpecifier>(
+  auto v317 = pybind11_weaver::CreateEntity<Entity_clang_getAllSkippedRanges>(
       EntityScope(m), registry);
-  auto v317 = pybind11_weaver::CreateEntity<Entity_clang_getCanonicalCursor>(
+  auto v318 = pybind11_weaver::CreateEntity<Entity_clang_getArgType>(
       EntityScope(m), registry);
-  auto v318 = pybind11_weaver::CreateEntity<Entity_clang_getCanonicalType>(
+  auto v319 = pybind11_weaver::CreateEntity<Entity_clang_getArrayElementType>(
       EntityScope(m), registry);
-  auto v319 = pybind11_weaver::CreateEntity<Entity_clang_getChildDiagnostics>(
-      EntityScope(m), registry);
-  auto v320 = pybind11_weaver::CreateEntity<Entity_clang_getClangVersion>(
+  auto v320 = pybind11_weaver::CreateEntity<Entity_clang_getArraySize>(
       EntityScope(m), registry);
   auto v321 =
-      pybind11_weaver::CreateEntity<Entity_clang_getCompletionAnnotation>(
+      pybind11_weaver::CreateEntity<Entity_clang_getBinaryOperatorKindSpelling>(
           EntityScope(m), registry);
   auto v322 =
+      pybind11_weaver::CreateEntity<Entity_clang_getBuildSessionTimestamp>(
+          EntityScope(m), registry);
+  auto v323 = pybind11_weaver::CreateEntity<Entity_clang_getCString>(
+      EntityScope(m), registry);
+  auto v324 = pybind11_weaver::CreateEntity<Entity_clang_getCXTUResourceUsage>(
+      EntityScope(m), registry);
+  auto v325 = pybind11_weaver::CreateEntity<Entity_clang_getCXXAccessSpecifier>(
+      EntityScope(m), registry);
+  auto v326 = pybind11_weaver::CreateEntity<Entity_clang_getCanonicalCursor>(
+      EntityScope(m), registry);
+  auto v327 = pybind11_weaver::CreateEntity<Entity_clang_getCanonicalType>(
+      EntityScope(m), registry);
+  auto v328 = pybind11_weaver::CreateEntity<Entity_clang_getChildDiagnostics>(
+      EntityScope(m), registry);
+  auto v329 = pybind11_weaver::CreateEntity<Entity_clang_getClangVersion>(
+      EntityScope(m), registry);
+  auto v330 =
+      pybind11_weaver::CreateEntity<Entity_clang_getCompletionAnnotation>(
+          EntityScope(m), registry);
+  auto v331 =
       pybind11_weaver::CreateEntity<Entity_clang_getCompletionAvailability>(
           EntityScope(m), registry);
-  auto v323 =
+  auto v332 =
       pybind11_weaver::CreateEntity<Entity_clang_getCompletionBriefComment>(
           EntityScope(m), registry);
-  auto v324 = pybind11_weaver::CreateEntity<
+  auto v333 = pybind11_weaver::CreateEntity<
       Entity_clang_getCompletionChunkCompletionString>(EntityScope(m),
                                                        registry);
-  auto v325 =
+  auto v334 =
       pybind11_weaver::CreateEntity<Entity_clang_getCompletionChunkKind>(
           EntityScope(m), registry);
-  auto v326 =
+  auto v335 =
       pybind11_weaver::CreateEntity<Entity_clang_getCompletionChunkText>(
           EntityScope(m), registry);
-  auto v327 = pybind11_weaver::CreateEntity<Entity_clang_getCompletionFixIt>(
+  auto v336 = pybind11_weaver::CreateEntity<Entity_clang_getCompletionFixIt>(
       EntityScope(m), registry);
-  auto v328 =
+  auto v337 =
       pybind11_weaver::CreateEntity<Entity_clang_getCompletionNumAnnotations>(
           EntityScope(m), registry);
-  auto v329 =
+  auto v338 =
       pybind11_weaver::CreateEntity<Entity_clang_getCompletionNumFixIts>(
           EntityScope(m), registry);
-  auto v330 = pybind11_weaver::CreateEntity<Entity_clang_getCompletionParent>(
+  auto v339 = pybind11_weaver::CreateEntity<Entity_clang_getCompletionParent>(
       EntityScope(m), registry);
-  auto v331 = pybind11_weaver::CreateEntity<Entity_clang_getCompletionPriority>(
+  auto v340 = pybind11_weaver::CreateEntity<Entity_clang_getCompletionPriority>(
       EntityScope(m), registry);
-  auto v332 = pybind11_weaver::CreateEntity<Entity_clang_getCursor>(
+  auto v341 = pybind11_weaver::CreateEntity<Entity_clang_getCursor>(
       EntityScope(m), registry);
-  auto v333 = pybind11_weaver::CreateEntity<Entity_clang_getCursorAvailability>(
+  auto v342 = pybind11_weaver::CreateEntity<Entity_clang_getCursorAvailability>(
       EntityScope(m), registry);
-  auto v334 =
+  auto v343 =
+      pybind11_weaver::CreateEntity<Entity_clang_getCursorBinaryOperatorKind>(
+          EntityScope(m), registry);
+  auto v344 =
       pybind11_weaver::CreateEntity<Entity_clang_getCursorCompletionString>(
           EntityScope(m), registry);
-  auto v335 = pybind11_weaver::CreateEntity<Entity_clang_getCursorDefinition>(
+  auto v345 = pybind11_weaver::CreateEntity<Entity_clang_getCursorDefinition>(
       EntityScope(m), registry);
-  auto v336 = pybind11_weaver::CreateEntity<Entity_clang_getCursorDisplayName>(
+  auto v346 = pybind11_weaver::CreateEntity<Entity_clang_getCursorDisplayName>(
       EntityScope(m), registry);
-  auto v337 = pybind11_weaver::CreateEntity<
+  auto v347 = pybind11_weaver::CreateEntity<
       Entity_clang_getCursorExceptionSpecificationType>(EntityScope(m),
                                                         registry);
-  auto v338 = pybind11_weaver::CreateEntity<Entity_clang_getCursorExtent>(
+  auto v348 = pybind11_weaver::CreateEntity<Entity_clang_getCursorExtent>(
       EntityScope(m), registry);
-  auto v339 = pybind11_weaver::CreateEntity<Entity_clang_getCursorKind>(
+  auto v349 = pybind11_weaver::CreateEntity<Entity_clang_getCursorKind>(
       EntityScope(m), registry);
-  auto v340 = pybind11_weaver::CreateEntity<Entity_clang_getCursorKindSpelling>(
+  auto v350 = pybind11_weaver::CreateEntity<Entity_clang_getCursorKindSpelling>(
       EntityScope(m), registry);
-  auto v341 = pybind11_weaver::CreateEntity<Entity_clang_getCursorLanguage>(
+  auto v351 = pybind11_weaver::CreateEntity<Entity_clang_getCursorLanguage>(
       EntityScope(m), registry);
-  auto v342 =
+  auto v352 =
       pybind11_weaver::CreateEntity<Entity_clang_getCursorLexicalParent>(
           EntityScope(m), registry);
-  auto v343 = pybind11_weaver::CreateEntity<Entity_clang_getCursorLinkage>(
+  auto v353 = pybind11_weaver::CreateEntity<Entity_clang_getCursorLinkage>(
       EntityScope(m), registry);
-  auto v344 = pybind11_weaver::CreateEntity<Entity_clang_getCursorLocation>(
+  auto v354 = pybind11_weaver::CreateEntity<Entity_clang_getCursorLocation>(
       EntityScope(m), registry);
-  auto v345 =
+  auto v355 =
       pybind11_weaver::CreateEntity<Entity_clang_getCursorPlatformAvailability>(
           EntityScope(m), registry);
-  auto v346 =
+  auto v356 =
       pybind11_weaver::CreateEntity<Entity_clang_getCursorPrettyPrinted>(
           EntityScope(m), registry);
-  auto v347 =
+  auto v357 =
       pybind11_weaver::CreateEntity<Entity_clang_getCursorPrintingPolicy>(
           EntityScope(m), registry);
-  auto v348 =
+  auto v358 =
       pybind11_weaver::CreateEntity<Entity_clang_getCursorReferenceNameRange>(
           EntityScope(m), registry);
-  auto v349 = pybind11_weaver::CreateEntity<Entity_clang_getCursorReferenced>(
+  auto v359 = pybind11_weaver::CreateEntity<Entity_clang_getCursorReferenced>(
       EntityScope(m), registry);
-  auto v350 = pybind11_weaver::CreateEntity<Entity_clang_getCursorResultType>(
-      EntityScope(m), registry);
-  auto v351 =
-      pybind11_weaver::CreateEntity<Entity_clang_getCursorSemanticParent>(
-          EntityScope(m), registry);
-  auto v352 = pybind11_weaver::CreateEntity<Entity_clang_getCursorSpelling>(
-      EntityScope(m), registry);
-  auto v353 = pybind11_weaver::CreateEntity<Entity_clang_getCursorTLSKind>(
-      EntityScope(m), registry);
-  auto v354 = pybind11_weaver::CreateEntity<Entity_clang_getCursorType>(
-      EntityScope(m), registry);
-  auto v355 = pybind11_weaver::CreateEntity<Entity_clang_getCursorUSR>(
-      EntityScope(m), registry);
-  auto v356 = pybind11_weaver::CreateEntity<Entity_clang_getCursorVisibility>(
-      EntityScope(m), registry);
-  auto v357 =
-      pybind11_weaver::CreateEntity<Entity_clang_getDeclObjCTypeEncoding>(
-          EntityScope(m), registry);
-  auto v358 = pybind11_weaver::CreateEntity<
-      Entity_clang_getDefinitionSpellingAndExtent>(EntityScope(m), registry);
-  auto v359 = pybind11_weaver::CreateEntity<Entity_clang_getDiagnostic>(
-      EntityScope(m), registry);
-  auto v360 = pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticCategory>(
+  auto v360 = pybind11_weaver::CreateEntity<Entity_clang_getCursorResultType>(
       EntityScope(m), registry);
   auto v361 =
-      pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticCategoryName>(
+      pybind11_weaver::CreateEntity<Entity_clang_getCursorSemanticParent>(
           EntityScope(m), registry);
-  auto v362 =
-      pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticCategoryText>(
-          EntityScope(m), registry);
-  auto v363 = pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticFixIt>(
+  auto v362 = pybind11_weaver::CreateEntity<Entity_clang_getCursorSpelling>(
       EntityScope(m), registry);
-  auto v364 = pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticInSet>(
+  auto v363 = pybind11_weaver::CreateEntity<Entity_clang_getCursorTLSKind>(
       EntityScope(m), registry);
-  auto v365 = pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticLocation>(
+  auto v364 = pybind11_weaver::CreateEntity<Entity_clang_getCursorType>(
+      EntityScope(m), registry);
+  auto v365 = pybind11_weaver::CreateEntity<Entity_clang_getCursorUSR>(
       EntityScope(m), registry);
   auto v366 =
+      pybind11_weaver::CreateEntity<Entity_clang_getCursorUnaryOperatorKind>(
+          EntityScope(m), registry);
+  auto v367 = pybind11_weaver::CreateEntity<Entity_clang_getCursorVisibility>(
+      EntityScope(m), registry);
+  auto v368 =
+      pybind11_weaver::CreateEntity<Entity_clang_getDeclObjCTypeEncoding>(
+          EntityScope(m), registry);
+  auto v369 = pybind11_weaver::CreateEntity<
+      Entity_clang_getDefinitionSpellingAndExtent>(EntityScope(m), registry);
+  auto v370 = pybind11_weaver::CreateEntity<Entity_clang_getDiagnostic>(
+      EntityScope(m), registry);
+  auto v371 = pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticCategory>(
+      EntityScope(m), registry);
+  auto v372 =
+      pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticCategoryName>(
+          EntityScope(m), registry);
+  auto v373 =
+      pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticCategoryText>(
+          EntityScope(m), registry);
+  auto v374 = pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticFixIt>(
+      EntityScope(m), registry);
+  auto v375 = pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticInSet>(
+      EntityScope(m), registry);
+  auto v376 = pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticLocation>(
+      EntityScope(m), registry);
+  auto v377 =
       pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticNumFixIts>(
           EntityScope(m), registry);
-  auto v367 =
+  auto v378 =
       pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticNumRanges>(
           EntityScope(m), registry);
-  auto v368 = pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticOption>(
+  auto v379 = pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticOption>(
       EntityScope(m), registry);
-  auto v369 = pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticRange>(
+  auto v380 = pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticRange>(
       EntityScope(m), registry);
-  auto v370 =
+  auto v381 =
       pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticSetFromTU>(
           EntityScope(m), registry);
-  auto v371 = pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticSeverity>(
+  auto v382 = pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticSeverity>(
       EntityScope(m), registry);
-  auto v372 = pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticSpelling>(
+  auto v383 = pybind11_weaver::CreateEntity<Entity_clang_getDiagnosticSpelling>(
       EntityScope(m), registry);
-  auto v373 = pybind11_weaver::CreateEntity<Entity_clang_getElementType>(
+  auto v384 = pybind11_weaver::CreateEntity<Entity_clang_getElementType>(
       EntityScope(m), registry);
-  auto v374 = pybind11_weaver::CreateEntity<
+  auto v385 = pybind11_weaver::CreateEntity<
       Entity_clang_getEnumConstantDeclUnsignedValue>(EntityScope(m), registry);
-  auto v375 =
+  auto v386 =
       pybind11_weaver::CreateEntity<Entity_clang_getEnumConstantDeclValue>(
           EntityScope(m), registry);
-  auto v376 =
+  auto v387 =
       pybind11_weaver::CreateEntity<Entity_clang_getEnumDeclIntegerType>(
           EntityScope(m), registry);
-  auto v377 =
+  auto v388 =
       pybind11_weaver::CreateEntity<Entity_clang_getExceptionSpecificationType>(
           EntityScope(m), registry);
-  auto v378 = pybind11_weaver::CreateEntity<Entity_clang_getExpansionLocation>(
+  auto v389 = pybind11_weaver::CreateEntity<Entity_clang_getExpansionLocation>(
       EntityScope(m), registry);
-  auto v379 = pybind11_weaver::CreateEntity<Entity_clang_getFieldDeclBitWidth>(
+  auto v390 = pybind11_weaver::CreateEntity<Entity_clang_getFieldDeclBitWidth>(
       EntityScope(m), registry);
-  auto v380 = pybind11_weaver::CreateEntity<Entity_clang_getFile>(
+  auto v391 = pybind11_weaver::CreateEntity<Entity_clang_getFile>(
       EntityScope(m), registry);
-  auto v381 = pybind11_weaver::CreateEntity<Entity_clang_getFileContents>(
+  auto v392 = pybind11_weaver::CreateEntity<Entity_clang_getFileContents>(
       EntityScope(m), registry);
-  auto v382 = pybind11_weaver::CreateEntity<Entity_clang_getFileLocation>(
+  auto v393 = pybind11_weaver::CreateEntity<Entity_clang_getFileLocation>(
       EntityScope(m), registry);
-  auto v383 = pybind11_weaver::CreateEntity<Entity_clang_getFileName>(
+  auto v394 = pybind11_weaver::CreateEntity<Entity_clang_getFileName>(
       EntityScope(m), registry);
-  auto v384 = pybind11_weaver::CreateEntity<Entity_clang_getFileTime>(
+  auto v395 = pybind11_weaver::CreateEntity<Entity_clang_getFileTime>(
       EntityScope(m), registry);
-  auto v385 = pybind11_weaver::CreateEntity<Entity_clang_getFileUniqueID>(
+  auto v396 = pybind11_weaver::CreateEntity<Entity_clang_getFileUniqueID>(
       EntityScope(m), registry);
-  auto v386 =
+  auto v397 =
       pybind11_weaver::CreateEntity<Entity_clang_getFunctionTypeCallingConv>(
           EntityScope(m), registry);
-  auto v387 =
+  auto v398 =
       pybind11_weaver::CreateEntity<Entity_clang_getIBOutletCollectionType>(
           EntityScope(m), registry);
-  auto v388 = pybind11_weaver::CreateEntity<Entity_clang_getIncludedFile>(
+  auto v399 = pybind11_weaver::CreateEntity<Entity_clang_getIncludedFile>(
       EntityScope(m), registry);
-  auto v389 = pybind11_weaver::CreateEntity<Entity_clang_getInclusions>(
-      EntityScope(m), registry);
-  auto v390 =
-      pybind11_weaver::CreateEntity<Entity_clang_getInstantiationLocation>(
-          EntityScope(m), registry);
-  auto v391 = pybind11_weaver::CreateEntity<Entity_clang_getLocation>(
-      EntityScope(m), registry);
-  auto v392 = pybind11_weaver::CreateEntity<Entity_clang_getLocationForOffset>(
-      EntityScope(m), registry);
-  auto v393 = pybind11_weaver::CreateEntity<Entity_clang_getModuleForFile>(
-      EntityScope(m), registry);
-  auto v394 = pybind11_weaver::CreateEntity<Entity_clang_getNonReferenceType>(
-      EntityScope(m), registry);
-  auto v395 = pybind11_weaver::CreateEntity<Entity_clang_getNullCursor>(
-      EntityScope(m), registry);
-  auto v396 = pybind11_weaver::CreateEntity<Entity_clang_getNullLocation>(
-      EntityScope(m), registry);
-  auto v397 = pybind11_weaver::CreateEntity<Entity_clang_getNullRange>(
-      EntityScope(m), registry);
-  auto v398 = pybind11_weaver::CreateEntity<Entity_clang_getNumArgTypes>(
-      EntityScope(m), registry);
-  auto v399 =
-      pybind11_weaver::CreateEntity<Entity_clang_getNumCompletionChunks>(
-          EntityScope(m), registry);
-  auto v400 = pybind11_weaver::CreateEntity<Entity_clang_getNumDiagnostics>(
+  auto v400 = pybind11_weaver::CreateEntity<Entity_clang_getInclusions>(
       EntityScope(m), registry);
   auto v401 =
-      pybind11_weaver::CreateEntity<Entity_clang_getNumDiagnosticsInSet>(
+      pybind11_weaver::CreateEntity<Entity_clang_getInstantiationLocation>(
           EntityScope(m), registry);
-  auto v402 = pybind11_weaver::CreateEntity<Entity_clang_getNumElements>(
+  auto v402 = pybind11_weaver::CreateEntity<Entity_clang_getLocation>(
       EntityScope(m), registry);
-  auto v403 = pybind11_weaver::CreateEntity<Entity_clang_getNumOverloadedDecls>(
+  auto v403 = pybind11_weaver::CreateEntity<Entity_clang_getLocationForOffset>(
       EntityScope(m), registry);
-  auto v404 = pybind11_weaver::CreateEntity<Entity_clang_getOverloadedDecl>(
+  auto v404 = pybind11_weaver::CreateEntity<Entity_clang_getModuleForFile>(
       EntityScope(m), registry);
-  auto v405 = pybind11_weaver::CreateEntity<Entity_clang_getOverriddenCursors>(
+  auto v405 = pybind11_weaver::CreateEntity<Entity_clang_getNonReferenceType>(
       EntityScope(m), registry);
-  auto v406 = pybind11_weaver::CreateEntity<Entity_clang_getPointeeType>(
+  auto v406 = pybind11_weaver::CreateEntity<Entity_clang_getNullCursor>(
       EntityScope(m), registry);
-  auto v407 = pybind11_weaver::CreateEntity<Entity_clang_getPresumedLocation>(
+  auto v407 = pybind11_weaver::CreateEntity<Entity_clang_getNullLocation>(
       EntityScope(m), registry);
-  auto v408 = pybind11_weaver::CreateEntity<Entity_clang_getRange>(
+  auto v408 = pybind11_weaver::CreateEntity<Entity_clang_getNullRange>(
       EntityScope(m), registry);
-  auto v409 = pybind11_weaver::CreateEntity<Entity_clang_getRangeEnd>(
+  auto v409 = pybind11_weaver::CreateEntity<Entity_clang_getNumArgTypes>(
       EntityScope(m), registry);
-  auto v410 = pybind11_weaver::CreateEntity<Entity_clang_getRangeStart>(
-      EntityScope(m), registry);
-  auto v411 = pybind11_weaver::CreateEntity<Entity_clang_getRemappings>(
+  auto v410 =
+      pybind11_weaver::CreateEntity<Entity_clang_getNumCompletionChunks>(
+          EntityScope(m), registry);
+  auto v411 = pybind11_weaver::CreateEntity<Entity_clang_getNumDiagnostics>(
       EntityScope(m), registry);
   auto v412 =
+      pybind11_weaver::CreateEntity<Entity_clang_getNumDiagnosticsInSet>(
+          EntityScope(m), registry);
+  auto v413 = pybind11_weaver::CreateEntity<Entity_clang_getNumElements>(
+      EntityScope(m), registry);
+  auto v414 = pybind11_weaver::CreateEntity<Entity_clang_getNumOverloadedDecls>(
+      EntityScope(m), registry);
+  auto v415 = pybind11_weaver::CreateEntity<Entity_clang_getOverloadedDecl>(
+      EntityScope(m), registry);
+  auto v416 = pybind11_weaver::CreateEntity<Entity_clang_getOverriddenCursors>(
+      EntityScope(m), registry);
+  auto v417 = pybind11_weaver::CreateEntity<Entity_clang_getPointeeType>(
+      EntityScope(m), registry);
+  auto v418 = pybind11_weaver::CreateEntity<Entity_clang_getPresumedLocation>(
+      EntityScope(m), registry);
+  auto v419 = pybind11_weaver::CreateEntity<Entity_clang_getRange>(
+      EntityScope(m), registry);
+  auto v420 = pybind11_weaver::CreateEntity<Entity_clang_getRangeEnd>(
+      EntityScope(m), registry);
+  auto v421 = pybind11_weaver::CreateEntity<Entity_clang_getRangeStart>(
+      EntityScope(m), registry);
+  auto v422 = pybind11_weaver::CreateEntity<Entity_clang_getRemappings>(
+      EntityScope(m), registry);
+  auto v423 =
       pybind11_weaver::CreateEntity<Entity_clang_getRemappingsFromFileList>(
           EntityScope(m), registry);
-  auto v413 = pybind11_weaver::CreateEntity<Entity_clang_getResultType>(
+  auto v424 = pybind11_weaver::CreateEntity<Entity_clang_getResultType>(
       EntityScope(m), registry);
-  auto v414 = pybind11_weaver::CreateEntity<Entity_clang_getSkippedRanges>(
-      EntityScope(m), registry);
-  auto v415 =
-      pybind11_weaver::CreateEntity<Entity_clang_getSpecializedCursorTemplate>(
-          EntityScope(m), registry);
-  auto v416 = pybind11_weaver::CreateEntity<Entity_clang_getSpellingLocation>(
-      EntityScope(m), registry);
-  auto v417 =
-      pybind11_weaver::CreateEntity<Entity_clang_getSymbolGraphForCursor>(
-          EntityScope(m), registry);
-  auto v418 = pybind11_weaver::CreateEntity<Entity_clang_getSymbolGraphForUSR>(
-      EntityScope(m), registry);
-  auto v419 =
-      pybind11_weaver::CreateEntity<Entity_clang_getTUResourceUsageName>(
-          EntityScope(m), registry);
-  auto v420 = pybind11_weaver::CreateEntity<Entity_clang_getTemplateCursorKind>(
-      EntityScope(m), registry);
-  auto v421 = pybind11_weaver::CreateEntity<Entity_clang_getToken>(
-      EntityScope(m), registry);
-  auto v422 = pybind11_weaver::CreateEntity<Entity_clang_getTokenExtent>(
-      EntityScope(m), registry);
-  auto v423 = pybind11_weaver::CreateEntity<Entity_clang_getTokenKind>(
-      EntityScope(m), registry);
-  auto v424 = pybind11_weaver::CreateEntity<Entity_clang_getTokenLocation>(
-      EntityScope(m), registry);
-  auto v425 = pybind11_weaver::CreateEntity<Entity_clang_getTokenSpelling>(
+  auto v425 = pybind11_weaver::CreateEntity<Entity_clang_getSkippedRanges>(
       EntityScope(m), registry);
   auto v426 =
+      pybind11_weaver::CreateEntity<Entity_clang_getSpecializedCursorTemplate>(
+          EntityScope(m), registry);
+  auto v427 = pybind11_weaver::CreateEntity<Entity_clang_getSpellingLocation>(
+      EntityScope(m), registry);
+  auto v428 =
+      pybind11_weaver::CreateEntity<Entity_clang_getSymbolGraphForCursor>(
+          EntityScope(m), registry);
+  auto v429 = pybind11_weaver::CreateEntity<Entity_clang_getSymbolGraphForUSR>(
+      EntityScope(m), registry);
+  auto v430 =
+      pybind11_weaver::CreateEntity<Entity_clang_getTUResourceUsageName>(
+          EntityScope(m), registry);
+  auto v431 = pybind11_weaver::CreateEntity<Entity_clang_getTemplateCursorKind>(
+      EntityScope(m), registry);
+  auto v432 = pybind11_weaver::CreateEntity<Entity_clang_getToken>(
+      EntityScope(m), registry);
+  auto v433 = pybind11_weaver::CreateEntity<Entity_clang_getTokenExtent>(
+      EntityScope(m), registry);
+  auto v434 = pybind11_weaver::CreateEntity<Entity_clang_getTokenKind>(
+      EntityScope(m), registry);
+  auto v435 = pybind11_weaver::CreateEntity<Entity_clang_getTokenLocation>(
+      EntityScope(m), registry);
+  auto v436 = pybind11_weaver::CreateEntity<Entity_clang_getTokenSpelling>(
+      EntityScope(m), registry);
+  auto v437 =
       pybind11_weaver::CreateEntity<Entity_clang_getTranslationUnitCursor>(
           EntityScope(m), registry);
-  auto v427 =
+  auto v438 =
       pybind11_weaver::CreateEntity<Entity_clang_getTranslationUnitSpelling>(
           EntityScope(m), registry);
-  auto v428 =
+  auto v439 =
       pybind11_weaver::CreateEntity<Entity_clang_getTranslationUnitTargetInfo>(
           EntityScope(m), registry);
-  auto v429 = pybind11_weaver::CreateEntity<Entity_clang_getTypeDeclaration>(
+  auto v440 = pybind11_weaver::CreateEntity<Entity_clang_getTypeDeclaration>(
       EntityScope(m), registry);
-  auto v430 = pybind11_weaver::CreateEntity<Entity_clang_getTypeKindSpelling>(
+  auto v441 = pybind11_weaver::CreateEntity<Entity_clang_getTypeKindSpelling>(
       EntityScope(m), registry);
-  auto v431 = pybind11_weaver::CreateEntity<Entity_clang_getTypeSpelling>(
+  auto v442 = pybind11_weaver::CreateEntity<Entity_clang_getTypeSpelling>(
       EntityScope(m), registry);
-  auto v432 =
+  auto v443 =
       pybind11_weaver::CreateEntity<Entity_clang_getTypedefDeclUnderlyingType>(
           EntityScope(m), registry);
-  auto v433 = pybind11_weaver::CreateEntity<Entity_clang_getTypedefName>(
+  auto v444 = pybind11_weaver::CreateEntity<Entity_clang_getTypedefName>(
       EntityScope(m), registry);
-  auto v434 = pybind11_weaver::CreateEntity<Entity_clang_getUnqualifiedType>(
+  auto v445 =
+      pybind11_weaver::CreateEntity<Entity_clang_getUnaryOperatorKindSpelling>(
+          EntityScope(m), registry);
+  auto v446 = pybind11_weaver::CreateEntity<Entity_clang_getUnqualifiedType>(
       EntityScope(m), registry);
-  auto v435 = pybind11_weaver::CreateEntity<Entity_clang_hashCursor>(
+  auto v447 = pybind11_weaver::CreateEntity<Entity_clang_hashCursor>(
       EntityScope(m), registry);
-  auto v436 =
+  auto v448 =
       pybind11_weaver::CreateEntity<Entity_clang_indexLoc_getCXSourceLocation>(
           EntityScope(m), registry);
-  auto v437 =
+  auto v449 =
       pybind11_weaver::CreateEntity<Entity_clang_indexLoc_getFileLocation>(
           EntityScope(m), registry);
-  auto v438 = pybind11_weaver::CreateEntity<Entity_clang_indexSourceFile>(
+  auto v450 = pybind11_weaver::CreateEntity<Entity_clang_indexSourceFile>(
       EntityScope(m), registry);
-  auto v439 =
+  auto v451 =
       pybind11_weaver::CreateEntity<Entity_clang_indexSourceFileFullArgv>(
           EntityScope(m), registry);
-  auto v440 = pybind11_weaver::CreateEntity<Entity_clang_indexTranslationUnit>(
+  auto v452 = pybind11_weaver::CreateEntity<Entity_clang_indexTranslationUnit>(
       EntityScope(m), registry);
-  auto v441 =
+  auto v453 =
       pybind11_weaver::CreateEntity<Entity_clang_index_getCXXClassDeclInfo>(
           EntityScope(m), registry);
-  auto v442 =
+  auto v454 =
       pybind11_weaver::CreateEntity<Entity_clang_index_getClientContainer>(
           EntityScope(m), registry);
-  auto v443 = pybind11_weaver::CreateEntity<Entity_clang_index_getClientEntity>(
+  auto v455 = pybind11_weaver::CreateEntity<Entity_clang_index_getClientEntity>(
       EntityScope(m), registry);
-  auto v444 = pybind11_weaver::CreateEntity<
+  auto v456 = pybind11_weaver::CreateEntity<
       Entity_clang_index_getIBOutletCollectionAttrInfo>(EntityScope(m),
                                                         registry);
-  auto v445 =
+  auto v457 =
       pybind11_weaver::CreateEntity<Entity_clang_index_getObjCCategoryDeclInfo>(
           EntityScope(m), registry);
-  auto v446 = pybind11_weaver::CreateEntity<
+  auto v458 = pybind11_weaver::CreateEntity<
       Entity_clang_index_getObjCContainerDeclInfo>(EntityScope(m), registry);
-  auto v447 = pybind11_weaver::CreateEntity<
+  auto v459 = pybind11_weaver::CreateEntity<
       Entity_clang_index_getObjCInterfaceDeclInfo>(EntityScope(m), registry);
-  auto v448 =
+  auto v460 =
       pybind11_weaver::CreateEntity<Entity_clang_index_getObjCPropertyDeclInfo>(
           EntityScope(m), registry);
-  auto v449 = pybind11_weaver::CreateEntity<
+  auto v461 = pybind11_weaver::CreateEntity<
       Entity_clang_index_getObjCProtocolRefListInfo>(EntityScope(m), registry);
-  auto v450 = pybind11_weaver::CreateEntity<
+  auto v462 = pybind11_weaver::CreateEntity<
       Entity_clang_index_isEntityObjCContainerKind>(EntityScope(m), registry);
-  auto v451 =
+  auto v463 =
       pybind11_weaver::CreateEntity<Entity_clang_index_setClientContainer>(
           EntityScope(m), registry);
-  auto v452 = pybind11_weaver::CreateEntity<Entity_clang_index_setClientEntity>(
+  auto v464 = pybind11_weaver::CreateEntity<Entity_clang_index_setClientEntity>(
       EntityScope(m), registry);
-  auto v453 = pybind11_weaver::CreateEntity<
+  auto v465 = pybind11_weaver::CreateEntity<
       Entity_clang_install_aborting_llvm_fatal_error_handler>(EntityScope(m),
                                                               registry);
-  auto v454 = pybind11_weaver::CreateEntity<Entity_clang_isAttribute>(
+  auto v466 = pybind11_weaver::CreateEntity<Entity_clang_isAttribute>(
       EntityScope(m), registry);
-  auto v455 = pybind11_weaver::CreateEntity<Entity_clang_isConstQualifiedType>(
+  auto v467 = pybind11_weaver::CreateEntity<Entity_clang_isConstQualifiedType>(
       EntityScope(m), registry);
-  auto v456 = pybind11_weaver::CreateEntity<Entity_clang_isCursorDefinition>(
+  auto v468 = pybind11_weaver::CreateEntity<Entity_clang_isCursorDefinition>(
       EntityScope(m), registry);
-  auto v457 = pybind11_weaver::CreateEntity<Entity_clang_isDeclaration>(
+  auto v469 = pybind11_weaver::CreateEntity<Entity_clang_isDeclaration>(
       EntityScope(m), registry);
-  auto v458 = pybind11_weaver::CreateEntity<Entity_clang_isExpression>(
-      EntityScope(m), registry);
-  auto v459 =
-      pybind11_weaver::CreateEntity<Entity_clang_isFileMultipleIncludeGuarded>(
-          EntityScope(m), registry);
-  auto v460 =
-      pybind11_weaver::CreateEntity<Entity_clang_isFunctionTypeVariadic>(
-          EntityScope(m), registry);
-  auto v461 = pybind11_weaver::CreateEntity<Entity_clang_isInvalid>(
-      EntityScope(m), registry);
-  auto v462 = pybind11_weaver::CreateEntity<Entity_clang_isInvalidDeclaration>(
-      EntityScope(m), registry);
-  auto v463 = pybind11_weaver::CreateEntity<Entity_clang_isPODType>(
-      EntityScope(m), registry);
-  auto v464 = pybind11_weaver::CreateEntity<Entity_clang_isPreprocessing>(
-      EntityScope(m), registry);
-  auto v465 = pybind11_weaver::CreateEntity<Entity_clang_isReference>(
-      EntityScope(m), registry);
-  auto v466 =
-      pybind11_weaver::CreateEntity<Entity_clang_isRestrictQualifiedType>(
-          EntityScope(m), registry);
-  auto v467 = pybind11_weaver::CreateEntity<Entity_clang_isStatement>(
-      EntityScope(m), registry);
-  auto v468 = pybind11_weaver::CreateEntity<Entity_clang_isTranslationUnit>(
-      EntityScope(m), registry);
-  auto v469 = pybind11_weaver::CreateEntity<Entity_clang_isUnexposed>(
-      EntityScope(m), registry);
-  auto v470 = pybind11_weaver::CreateEntity<Entity_clang_isVirtualBase>(
+  auto v470 = pybind11_weaver::CreateEntity<Entity_clang_isExpression>(
       EntityScope(m), registry);
   auto v471 =
+      pybind11_weaver::CreateEntity<Entity_clang_isFileMultipleIncludeGuarded>(
+          EntityScope(m), registry);
+  auto v472 =
+      pybind11_weaver::CreateEntity<Entity_clang_isFunctionTypeVariadic>(
+          EntityScope(m), registry);
+  auto v473 = pybind11_weaver::CreateEntity<Entity_clang_isInvalid>(
+      EntityScope(m), registry);
+  auto v474 = pybind11_weaver::CreateEntity<Entity_clang_isInvalidDeclaration>(
+      EntityScope(m), registry);
+  auto v475 = pybind11_weaver::CreateEntity<Entity_clang_isPODType>(
+      EntityScope(m), registry);
+  auto v476 = pybind11_weaver::CreateEntity<Entity_clang_isPreprocessing>(
+      EntityScope(m), registry);
+  auto v477 = pybind11_weaver::CreateEntity<Entity_clang_isReference>(
+      EntityScope(m), registry);
+  auto v478 =
+      pybind11_weaver::CreateEntity<Entity_clang_isRestrictQualifiedType>(
+          EntityScope(m), registry);
+  auto v479 = pybind11_weaver::CreateEntity<Entity_clang_isStatement>(
+      EntityScope(m), registry);
+  auto v480 = pybind11_weaver::CreateEntity<Entity_clang_isTranslationUnit>(
+      EntityScope(m), registry);
+  auto v481 = pybind11_weaver::CreateEntity<Entity_clang_isUnexposed>(
+      EntityScope(m), registry);
+  auto v482 = pybind11_weaver::CreateEntity<Entity_clang_isVirtualBase>(
+      EntityScope(m), registry);
+  auto v483 =
       pybind11_weaver::CreateEntity<Entity_clang_isVolatileQualifiedType>(
           EntityScope(m), registry);
-  auto v472 = pybind11_weaver::CreateEntity<Entity_clang_loadDiagnostics>(
+  auto v484 = pybind11_weaver::CreateEntity<Entity_clang_loadDiagnostics>(
       EntityScope(m), registry);
-  auto v473 = pybind11_weaver::CreateEntity<Entity_clang_parseTranslationUnit>(
+  auto v485 = pybind11_weaver::CreateEntity<Entity_clang_parseTranslationUnit>(
       EntityScope(m), registry);
-  auto v474 = pybind11_weaver::CreateEntity<Entity_clang_parseTranslationUnit2>(
+  auto v486 = pybind11_weaver::CreateEntity<Entity_clang_parseTranslationUnit2>(
       EntityScope(m), registry);
-  auto v475 =
+  auto v487 =
       pybind11_weaver::CreateEntity<Entity_clang_parseTranslationUnit2FullArgv>(
           EntityScope(m), registry);
-  auto v476 = pybind11_weaver::CreateEntity<Entity_clang_remap_dispose>(
+  auto v488 = pybind11_weaver::CreateEntity<Entity_clang_remap_dispose>(
       EntityScope(m), registry);
-  auto v477 = pybind11_weaver::CreateEntity<Entity_clang_remap_getFilenames>(
+  auto v489 = pybind11_weaver::CreateEntity<Entity_clang_remap_getFilenames>(
       EntityScope(m), registry);
-  auto v478 = pybind11_weaver::CreateEntity<Entity_clang_remap_getNumFiles>(
+  auto v490 = pybind11_weaver::CreateEntity<Entity_clang_remap_getNumFiles>(
       EntityScope(m), registry);
-  auto v479 =
+  auto v491 =
       pybind11_weaver::CreateEntity<Entity_clang_reparseTranslationUnit>(
           EntityScope(m), registry);
-  auto v480 = pybind11_weaver::CreateEntity<Entity_clang_saveTranslationUnit>(
+  auto v492 = pybind11_weaver::CreateEntity<Entity_clang_saveTranslationUnit>(
       EntityScope(m), registry);
-  auto v481 =
+  auto v493 =
       pybind11_weaver::CreateEntity<Entity_clang_sortCodeCompletionResults>(
           EntityScope(m), registry);
-  auto v482 =
+  auto v494 =
       pybind11_weaver::CreateEntity<Entity_clang_suspendTranslationUnit>(
           EntityScope(m), registry);
-  auto v483 = pybind11_weaver::CreateEntity<Entity_clang_toggleCrashRecovery>(
+  auto v495 = pybind11_weaver::CreateEntity<Entity_clang_toggleCrashRecovery>(
       EntityScope(m), registry);
-  auto v484 = pybind11_weaver::CreateEntity<Entity_clang_tokenize>(
+  auto v496 = pybind11_weaver::CreateEntity<Entity_clang_tokenize>(
       EntityScope(m), registry);
-  auto v485 = pybind11_weaver::CreateEntity<
+  auto v497 = pybind11_weaver::CreateEntity<
       Entity_clang_uninstall_llvm_fatal_error_handler>(EntityScope(m),
                                                        registry);
-  auto v486 = pybind11_weaver::CreateEntity<Entity_clang_visitChildren>(
+  auto v498 = pybind11_weaver::CreateEntity<Entity_clang_visitChildren>(
       EntityScope(m), registry);
+  auto v499 =
+      pybind11_weaver::CreateEntity<Entity_clang_visitChildrenWithBlock>(
+          EntityScope(m), registry);
 
   auto update_fn = [=]() {
     v0->Update();
@@ -31155,6 +32122,19 @@ DeclFn(pybind11::module &m,
     v484->Update();
     v485->Update();
     v486->Update();
+    v487->Update();
+    v488->Update();
+    v489->Update();
+    v490->Update();
+    v491->Update();
+    v492->Update();
+    v493->Update();
+    v494->Update();
+    v495->Update();
+    v496->Update();
+    v497->Update();
+    v498->Update();
+    v499->Update();
   };
   return {update_fn};
 }

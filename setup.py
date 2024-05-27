@@ -1,22 +1,30 @@
 import os
 import shutil
-from importlib_metadata import version
 import setuptools
 
 from pybind11.setup_helpers import Pybind11Extension
 from pybind11.setup_helpers import build_ext as _build_ext
 
-from clang import cindex
+libclang_so_path = "/io/llvm_cache/install/lib/libclang.so"
+if not os.path.exists(libclang_so_path):
+    libclang_so_path = os.getenv("PYLIBCLANG_LIBCLANG_SO_PATH", None)
+    if libclang_so_path is None:
+        raise FileNotFoundError("libclang.so not found, please set PYLIBCLANG_LIBCLANG_SO_PATH environment variable.")
 
-libclang_so_path = cindex.conf.get_filename()
 
-
-def clean_clang_so_name():
-    filename = os.path.basename(libclang_so_path)
-    if filename.endswith(".so"):
-        return f"{filename}.{version('libclang').split('.')[0]}"
+def get_soname(filename):
+    import re
+    import subprocess
+    try:
+        out = subprocess.check_output(['objdump', '-p', filename]).decode('utf-8')
+    except:
+        return ''
     else:
-        return filename
+        result = re.search('^\s+SONAME\s+(.+)$', out, re.MULTILINE)
+        if result:
+            return result.group(1)
+        else:
+            return ''
 
 
 class build_ext(_build_ext):
@@ -71,7 +79,7 @@ ext_modules = [
                       extra_link_args=["-lclang"],
                       extra_compile_args=["-Wno-deprecated-declarations"]
                       ),
-    AnyFile("pylibclang.libclang", libclang_so_path, clean_clang_so_name())
+    AnyFile("pylibclang.libclang", libclang_so_path, get_soname(libclang_so_path))
 ]
 
 setuptools.setup(

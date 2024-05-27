@@ -2,8 +2,6 @@
 requires = [
     "setuptools>=42",
     "pybind11>=2.10.0",
-    "libclang==16.0.6", # used to get prebuilt libclang
-    "importlib_metadata",
 ]
 build-backend = "setuptools.build_meta"
 
